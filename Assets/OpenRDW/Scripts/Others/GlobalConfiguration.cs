@@ -23,7 +23,7 @@ public class GlobalConfiguration : MonoBehaviour
     public enum TrackingSpaceChoice
     {
         //Trapezoid, Cross, L_shape
-        FilePath, Square, Triangle, Rectangle, T_shape
+        FilePath, Square, Triangle, Rectangle, T_shape, DoubleRoom
     };
     public enum MovementController { Keyboard, AutoPilot, HMD };//Three input modes
 
@@ -231,6 +231,14 @@ public class GlobalConfiguration : MonoBehaviour
 
     [Tooltip("Side length if trackingSpace == Square")]
     public float squareWidth;
+    [Tooltip("Side length of each square room if trackingSpace == DoubleRoom")]
+    public float doubleRoomSquareWidth = 4f;
+
+    [Tooltip("Width of the corridor if trackingSpace == DoubleRoom")]
+    public float doubleRoomCorridorWidth = 2f;
+
+    [Tooltip("Length of the corridor if trackingSpace == DoubleRoom")]
+    public float doubleRoomCorridorLength = 6f;
 
     public Color virtualObstacleColor;
 
@@ -1054,6 +1062,8 @@ public class GlobalConfiguration : MonoBehaviour
                 return TrackingSpaceChoice.Rectangle;
             case "t_shape":
                 return TrackingSpaceChoice.T_shape;
+            case "double_room":
+                return TrackingSpaceChoice.DoubleRoom;
             case "filepath":
                 return TrackingSpaceChoice.FilePath;
             default:
@@ -1684,6 +1694,15 @@ public class GlobalConfiguration : MonoBehaviour
                 break;
             case TrackingSpaceChoice.Square:
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(obstacleType, out rePhysicalSpaces, squareWidth, squareWidth);
+                break;
+            case TrackingSpaceChoice.DoubleRoom:
+                TrackingSpaceGenerator.GenerateDoubleRoomTrackingSpace(
+                    obstacleType,
+                    out rePhysicalSpaces,
+                    doubleRoomSquareWidth,
+                    doubleRoomCorridorWidth,
+                    doubleRoomCorridorLength
+                );
                 break;
             default:
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out rePhysicalSpaces, 10, 10);

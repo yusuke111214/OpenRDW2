@@ -265,6 +265,146 @@ public class TrackingSpaceGenerator
         GenerateT_ShapeTrackingSpace(obstacleType, out physicalSpaces, w1, w2, w3);
     }
 
+    public static List<Vector2> GenerateDoubleRoomTrackingSpacePoints(float roomSide, float corridorWidth, float corridorLength)
+    {
+        var trackingSpacePoints = new List<Vector2>();
+
+        if (roomSide <= 0 || corridorWidth <= 0 || corridorLength <= 0)
+        {
+            Debug.LogError("GenerateDoubleRoomTrackingSpacePoints: invalid parameters.");
+            return trackingSpacePoints;
+        }
+
+        var halfRoom = roomSide / 2f;
+        var halfCorridorLen = corridorLength / 2f;
+
+        // 廊下の幅が部屋より大きくなりすぎないように clamp
+        var halfCorridorWidth = Mathf.Min(corridorWidth / 2f, halfRoom);
+
+        float leftSquareLeft = -halfCorridorLen - roomSide;
+        float leftSquareRight = -halfCorridorLen;
+        float rightSquareLeft = halfCorridorLen;
+        float rightSquareRight = halfCorridorLen + roomSide;
+        float topY = halfRoom;
+        float bottomY = -halfRoom;
+        float corridorTopY = halfCorridorWidth;
+        float corridorBottomY = -halfCorridorWidth;
+
+        // 必ず counter-clockwise になるような順番で頂点を列挙
+        // 左下 → 左部屋右下 → 廊下下 → 右部屋右下 → 右上 → 右部屋左上 → 廊下上 → 左部屋右上 → 左上
+        trackingSpacePoints.Add(new Vector2(leftSquareLeft, bottomY));          // 1
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, bottomY));         // 2
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorBottomY)); // 3
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorBottomY)); // 4
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, bottomY));         // 5
+        trackingSpacePoints.Add(new Vector2(rightSquareRight, bottomY));        // 6
+        trackingSpacePoints.Add(new Vector2(rightSquareRight, topY));           // 7
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, topY));            // 8
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorTopY));    // 9
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorTopY));    // 10
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, topY));            // 11
+        trackingSpacePoints.Add(new Vector2(leftSquareLeft, topY));             // 12
+
+        return trackingSpacePoints;
+    }
+
+    public static void GenerateDoubleRoomTrackingSpace(int obstacleType, out List<SingleSpace> physicalSpaces,
+                                                    float roomSide, float corridorWidth, float corridorLength)
+    {
+        var trackingSpacePoints = GenerateDoubleRoomTrackingSpacePoints(roomSide, corridorWidth, corridorLength);
+        var obstaclePolygons = new List<List<Vector2>>();
+        var initialPoses = new List<InitialPose>();
+
+        if (trackingSpacePoints.Count == 0)
+        {
+            physicalSpaces = new List<SingleSpace>();
+            return;
+        }
+
+        var halfRoom = roomSide / 2f;
+        var halfCorridorLen = corridorLength / 2f;
+
+        float leftSquareLeft = -halfCorridorLen - roomSide;
+        float leftSquareRight = -halfCorridorLen;
+        float rightSquareLeft = halfCorridorLen;
+        float rightSquareRight = halfCorridorLen + roomSide;
+        float topY = halfRoom;
+        float bottomY = -halfRoom;
+
+        var distToWall = 0.1f * roomSide;
+
+        // ==== Initial Poses ====
+        // 左の部屋（2つ）
+        initialPoses.Add(new InitialPose(
+            new Vector2(leftSquareLeft + distToWall, topY - distToWall),
+            Vector2.right));  // 廊下方向を向く
+        initialPoses.Add(new InitialPose(
+            new Vector2(leftSquareLeft + distToWall, bottomY + distToWall),
+            Vector2.right));
+
+        // 右の部屋（2つ）
+        initialPoses.Add(new InitialPose(
+            new Vector2(rightSquareRight - distToWall, topY - distToWall),
+            Vector2.left));   // 廊下方向を向く
+        initialPoses.Add(new InitialPose(
+            new Vector2(rightSquareRight - distToWall, bottomY + distToWall),
+            Vector2.left));
+
+        // ==== Obstacles ====
+        switch (obstacleType)
+        {
+            case 0:
+                // 障害物なし
+                break;
+
+            case 1:
+                // 廊下の中央に小さい長方形の障害物
+                {
+                    var halfObsLen = corridorLength * 0.15f;
+                    var halfObsWidth = corridorWidth * 0.15f;
+
+                    obstaclePolygons.Add(new List<Vector2>
+                    {
+                        new Vector2(-halfObsLen,  halfObsWidth),
+                        new Vector2( halfObsLen,  halfObsWidth),
+                        new Vector2( halfObsLen, -halfObsWidth),
+                        new Vector2(-halfObsLen, -halfObsWidth),
+                    });
+                }
+                break;
+
+            case 2:
+                // 各部屋の中央に小さい正方形の障害物
+                {
+                    var halfObs = roomSide * 0.1f;
+                    var leftCenterX = (leftSquareLeft + leftSquareRight) * 0.5f;
+                    var rightCenterX = (rightSquareLeft + rightSquareRight) * 0.5f;
+
+                    obstaclePolygons.Add(new List<Vector2>
+                    {
+                        new Vector2(leftCenterX - halfObs, -halfObs),
+                        new Vector2(leftCenterX + halfObs, -halfObs),
+                        new Vector2(leftCenterX + halfObs,  halfObs),
+                        new Vector2(leftCenterX - halfObs,  halfObs),
+                    });
+
+                    obstaclePolygons.Add(new List<Vector2>
+                    {
+                        new Vector2(rightCenterX - halfObs, -halfObs),
+                        new Vector2(rightCenterX + halfObs, -halfObs),
+                        new Vector2(rightCenterX + halfObs,  halfObs),
+                        new Vector2(rightCenterX - halfObs,  halfObs),
+                    });
+                }
+                break;
+        }
+
+        physicalSpaces = new List<SingleSpace>
+        {
+            new SingleSpace(trackingSpacePoints, obstaclePolygons, initialPoses)
+        };
+    }
+
     //Generate Trapezoid TrackingSpace
     //generate cross with center coordinate(0,0), w: center square side length, h: Extension length
     //generate L_shape tracking space, w1: square side length; square center: (0,0); w2 extension length

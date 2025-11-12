@@ -1056,7 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: 1
-  synchronizedReset: 1
+  synchronizedReset: 0
   timeStep: 0.5
   directionSamples: 30
   timeStepBase: 0
@@ -1073,9 +1073,9 @@ MonoBehaviour:
   DEFAULT_RANDOM_SEED: 23
   MAX_TRANS_GAIN: 1.26
   MIN_TRANS_GAIN: 0.86
-  MAX_ROT_GAIN: 1.49
+  MAX_ROT_GAIN: 1.901
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 7.5
+  CURVATURE_RADIUS: 5.14
   RESET_TRIGGER_BUFFER: 0.05
   simulatedTime: 0
   targetFPS: 50
@@ -1087,7 +1087,7 @@ MonoBehaviour:
   startTimeOfProgram: 
   negArrow: {fileID: 717936904266117204, guid: f68566b61c5ebc74784982a22ecef585, type: 3}
   readyToStart: 0
-  avatarNum: 3
+  avatarNum: 1
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
@@ -1111,11 +1111,14 @@ MonoBehaviour:
   trackingSpaceVisible: 1
   bufferVisible: 1
   if3dObstacle: 1
-  trackingSpaceChoice: 0
+  trackingSpaceChoice: 5
   obstacleType: 0
   obstacleHeight: 1
-  trackingSpaceFilePath: TrackingSpaces/Separate3/3_squares.txt
-  squareWidth: 5
+  trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
+  squareWidth: 8
+  doubleRoomSquareWidth: 15
+  doubleRoomCorridorWidth: 10
+  doubleRoomCorridorLength: 8
   virtualObstacleColor: {r: 0.29850477, g: 0.21626912, b: 0.33962262, a: 0}
   obstacleColor: {r: 0.4352941, g: 0.2426616, b: 0.0039215665, a: 1}
   bufferColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 0.2509804}
@@ -1179,7 +1182,6 @@ MonoBehaviour:
   logSampleVariables: 1
   samplingFrequency: 10
   imageResolution: 1024
-  realSideLength: 20
   borderThickness: 3
   pathThickness: 6
   superSize: 1
@@ -1537,7 +1539,7 @@ MonoBehaviour:
   samplingIntervalsFilePath: 
   waypoints: []
   samplingIntervals: []
-  pathSeedChoice: 1
+  pathSeedChoice: 2
   vePath: {fileID: 144110144}
   waypointIterator: 0
   accumulatedWaypointTime: 0
@@ -1622,8 +1624,8 @@ MonoBehaviour:
   isRotating: 0
   isWalking: 0
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 9
-  resetterChoice: 6
+  redirectorChoice: 1
+  resetterChoice: 1
   globalConfiguration: {fileID: 0}
   visualizationManager: {fileID: 0}
   body: {fileID: 226266040}
