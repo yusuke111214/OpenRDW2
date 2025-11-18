@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Random = UnityEngine.Random;
 
 public class SingleSpace
 {
@@ -795,5 +797,184 @@ public class TrackingSpaceGenerator
             }
             obstacleId++;
         }
+    }
+    
+    public static bool IsPointInsidePolygon(List<Vector2> polygonPoints, Vector2 point)
+    {
+        if (polygonPoints == null || polygonPoints.Count < 3)
+        {
+            return false;
+        }
+
+        var inside = false;
+        var count = polygonPoints.Count;
+
+        for (var i = 0; i < count; i++)
+        {
+            var j = (i + count - 1) % count;
+            var pi = polygonPoints[i];
+            var pj = polygonPoints[j];
+
+            var intersect =
+                ((pi.y > point.y) != (pj.y > point.y)) &&
+                (point.x < (pj.x - pi.x) * (point.y - pi.y) / ((pj.y - pi.y) + Mathf.Epsilon) + pi.x);
+
+            if (intersect)
+            {
+                inside = !inside;
+            }
+        }
+
+        return inside;
+    }
+
+    public static Vector2 GetRandomPointInsidePolygon(List<Vector2> polygonPoints)
+    {
+        if (polygonPoints == null || polygonPoints.Count == 0)
+        {
+            return Vector2.zero;
+        }
+
+        var minX = polygonPoints[0].x;
+        var maxX = polygonPoints[0].x;
+        var minY = polygonPoints[0].y;
+        var maxY = polygonPoints[0].y;
+
+        for (var i = 1; i < polygonPoints.Count; i++)
+        {
+            var p = polygonPoints[i];
+            if (p.x < minX) minX = p.x;
+            if (p.x > maxX) maxX = p.x;
+            if (p.y < minY) minY = p.y;
+            if (p.y > maxY) maxY = p.y;
+        }
+
+        // バウンディングボックス内でサンプリング → ポリゴン内かチェック
+        for (var attempt = 0; attempt < 256; attempt++)
+        {
+            var x = Random.Range(minX, maxX);
+            var y = Random.Range(minY, maxY);
+            var candidate = new Vector2(x, y);
+
+            if (IsPointInsidePolygon(polygonPoints, candidate))
+            {
+                return candidate;
+            }
+        }
+
+        // 念のためのフォールバック（中心点）
+        return new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f);
+    }
+    
+    public static InitialPose GetRandomInitialPose(SingleSpace space, System.Random random)
+    {
+        if (space == null)
+        {
+            return new InitialPose(Vector2.zero, Vector2.up);
+        }
+
+        if (random == null)
+        {
+            random = new System.Random(Environment.TickCount);
+        }
+
+        // 1. もしプリセットの initialPoses があれば、そこからランダムに 1 つ選ぶ
+        if (space.initialPoses != null && space.initialPoses.Count > 0)
+        {
+            var index = random.Next(space.initialPoses.Count); // 0 <= index < Count
+            var pose = space.initialPoses[index];
+            return InitialPose.Copy(pose);
+        }
+
+        // 2. 無ければ、ポリゴン内ランダム
+        if (space.trackingSpace == null || space.trackingSpace.Count == 0)
+        {
+            return new InitialPose(Vector2.zero, Vector2.up);
+        }
+
+        var position = GetRandomPointInsidePolygon(space.trackingSpace, random);
+
+        var center = Vector2.zero;
+        for (var i = 0; i < space.trackingSpace.Count; i++)
+        {
+            center += space.trackingSpace[i];
+        }
+        center /= space.trackingSpace.Count;
+
+        var forward = (center - position).sqrMagnitude > 0.0001f
+            ? (center - position).normalized
+            : Vector2.up;
+
+        return new InitialPose(position, forward);
+    }
+    
+    public static InitialPose GetRandomInitialPose(SingleSpace space)
+    {
+        if (space == null || space.trackingSpace == null || space.trackingSpace.Count == 0)
+        {
+            return new InitialPose(Vector2.zero, Vector2.up);
+        }
+
+        var position = GetRandomPointInsidePolygon(space.trackingSpace);
+
+        // 向きは「部屋のざっくり中心方向」を向かせる
+        var center = Vector2.zero;
+        for (var i = 0; i < space.trackingSpace.Count; i++)
+        {
+            center += space.trackingSpace[i];
+        }
+
+        center /= space.trackingSpace.Count;
+
+        var forward = (center - position).sqrMagnitude > 0.0001f
+            ? (center - position).normalized
+            : Vector2.up;
+
+        return new InitialPose(position, forward);
+    }
+    public static Vector2 GetRandomPointInsidePolygon(List<Vector2> polygonPoints, System.Random random)
+    {
+        if (polygonPoints == null || polygonPoints.Count == 0)
+        {
+            return Vector2.zero;
+        }
+
+        if (random == null)
+        {
+            random = new System.Random(Environment.TickCount);
+        }
+
+        var minX = polygonPoints[0].x;
+        var maxX = polygonPoints[0].x;
+        var minY = polygonPoints[0].y;
+        var maxY = polygonPoints[0].y;
+
+        for (var i = 1; i < polygonPoints.Count; i++)
+        {
+            var p = polygonPoints[i];
+            if (p.x < minX) minX = p.x;
+            if (p.x > maxX) maxX = p.x;
+            if (p.y < minY) minY = p.y;
+            if (p.y > maxY) maxY = p.y;
+        }
+
+        for (var attempt = 0; attempt < 256; attempt++)
+        {
+            var rx = random.NextDouble();
+            var ry = random.NextDouble();
+
+            var x = (float)(minX + (maxX - minX) * rx);
+            var y = (float)(minY + (maxY - minY) * ry);
+            var candidate = new Vector2(x, y);
+
+            if (IsPointInsidePolygon(polygonPoints, candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return new Vector2(
+            (minX + maxX) * 0.5f,
+            (minY + maxY) * 0.5f);
     }
 }

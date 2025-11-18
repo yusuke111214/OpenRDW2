@@ -840,12 +840,26 @@ public class StatisticsLogger : MonoBehaviour
             var realPosList = avatarStatistics[uId].userRealPositionSamples;
             var beginWeight = 0.1f;
             var deltaWeight = (1 - beginWeight) / realPosList.Count;
-
+            
             for (int i = 0; i < realPosList.Count - 1; i++)
             {
-                var w = (beginWeight + deltaWeight * i);
-                //Debug.Log("realPosList[i]:" + realPosList[i].ToString("f3"));
-                Utilities.DrawLine(texRealPathGraph, realPosList[i] - centerp, realPosList[i + 1] - centerp, realSideLength, pathThickness, w * color + (1 - w) * backgroundColor, (w + deltaWeight) * color + (1 - w - deltaWeight) * backgroundColor);
+                var t = (float)i / (realPosList.Count - 1); // 0→1 に正規化
+
+                // 青から赤への線形補間
+                var colorStart = Color.blue;
+                var colorEnd = Color.red;
+
+                var c1 = Color.Lerp(colorStart, colorEnd, t);
+                var c2 = Color.Lerp(colorStart, colorEnd, Mathf.Min(1, t + deltaWeight));
+
+                Utilities.DrawLine(
+                    texRealPathGraph,
+                    realPosList[i] - centerp,
+                    realPosList[i + 1] - centerp,
+                    realSideLength,
+                    pathThickness,
+                    c1,
+                    c2);
             }
         }
 

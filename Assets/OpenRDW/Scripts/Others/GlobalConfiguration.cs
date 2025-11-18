@@ -12,6 +12,7 @@ public class GlobalConfiguration : MonoBehaviour
 {
     const float INF = 100000;
     const float EPS = 1e-5f;
+    private System.Random _initialPoseRandom;
     public List<SingleSpace> physicalSpaces;
     public SingleSpace virtualSpace;
 
@@ -31,7 +32,13 @@ public class GlobalConfiguration : MonoBehaviour
     //FilePath: constant walking speed
     //RealUserPath: real walking speed according to sample points    
     public enum PathSeedChoice { _90Turn, RandomTurn, StraightLine, Sawtooth, Circle, FigureEight, FilePath, RealUserPath, VEPath, ValidPath };
-
+    
+    public enum InitialPoseMode
+    {
+        FixedFromTrackingSpace,    // 原点位置
+        RandomInTrackingSpace      // トラッキングスペース内のランダム位置
+    }
+    
     public static float obstacleParentHeight = 0.0018f;
     public static float bufferParentHeight = 0.0016f;
 
@@ -350,6 +357,12 @@ public class GlobalConfiguration : MonoBehaviour
 
     [HideInInspector]
     public UserInterfaceManager userInterfaceManager;
+    
+    // GlobalConfiguration 内、フィールド定義部分に追加
+    [Header("Initial Pose (Non-HMD)")]
+    [Tooltip("Keyboard / AutoPilot モードで使用する初期姿勢の決め方。HMD モードでは無視されます。")]
+    public InitialPoseMode InitialPoseModeForNonHmd = InitialPoseMode.FixedFromTrackingSpace;
+    
 
     #endregion
 
@@ -972,6 +985,8 @@ public class GlobalConfiguration : MonoBehaviour
         experimentSetupsList = new List<List<ExperimentSetup>>();
         // Here we generate the corresponding experiments
         experimentSetups = new List<ExperimentSetup>();
+        
+        _initialPoseRandom = new System.Random(Environment.TickCount);
 
         for (; redirectedAvatars.Count < avatarNum;)
         {
@@ -984,25 +999,62 @@ public class GlobalConfiguration : MonoBehaviour
         var avatarList = new List<AvatarInfo>();
         int physicalSpaceIndex = 0;
         int avatarIndex = 0;
+
         for (int i = 0; i < redirectedAvatars.Count; i++)
         {
             var ra = redirectedAvatars[i];
             var mm = ra.GetComponent<MovementManager>();
-            mm.physicalInitPose = physicalSpaces[physicalSpaceIndex].initialPoses[avatarIndex];
-            mm.physicalSpaceIndex = physicalSpaceIndex;
-            if (virtualSpace != null)
+
+            InitialPose physicalInitPose;
+            InitialPose virtualInitPose;
+
+            // HMD 以外のときだけ、Inspector のモードを見てランダム化する
+            var useRandomInitialPose =
+                movementController != MovementController.HMD &&
+                InitialPoseModeForNonHmd == InitialPoseMode.RandomInTrackingSpace;
+
+            if (useRandomInitialPose)
             {
-                mm.virtualInitPose = virtualSpace.initialPoses[i];
+                // ★ランダム候補から 1 つ選ぶ
+                physicalInitPose = TrackingSpaceGenerator.GetRandomInitialPose(
+                    physicalSpaces[physicalSpaceIndex],
+                    _initialPoseRandom);
+
+                if (virtualSpace != null)
+                {
+                    virtualInitPose = TrackingSpaceGenerator.GetRandomInitialPose(
+                        virtualSpace,
+                        _initialPoseRandom);
+                }
+                else
+                {
+                    virtualInitPose = physicalInitPose;
+                }
             }
             else
             {
-                mm.virtualInitPose = mm.physicalInitPose;
+                // 従来通り：SingleSpace.initialPoses / virtualSpace.initialPoses を使用
+                physicalInitPose = physicalSpaces[physicalSpaceIndex].initialPoses[avatarIndex];
+
+                if (virtualSpace != null)
+                {
+                    virtualInitPose = virtualSpace.initialPoses[i];
+                }
+                else
+                {
+                    virtualInitPose = physicalInitPose;
+                }
             }
+
+            mm.physicalInitPose = physicalInitPose;
+            mm.physicalSpaceIndex = physicalSpaceIndex;
+            mm.virtualInitPose = virtualInitPose;
 
             mm.InitializeWaypointsPattern(DEFAULT_RANDOM_SEED);
             mm.randomSeed = DEFAULT_RANDOM_SEED;
             var avatarInfo = mm.GetCurrentAvatarInfo();
             avatarList.Add(avatarInfo);
+
             avatarIndex++;
             if (avatarIndex >= physicalSpaces[physicalSpaceIndex].initialPoses.Count)
             {
@@ -1010,6 +1062,7 @@ public class GlobalConfiguration : MonoBehaviour
                 avatarIndex = 0;
             }
         }
+        
         for (int i = 0; i < trialsForCurrentExperiment; i++)
         {
             experimentSetups.Add(new ExperimentSetup(
@@ -1157,29 +1210,96 @@ public class GlobalConfiguration : MonoBehaviour
 
                 //handle experiment setup
                 case "end":
-                    // AddAvatarToAvatarListWhenDealingCommand(ref avatarList, ref avatar);
-                    // GenerateWaypoints(avatar.randomSeed, avatar.pathSeedChoice, avatar.virtualInitPose, avatar.waypointsFilePath, avatar.samplingIntervalsFilePath, out avatar.waypoints, out avatar.samplingIntervals);
+                {
+                    // トラッキングスペース生成
                     GenerateTrackingSpace(avatarList.Count, out physicalSpaces, out virtualSpace);
                     int physicalSpaceIndex = 0;
                     int avatarIndex = 0;
+
+                    // UI 側と同じルールで「ランダム初期姿勢を使うか」を決める
+                    var useRandomInitialPose =
+                        movementController != MovementController.HMD &&
+                        InitialPoseModeForNonHmd == InitialPoseMode.RandomInTrackingSpace;
+
                     for (int i = 0; i < avatarList.Count; i++)
                     {
-                        avatarList[i].physicalInitPose = physicalSpaces[physicalSpaceIndex].initialPoses[avatarIndex];
-                        avatarList[i].virtualInitPose = virtualSpace.initialPoses[i];
+                        var space = physicalSpaces[physicalSpaceIndex];
+
+                        // === 物理空間側 InitialPose ===
+                        if (avatarList[i].physicalInitPose == null)
+                        {
+                            if (useRandomInitialPose)
+                            {
+                                // トラッキングスペース内からランダムサンプリング
+                                avatarList[i].physicalInitPose = TrackingSpaceGenerator.GetRandomInitialPose(space);
+                            }
+                            else
+                            {
+                                // 従来どおり、pre-defined initialPoses を使う
+                                avatarList[i].physicalInitPose = space.initialPoses[avatarIndex];
+                            }
+                        }
+                        // physicalSpaceIndex は従来どおり振っておく
                         avatarList[i].physicalSpaceIndex = physicalSpaceIndex;
-                        GenerateWaypoints(avatarList[i].randomSeed, avatarList[i].pathSeedChoice, avatarList[i].virtualInitPose,
-                            avatarList[i].waypointsFilePath, avatarList[i].samplingIntervalsFilePath, out avatarList[i].waypoints, out avatarList[i].samplingIntervals);
+
+                        // === 仮想空間側 InitialPose ===
+                        if (virtualSpace != null)
+                        {
+                            if (avatarList[i].virtualInitPose == null)
+                            {
+                                if (useRandomInitialPose)
+                                {
+                                    avatarList[i].virtualInitPose = TrackingSpaceGenerator.GetRandomInitialPose(virtualSpace);
+                                }
+                                else
+                                {
+                                    // 元コードの挙動を維持（virtualSpace.initialPoses[i] を使う）
+                                    avatarList[i].virtualInitPose = virtualSpace.initialPoses[i];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // virtualSpace が無いケースでは、物理側と同じ姿勢に揃えておく
+                            if (avatarList[i].virtualInitPose == null)
+                            {
+                                avatarList[i].virtualInitPose = InitialPose.Copy(avatarList[i].physicalInitPose);
+                            }
+                        }
+
+                        // === 経路生成 ===
+                        GenerateWaypoints(
+                            avatarList[i].randomSeed,
+                            avatarList[i].pathSeedChoice,
+                            avatarList[i].virtualInitPose,
+                            avatarList[i].waypointsFilePath,
+                            avatarList[i].samplingIntervalsFilePath,
+                            out avatarList[i].waypoints,
+                            out avatarList[i].samplingIntervals);
+
+                        // 複数 SingleSpace にまたがる場合のインデックス処理（元コードそのまま）
                         avatarIndex++;
-                        if (avatarIndex >= physicalSpaces[physicalSpaceIndex].initialPoses.Count)
+                        if (avatarIndex >= space.initialPoses.Count)
                         {
                             physicalSpaceIndex++;
                             avatarIndex = 0;
                         }
                     }
-                    experimentSetups.Add(new ExperimentSetup(avatarList, physicalSpaces, virtualSpace, trackingSpaceChoice, trackingSpaceFilePath, squareWidth, obstacleType, pathLength));
 
-                    avatarList = new List<AvatarInfo>();//initialize for next trial setup
+                    experimentSetups.Add(
+                        new ExperimentSetup(
+                            avatarList,
+                            physicalSpaces,
+                            virtualSpace,
+                            trackingSpaceChoice,
+                            trackingSpaceFilePath,
+                            squareWidth,
+                            obstacleType,
+                            pathLength));
+
+                    avatarList = new List<AvatarInfo>(); // initialize for next trial setup
                     break;
+                }
                 default:
                     Debug.LogError("Invalid command line: " + line);
                     break;

@@ -147,82 +147,114 @@ public class VirtualPathGenerator
         return false;
     }
 
-    public static List<Vector2> GenerateValidVirtualPath(int randomSeed, PathSeed pathSeed, float targetDist, InitialPose initPos, SingleSpace space, out float sumOfDistances, out float sumOfRotations)
+    public static List<Vector2> GenerateValidVirtualPath(
+        int randomSeed,
+        PathSeed pathSeed,
+        float targetDist,
+        InitialPose initPos,
+        SingleSpace space,
+        out float sumOfDistances,
+        out float sumOfRotations)
     {
-        Random.InitState(randomSeed);
-        List<Vector2> waypoints = new List<Vector2>();
-        Vector2 position = initPos.initialPosition;
-        float sampledDistance, sampledRotation;
-        sumOfDistances = 0;
-        sumOfRotations = 0;
-        waypoints.Add(position);
-        bool valid = false;
-        while (true)
+        // ★追加：元の乱数状態を退避
+        var previousRandomState = Random.state;
+        try
         {
-            sampledDistance = SampleDistribution(pathSeed.distanceDistribution);
-            if (sampledDistance + sumOfDistances >= targetDist)
+            Random.InitState(randomSeed);
+
+            List<Vector2> waypoints = new List<Vector2>();
+            Vector2 position = initPos.initialPosition;
+            float sampledDistance, sampledRotation;
+            sumOfDistances = 0;
+            sumOfRotations = 0;
+            waypoints.Add(position);
+            bool valid = false;
+            while (true)
             {
-                sampledDistance = targetDist - sumOfDistances;
-            }
-            sampledRotation = SampleDistribution(pathSeed.angleDistribution);
-            valid = CheckValid(space, position, sampledRotation, sampledDistance);
-            if (valid)
-            {
-                position = position + Utilities.RotateVector(new Vector2(0, 1), sampledRotation) * sampledDistance;
-                waypoints.Add(position);
-                sumOfDistances += sampledDistance;
-                sumOfRotations += Mathf.Abs(sampledRotation); // The last one might seem redundant to add
-                if (Mathf.Abs(sumOfDistances - targetDist) < 1e-6)
+                sampledDistance = SampleDistribution(pathSeed.distanceDistribution);
+                if (sampledDistance + sumOfDistances >= targetDist)
                 {
-                    break;
+                    sampledDistance = targetDist - sumOfDistances;
+                }
+                sampledRotation = SampleDistribution(pathSeed.angleDistribution);
+                valid = CheckValid(space, position, sampledRotation, sampledDistance);
+                if (valid)
+                {
+                    position = position + Utilities.RotateVector(new Vector2(0, 1), sampledRotation) * sampledDistance;
+                    waypoints.Add(position);
+                    sumOfDistances += sampledDistance;
+                    sumOfRotations += Mathf.Abs(sampledRotation);
+                    if (Mathf.Abs(sumOfDistances - targetDist) < 1e-6)
+                    {
+                        break;
+                    }
                 }
             }
+            return waypoints;
         }
-        return waypoints;
+        finally
+        {
+            // ★追加：外側の乱数状態を元に戻す
+            Random.state = previousRandomState;
+        }
     }
 
     //generate waypoints by pathSeed，ensure the same in every trial
-    public static List<Vector2> GenerateInitialPathByPathSeed(int randomSeed, PathSeed pathSeed, float targetDist, out float sumOfDistances, out float sumOfRotations)
+    public static List<Vector2> GenerateInitialPathByPathSeed(
+        int randomSeed,
+        PathSeed pathSeed,
+        float targetDist,
+        out float sumOfDistances,
+        out float sumOfRotations)
     {
-        Random.InitState(randomSeed); // we init state here
-        Vector2 initialPosition = Vector2.zero;
-        Vector2 initialForward = new Vector2(0, 1);//along z axis
-        // THE GENERATION RULE IS WALK THEN TURN! SO THE LAST TURN IS TECHNICALLY REDUNDANT!
-        // I'M DOING THIS TO MAKE SURE WE WALK STRAIGHT ALONG THE INITIAL POSITION FIRST BEFORE WE EVER TURN
-        List<Vector2> waypoints = new List<Vector2>(pathSeed.waypointCount);
-        Vector2 position = initialPosition;
-        Vector2 forward = initialForward.normalized;
-        Vector2 nextPosition, nextForward;
-        float sampledDistance, sampledRotation;
-        sumOfDistances = 0;
-        sumOfRotations = 0;
-        int alternator = 1;
-
-        //add start point
-        waypoints.Add(position);
-        bool finished = false;
-        for (; !finished;)
+        // ★追加：元の乱数状態を退避
+        var previousRandomState = Random.state;
+        try
         {
-            sampledDistance = SampleDistribution(pathSeed.distanceDistribution);
-            if (sampledDistance + sumOfDistances >= targetDist)
+            Random.InitState(randomSeed);
+
+            Vector2 initialPosition = Vector2.zero;
+            Vector2 initialForward = new Vector2(0, 1);
+            List<Vector2> waypoints = new List<Vector2>(pathSeed.waypointCount);
+            Vector2 position = initialPosition;
+            Vector2 forward = initialForward.normalized;
+            Vector2 nextPosition, nextForward;
+            float sampledDistance, sampledRotation;
+            sumOfDistances = 0;
+            sumOfRotations = 0;
+            int alternator = 1;
+
+            waypoints.Add(position);
+            bool finished = false;
+            for (; !finished;)
             {
-                finished = true;
-                sampledDistance = targetDist - sumOfDistances;
+                sampledDistance = SampleDistribution(pathSeed.distanceDistribution);
+                if (sampledDistance + sumOfDistances >= targetDist)
+                {
+                    finished = true;
+                    sampledDistance = targetDist - sumOfDistances;
+                }
+                sampledRotation = SampleDistribution(pathSeed.angleDistribution);
+                if (pathSeed.angleDistribution.alternationType == AlternationType.Constant)
+                    sampledRotation *= alternator;
+                nextPosition = position + sampledDistance * forward;
+                nextForward = Utilities.RotateVector(forward, sampledRotation).normalized;
+                waypoints.Add(nextPosition);
+                position = nextPosition;
+                forward = nextForward;
+                sumOfDistances += sampledDistance;
+                sumOfRotations += Mathf.Abs(sampledRotation);
+                alternator *= -1;
             }
-            sampledRotation = SampleDistribution(pathSeed.angleDistribution);
-            if (pathSeed.angleDistribution.alternationType == AlternationType.Constant)
-                sampledRotation *= alternator;
-            nextPosition = position + sampledDistance * forward;
-            nextForward = Utilities.RotateVector(forward, sampledRotation).normalized; // Normalizing for extra protection in case error accumulates over time
-            waypoints.Add(nextPosition);
-            position = nextPosition;
-            forward = nextForward;
-            sumOfDistances += sampledDistance;
-            sumOfRotations += Mathf.Abs(sampledRotation); // The last one might seem redundant to add
-            alternator *= -1;
+            return waypoints;
         }
-        return waypoints;
+        finally
+        {
+            // ★追加：外側の乱数状態を元に戻す
+            Random.state = previousRandomState;
+        }
     }
+    
     //generate circle path
     public static List<Vector2> GenerateCirclePath(int randomSeed, float radius, int waypointNum, out float sumOfDistances, out float sumOfRotations, bool if8 = false)
     {

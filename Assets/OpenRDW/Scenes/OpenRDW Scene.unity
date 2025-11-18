@@ -1152,6 +1152,7 @@ MonoBehaviour:
   cameraVirtualTopForAllAvatars: {fileID: 0}
   signText: {fileID: 0}
   userInterfaceManager: {fileID: 0}
+  InitialPoseModeForNonHmd: 1
 --- !u!114 &226199563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1624,7 +1625,7 @@ MonoBehaviour:
   isRotating: 0
   isWalking: 0
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 1
+  redirectorChoice: 4
   resetterChoice: 1
   globalConfiguration: {fileID: 0}
   visualizationManager: {fileID: 0}
