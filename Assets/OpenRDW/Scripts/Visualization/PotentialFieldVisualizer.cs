@@ -60,6 +60,8 @@ public class PotentialFieldVisualizer : MonoBehaviour
     private Vector2 gridMax;
     private float[,] potentialGrid;
     private Vector2[,] gradientGrid;
+    private float minPotential;
+    private float maxPotential;
 
     // Visualization objects
     private GameObject heatmapObject;
@@ -261,6 +263,31 @@ public class PotentialFieldVisualizer : MonoBehaviour
                 gradientGrid[x, y] = -gradient; // 負の勾配（誘導方向）
             }
         }
+
+        // ポテンシャル値の最小値と最大値を計算
+        minPotential = float.MaxValue;
+        maxPotential = float.MinValue;
+
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                Vector2 cellPos = gridMin + new Vector2(x * gridCellSize, y * gridCellSize);
+
+                // トラッキングスペース内のみをカウント
+                if (!TrackingSpaceGenerator.IsPointInsidePolygon(space.trackingSpace, cellPos))
+                    continue;
+
+                float potential = potentialGrid[x, y];
+                if (potential > 0) // ゼロは除外
+                {
+                    minPotential = Mathf.Min(minPotential, potential);
+                    maxPotential = Mathf.Max(maxPotential, potential);
+                }
+            }
+        }
+
+        Debug.Log($"Potential range: min={minPotential:F2}, max={maxPotential:F2}");
     }
 
     /// <summary>
@@ -347,15 +374,7 @@ public class PotentialFieldVisualizer : MonoBehaviour
         heatmapMesh.triangles = triangles.ToArray();
         heatmapMesh.RecalculateNormals();
 
-        Debug.Log($"Heatmap mesh created: {vertices.Count} vertices, {triangles.Count / 3} triangles");
-
-        // 最初の数頂点の色をデバッグ出力
-        if (colors.Count > 0)
-        {
-            Debug.Log($"First vertex color: {colors[0]}");
-            if (colors.Count > 1)
-                Debug.Log($"Second vertex color: {colors[1]}");
-        }
+        Debug.Log($"Heatmap mesh: {vertices.Count} vertices, {triangles.Count / 3} triangles");
 
         // メッシュコンポーネント追加
         MeshFilter meshFilter = heatmapObject.AddComponent<MeshFilter>();
@@ -394,18 +413,11 @@ public class PotentialFieldVisualizer : MonoBehaviour
         meshRenderer.receiveShadows = false;
 
         // デバッグ情報
-        Debug.Log($"Heatmap object position: {heatmapObject.transform.position}");
-        Debug.Log($"Heatmap object local position: {heatmapObject.transform.localPosition}");
-        Debug.Log($"Parent transform position: {transform.position}");
-        Debug.Log($"Mesh bounds: {heatmapMesh.bounds}");
-        Debug.Log($"Using shader: {shader.name}");
-        Debug.Log($"MeshRenderer enabled: {meshRenderer.enabled}");
-        Debug.Log($"visualizationManager.ifVisible: {visualizationManager.ifVisible}");
-        Debug.Log($"Heatmap GameObject active: {heatmapObject.activeSelf}");
+        Debug.Log($"Heatmap shader: {shader.name}, visible: {meshRenderer.enabled}");
     }
 
     /// <summary>
-    /// ポテンシャル値を色に変換
+    /// ポテンシャル値を色に変換（5段階グラデーション）
     /// </summary>
     Color GetPotentialColor(float potential, bool inside)
     {
@@ -414,20 +426,51 @@ public class PotentialFieldVisualizer : MonoBehaviour
             return new Color(0, 0, 0, 0); // 透明（外側）
         }
 
-        // 青（低ポテンシャル） → シアン → 緑 → 黄 → 赤（高ポテンシャル）
-        float t = Mathf.Clamp01(potential / maxPotentialForColor);
-
-        Color lowColor = new Color(0, 0, 1, 0.8f);    // 青（安全）
-        Color midColor = new Color(0, 1, 0, 0.85f);   // 緑（中間）
-        Color highColor = new Color(1, 0, 0, 0.9f);   // 赤（危険）
-
-        if (t < 0.5f)
+        // 実際の範囲に基づいて正規化
+        float t;
+        if (maxPotential > minPotential)
         {
-            return Color.Lerp(lowColor, midColor, t * 2f);
+            t = Mathf.Clamp01((potential - minPotential) / (maxPotential - minPotential));
         }
         else
         {
-            return Color.Lerp(midColor, highColor, (t - 0.5f) * 2f);
+            t = 0.5f; // フォールバック
+        }
+
+        // 5段階グラデーション: 青 → シアン → 緑 → 黄 → オレンジ → 赤
+        // より高い透明度ではっきりとした色
+        Color color1 = new Color(0.0f, 0.0f, 1.0f, 0.95f);   // 青（最も安全）
+        Color color2 = new Color(0.0f, 1.0f, 1.0f, 0.95f);   // シアン
+        Color color3 = new Color(0.0f, 1.0f, 0.0f, 0.95f);   // 緑
+        Color color4 = new Color(1.0f, 1.0f, 0.0f, 0.95f);   // 黄色
+        Color color5 = new Color(1.0f, 0.5f, 0.0f, 0.95f);   // オレンジ
+        Color color6 = new Color(1.0f, 0.0f, 0.0f, 0.95f);   // 赤（最も危険）
+
+        // 5段階の補間
+        if (t < 0.2f)
+        {
+            // 青 → シアン
+            return Color.Lerp(color1, color2, t * 5f);
+        }
+        else if (t < 0.4f)
+        {
+            // シアン → 緑
+            return Color.Lerp(color2, color3, (t - 0.2f) * 5f);
+        }
+        else if (t < 0.6f)
+        {
+            // 緑 → 黄色
+            return Color.Lerp(color3, color4, (t - 0.4f) * 5f);
+        }
+        else if (t < 0.8f)
+        {
+            // 黄色 → オレンジ
+            return Color.Lerp(color4, color5, (t - 0.6f) * 5f);
+        }
+        else
+        {
+            // オレンジ → 赤
+            return Color.Lerp(color5, color6, (t - 0.8f) * 5f);
         }
     }
 
