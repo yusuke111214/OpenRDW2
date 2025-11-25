@@ -273,7 +273,14 @@ public class PotentialFieldVisualizer : MonoBehaviour
 
         heatmapObject = new GameObject("PotentialFieldHeatmap");
         heatmapObject.transform.SetParent(transform);
-        heatmapObject.layer = LayerMask.NameToLayer("Real");
+
+        // レイヤー設定（安全にチェック）
+        int realLayer = LayerMask.NameToLayer("Real");
+        if (realLayer != -1)
+        {
+            heatmapObject.layer = realLayer;
+        }
+        // レイヤーが存在しない場合はデフォルトレイヤー（0）を使用
 
         // メッシュデータを構築
         List<Vector3> vertices = new List<Vector3>();
@@ -340,16 +347,34 @@ public class PotentialFieldVisualizer : MonoBehaviour
         heatmapMesh.triangles = triangles.ToArray();
         heatmapMesh.RecalculateNormals();
 
+        Debug.Log($"Heatmap mesh created: {vertices.Count} vertices, {triangles.Count / 3} triangles");
+
         // メッシュコンポーネント追加
         MeshFilter meshFilter = heatmapObject.AddComponent<MeshFilter>();
         meshFilter.mesh = heatmapMesh;
 
         MeshRenderer meshRenderer = heatmapObject.AddComponent<MeshRenderer>();
+
+        // 頂点カラーをサポートする透明マテリアル
         Material mat = new Material(Shader.Find("Standard"));
+        mat.SetColor("_Color", Color.white); // 頂点カラーを乗算するためにベースを白に
         mat.SetFloat("_Glossiness", 0);
         mat.SetFloat("_Metallic", 0);
+
+        // 透明度を有効にする
+        mat.SetFloat("_Mode", 3); // Transparent mode
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.SetInt("_ZWrite", 0);
+        mat.DisableKeyword("_ALPHATEST_ON");
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        mat.renderQueue = 3000;
+
         meshRenderer.material = mat;
         meshRenderer.enabled = visualizationManager.ifVisible;
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows = false;
     }
 
     /// <summary>
@@ -365,9 +390,9 @@ public class PotentialFieldVisualizer : MonoBehaviour
         // 青（低ポテンシャル） → シアン → 緑 → 黄 → 赤（高ポテンシャル）
         float t = Mathf.Clamp01(potential / maxPotentialForColor);
 
-        Color lowColor = new Color(0, 0, 1, 0.6f);    // 青（安全）
-        Color midColor = new Color(0, 1, 0, 0.7f);    // 緑（中間）
-        Color highColor = new Color(1, 0, 0, 0.8f);   // 赤（危険）
+        Color lowColor = new Color(0, 0, 1, 0.8f);    // 青（安全）
+        Color midColor = new Color(0, 1, 0, 0.85f);   // 緑（中間）
+        Color highColor = new Color(1, 0, 0, 0.9f);   // 赤（危険）
 
         if (t < 0.5f)
         {
@@ -413,7 +438,14 @@ public class PotentialFieldVisualizer : MonoBehaviour
                 GameObject arrow = Instantiate(globalConfiguration.negArrow);
                 arrow.name = $"Arrow_{x}_{y}";
                 arrow.transform.SetParent(transform);
-                arrow.layer = LayerMask.NameToLayer("Real");
+
+                // レイヤー設定（安全にチェック）
+                int realLayer = LayerMask.NameToLayer("Real");
+                if (realLayer != -1)
+                {
+                    arrow.layer = realLayer;
+                }
+                // レイヤーが存在しない場合はデフォルトレイヤー（0）を使用
 
                 // 位置と向きを設定
                 Vector3 pos = Utilities.UnFlatten(cellPos) + Vector3.up * arrowHeight;
