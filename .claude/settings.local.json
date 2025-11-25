@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix:RandomInTrackingSpaceモードで完全ランダム位置を使用\n\nプリセット位置から選択する代わりに、トラッキングスペース内の\n完全にランダムな座標を歩行開始位置として使用するように修正。\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
