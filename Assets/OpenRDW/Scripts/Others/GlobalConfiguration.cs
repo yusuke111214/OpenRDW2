@@ -173,6 +173,10 @@ public class GlobalConfiguration : MonoBehaviour
     [Tooltip("Show heatmap (color-coded potential values)")]
     public bool showPotentialHeatmap = true;
 
+    [Tooltip("Color mapping gamma correction (lower = emphasize floor differences)")]
+    [Range(0.1f, 2.0f)]
+    public float potentialColorGamma = 0.5f;
+
     [Tooltip("Show arrow field (gradient directions)")]
     public bool showPotentialArrows = true;
 

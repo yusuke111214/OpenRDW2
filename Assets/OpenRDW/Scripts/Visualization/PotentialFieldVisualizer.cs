@@ -23,9 +23,9 @@ public class PotentialFieldVisualizer : MonoBehaviour
     [Tooltip("ヒートマップを表示")]
     public bool showHeatmap = true;
 
-    [Tooltip("ヒートマップの最大ポテンシャル値（色マッピング用）")]
-    [Range(1f, 50f)]
-    public float maxPotentialForColor = 20f;
+    [Tooltip("色マッピングのガンマ補正値（低いほど床の色の違いが強調される）")]
+    [Range(0.1f, 2.0f)]
+    public float colorGamma = 0.5f;
 
     [Tooltip("ヒートマップの高さオフセット")]
     [Range(0f, 0.5f)]
@@ -87,6 +87,7 @@ public class PotentialFieldVisualizer : MonoBehaviour
             enableVisualization = globalConfiguration.enablePotentialFieldVisualization;
             gridCellSize = globalConfiguration.potentialFieldGridSize;
             showHeatmap = globalConfiguration.showPotentialHeatmap;
+            colorGamma = globalConfiguration.potentialColorGamma;
             showArrowField = globalConfiguration.showPotentialArrows;
             arrowSpacing = globalConfiguration.potentialArrowSpacing;
             realtimeUpdate = globalConfiguration.realtimePotentialUpdate;
@@ -287,7 +288,7 @@ public class PotentialFieldVisualizer : MonoBehaviour
             }
         }
 
-        Debug.Log($"Potential range: min={minPotential:F2}, max={maxPotential:F2}");
+        Debug.Log($"Potential range: min={minPotential:F2}, max={maxPotential:F2}, gamma={colorGamma:F2}");
     }
 
     /// <summary>
@@ -436,6 +437,12 @@ public class PotentialFieldVisualizer : MonoBehaviour
         {
             t = 0.5f; // フォールバック
         }
+
+        // ガンマ補正を適用（低ポテンシャル領域の色の違いを強調）
+        // gamma < 1.0: 低い値を強調（床の色がはっきり）
+        // gamma = 1.0: 線形（デフォルト）
+        // gamma > 1.0: 高い値を強調（壁の色がはっきり）
+        t = Mathf.Pow(t, colorGamma);
 
         // 5段階グラデーション: 青 → シアン → 緑 → 黄 → オレンジ → 赤
         // より高い透明度ではっきりとした色
