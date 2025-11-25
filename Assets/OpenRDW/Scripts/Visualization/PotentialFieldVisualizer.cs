@@ -349,6 +349,14 @@ public class PotentialFieldVisualizer : MonoBehaviour
 
         Debug.Log($"Heatmap mesh created: {vertices.Count} vertices, {triangles.Count / 3} triangles");
 
+        // 最初の数頂点の色をデバッグ出力
+        if (colors.Count > 0)
+        {
+            Debug.Log($"First vertex color: {colors[0]}");
+            if (colors.Count > 1)
+                Debug.Log($"Second vertex color: {colors[1]}");
+        }
+
         // メッシュコンポーネント追加
         MeshFilter meshFilter = heatmapObject.AddComponent<MeshFilter>();
         meshFilter.mesh = heatmapMesh;
@@ -356,25 +364,46 @@ public class PotentialFieldVisualizer : MonoBehaviour
         MeshRenderer meshRenderer = heatmapObject.AddComponent<MeshRenderer>();
 
         // 頂点カラーをサポートする透明マテリアル
-        Material mat = new Material(Shader.Find("Standard"));
-        mat.SetColor("_Color", Color.white); // 頂点カラーを乗算するためにベースを白に
-        mat.SetFloat("_Glossiness", 0);
-        mat.SetFloat("_Metallic", 0);
+        // Particles/Standard Unlitシェーダーは頂点カラーをネイティブサポート
+        Shader shader = Shader.Find("Particles/Standard Unlit");
+        if (shader == null)
+        {
+            // フォールバック: Mobile/Particles/Additive
+            shader = Shader.Find("Mobile/Particles/Additive");
+            Debug.LogWarning("Particles/Standard Unlit shader not found, using Mobile/Particles/Additive");
+        }
+        if (shader == null)
+        {
+            // 最終フォールバック: Unlit/Color
+            shader = Shader.Find("Unlit/Color");
+            Debug.LogWarning("Mobile/Particles/Additive shader not found, using Unlit/Color");
+        }
 
-        // 透明度を有効にする
-        mat.SetFloat("_Mode", 3); // Transparent mode
-        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        mat.SetInt("_ZWrite", 0);
-        mat.DisableKeyword("_ALPHATEST_ON");
-        mat.EnableKeyword("_ALPHABLEND_ON");
-        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        mat.renderQueue = 3000;
+        Material mat = new Material(shader);
+
+        // Particles/Standard Unlitの設定
+        if (shader.name.Contains("Particles/Standard Unlit"))
+        {
+            mat.SetInt("_BlendMode", 0); // Blend
+            mat.SetInt("_ColorMode", 0); // Multiply
+            mat.SetFloat("_FlipbookMode", 0);
+            mat.EnableKeyword("_ALPHABLEND_ON");
+        }
 
         meshRenderer.material = mat;
         meshRenderer.enabled = visualizationManager.ifVisible;
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshRenderer.receiveShadows = false;
+
+        // デバッグ情報
+        Debug.Log($"Heatmap object position: {heatmapObject.transform.position}");
+        Debug.Log($"Heatmap object local position: {heatmapObject.transform.localPosition}");
+        Debug.Log($"Parent transform position: {transform.position}");
+        Debug.Log($"Mesh bounds: {heatmapMesh.bounds}");
+        Debug.Log($"Using shader: {shader.name}");
+        Debug.Log($"MeshRenderer enabled: {meshRenderer.enabled}");
+        Debug.Log($"visualizationManager.ifVisible: {visualizationManager.ifVisible}");
+        Debug.Log($"Heatmap GameObject active: {heatmapObject.activeSelf}");
     }
 
     /// <summary>
