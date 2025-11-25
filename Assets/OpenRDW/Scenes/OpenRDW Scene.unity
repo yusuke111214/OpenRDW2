@@ -1091,6 +1091,7 @@ MonoBehaviour:
   enablePotentialFieldVisualization: 1
   potentialFieldGridSize: 0.2
   showPotentialHeatmap: 1
+  potentialColorGamma: 0.174
   showPotentialArrows: 1
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
