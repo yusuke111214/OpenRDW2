@@ -160,6 +160,31 @@ public class GlobalConfiguration : MonoBehaviour
 
     #endregion
 
+    #region Visualization
+
+    [Header("Potential Field Visualization")]
+    [Tooltip("Enable potential field visualization for APF redirectors")]
+    public bool enablePotentialFieldVisualization = false;
+
+    [Tooltip("Grid cell size for potential field calculation (meters)")]
+    [Range(0.1f, 1.0f)]
+    public float potentialFieldGridSize = 0.2f;
+
+    [Tooltip("Show heatmap (color-coded potential values)")]
+    public bool showPotentialHeatmap = true;
+
+    [Tooltip("Show arrow field (gradient directions)")]
+    public bool showPotentialArrows = true;
+
+    [Tooltip("Arrow spacing for potential field (meters)")]
+    [Range(0.2f, 2.0f)]
+    public float potentialArrowSpacing = 0.5f;
+
+    [Tooltip("Realtime update of potential field (performance cost)")]
+    public bool realtimePotentialUpdate = false;
+
+    #endregion
+
     #region Avatar
 
     [Header("Avatar")]

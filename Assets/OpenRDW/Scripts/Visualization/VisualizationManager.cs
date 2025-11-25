@@ -44,6 +44,9 @@ public class VisualizationManager : MonoBehaviour
     [HideInInspector]
     public LineRenderer targetLine;
 
+    [HideInInspector]
+    public PotentialFieldVisualizer potentialFieldVisualizer;
+
     void Awake()
     {
         ifVisible = true;
@@ -82,6 +85,13 @@ public class VisualizationManager : MonoBehaviour
         else
         {
             targetLine = null;
+        }
+
+        // PotentialFieldVisualizerを取得または追加
+        potentialFieldVisualizer = GetComponent<PotentialFieldVisualizer>();
+        if (potentialFieldVisualizer == null)
+        {
+            potentialFieldVisualizer = gameObject.AddComponent<PotentialFieldVisualizer>();
         }
     }
 
@@ -130,6 +140,12 @@ public class VisualizationManager : MonoBehaviour
         foreach (var cam in GetComponentsInChildren<Camera>())
         {
             cam.enabled = false;
+        }
+
+        // PotentialFieldVisualizerの可視性を更新
+        if (potentialFieldVisualizer != null && potentialFieldVisualizer.enableVisualization)
+        {
+            potentialFieldVisualizer.RegenerateVisualization();
         }
     }
 
