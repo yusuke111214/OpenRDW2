@@ -878,15 +878,9 @@ public class TrackingSpaceGenerator
             random = new System.Random(Environment.TickCount);
         }
 
-        // 1. もしプリセットの initialPoses があれば、そこからランダムに 1 つ選ぶ
-        if (space.initialPoses != null && space.initialPoses.Count > 0)
-        {
-            var index = random.Next(space.initialPoses.Count); // 0 <= index < Count
-            var pose = space.initialPoses[index];
-            return InitialPose.Copy(pose);
-        }
-
-        // 2. 無ければ、ポリゴン内ランダム
+        // RandomInTrackingSpace モードでは、プリセット位置を使わず、
+        // 常にトラッキングスペース内の完全なランダム位置を使用
+        // ポリゴン内ランダム
         if (space.trackingSpace == null || space.trackingSpace.Count == 0)
         {
             return new InitialPose(Vector2.zero, Vector2.up);
