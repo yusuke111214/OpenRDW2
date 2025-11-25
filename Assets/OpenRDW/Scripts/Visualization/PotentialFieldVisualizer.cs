@@ -28,8 +28,8 @@ public class PotentialFieldVisualizer : MonoBehaviour
     public float maxPotentialForColor = 20f;
 
     [Tooltip("ヒートマップの高さオフセット")]
-    [Range(0f, 0.1f)]
-    public float heatmapHeight = 0.002f;
+    [Range(0f, 0.5f)]
+    public float heatmapHeight = 0.05f;
 
     [Header("Arrow Field Parameters")]
     [Tooltip("矢印フィールドを表示")]
@@ -364,31 +364,29 @@ public class PotentialFieldVisualizer : MonoBehaviour
         MeshRenderer meshRenderer = heatmapObject.AddComponent<MeshRenderer>();
 
         // 頂点カラーをサポートする透明マテリアル
-        // Particles/Standard Unlitシェーダーは頂点カラーをネイティブサポート
-        Shader shader = Shader.Find("Particles/Standard Unlit");
+        // Legacy Shaders/Particles/Alpha Blendedは頂点カラーを確実にサポート
+        Shader shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended");
         if (shader == null)
         {
-            // フォールバック: Mobile/Particles/Additive
-            shader = Shader.Find("Mobile/Particles/Additive");
-            Debug.LogWarning("Particles/Standard Unlit shader not found, using Mobile/Particles/Additive");
+            // フォールバック: Mobile/Particles/Alpha Blended
+            shader = Shader.Find("Mobile/Particles/Alpha Blended");
+            Debug.LogWarning("Legacy Shaders/Particles/Alpha Blended not found, using Mobile/Particles/Alpha Blended");
         }
         if (shader == null)
         {
-            // 最終フォールバック: Unlit/Color
-            shader = Shader.Find("Unlit/Color");
-            Debug.LogWarning("Mobile/Particles/Additive shader not found, using Unlit/Color");
+            // 最終フォールバック: Particles/Standard Unlit
+            shader = Shader.Find("Particles/Standard Unlit");
+            Debug.LogWarning("Mobile/Particles/Alpha Blended not found, using Particles/Standard Unlit");
+        }
+        if (shader == null)
+        {
+            // 緊急フォールバック
+            shader = Shader.Find("Unlit/Transparent");
+            Debug.LogWarning("All preferred shaders not found, using Unlit/Transparent");
         }
 
         Material mat = new Material(shader);
-
-        // Particles/Standard Unlitの設定
-        if (shader.name.Contains("Particles/Standard Unlit"))
-        {
-            mat.SetInt("_BlendMode", 0); // Blend
-            mat.SetInt("_ColorMode", 0); // Multiply
-            mat.SetFloat("_FlipbookMode", 0);
-            mat.EnableKeyword("_ALPHABLEND_ON");
-        }
+        mat.SetColor("_TintColor", Color.white); // パーティクルシェーダー用
 
         meshRenderer.material = mat;
         meshRenderer.enabled = visualizationManager.ifVisible;
