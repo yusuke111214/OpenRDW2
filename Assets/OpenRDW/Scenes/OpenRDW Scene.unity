@@ -1062,7 +1062,7 @@ MonoBehaviour:
   directionSamples: 30
   timeStepBase: 0
   timeStepCountDown: 0
-  runInBackstage: 0
+  runInBackstage: 1
   loadFromTxt: 0
   multiCmdFiles: 0
   useResetPanel: 0
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   negArrow: {fileID: 717936904266117204, guid: f68566b61c5ebc74784982a22ecef585, type: 3}
   readyToStart: 0
   enablePotentialFieldVisualization: 1
-  potentialFieldGridSize: 0.2
+  potentialFieldGridSize: 0.172
   showPotentialHeatmap: 1
   potentialColorGamma: 0.174
   showPotentialArrows: 1
@@ -1124,8 +1124,9 @@ MonoBehaviour:
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
   squareWidth: 8
-  doubleRoomSquareWidth: 15
-  doubleRoomCorridorWidth: 10
+  doubleRoomLeftRoomSide: 10
+  doubleRoomRightRoomSide: 20
+  doubleRoomCorridorWidth: 5
   doubleRoomCorridorLength: 8
   virtualObstacleColor: {r: 0.29850477, g: 0.21626912, b: 0.33962262, a: 0}
   obstacleColor: {r: 0.4352941, g: 0.2426616, b: 0.0039215665, a: 1}
