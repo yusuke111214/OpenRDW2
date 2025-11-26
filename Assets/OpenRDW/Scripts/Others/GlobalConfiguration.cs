@@ -267,8 +267,12 @@ public class GlobalConfiguration : MonoBehaviour
 
     [Tooltip("Side length if trackingSpace == Square")]
     public float squareWidth;
-    [Tooltip("Side length of each square room if trackingSpace == DoubleRoom")]
-    public float doubleRoomSquareWidth = 4f;
+
+    [Tooltip("Side length of the left square room if trackingSpace == DoubleRoom")]
+    public float doubleRoomLeftRoomSide = 4f;
+
+    [Tooltip("Side length of the right square room if trackingSpace == DoubleRoom")]
+    public float doubleRoomRightRoomSide = 4f;
 
     [Tooltip("Width of the corridor if trackingSpace == DoubleRoom")]
     public float doubleRoomCorridorWidth = 2f;
@@ -1848,7 +1852,8 @@ public class GlobalConfiguration : MonoBehaviour
                 TrackingSpaceGenerator.GenerateDoubleRoomTrackingSpace(
                     obstacleType,
                     out rePhysicalSpaces,
-                    doubleRoomSquareWidth,
+                    doubleRoomLeftRoomSide,
+                    doubleRoomRightRoomSide,
                     doubleRoomCorridorWidth,
                     doubleRoomCorridorLength
                 );

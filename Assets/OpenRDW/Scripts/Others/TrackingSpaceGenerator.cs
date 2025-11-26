@@ -267,53 +267,60 @@ public class TrackingSpaceGenerator
         GenerateT_ShapeTrackingSpace(obstacleType, out physicalSpaces, w1, w2, w3);
     }
 
-    public static List<Vector2> GenerateDoubleRoomTrackingSpacePoints(float roomSide, float corridorWidth, float corridorLength)
+    public static List<Vector2> GenerateDoubleRoomTrackingSpacePoints(float leftRoomSide, float rightRoomSide, float corridorWidth, float corridorLength)
     {
         var trackingSpacePoints = new List<Vector2>();
 
-        if (roomSide <= 0 || corridorWidth <= 0 || corridorLength <= 0)
+        if (leftRoomSide <= 0 || rightRoomSide <= 0 || corridorWidth <= 0 || corridorLength <= 0)
         {
             Debug.LogError("GenerateDoubleRoomTrackingSpacePoints: invalid parameters.");
             return trackingSpacePoints;
         }
 
-        var halfRoom = roomSide / 2f;
+        var halfLeftRoom = leftRoomSide / 2f;
+        var halfRightRoom = rightRoomSide / 2f;
         var halfCorridorLen = corridorLength / 2f;
 
-        // 廊下の幅が部屋より大きくなりすぎないように clamp
-        var halfCorridorWidth = Mathf.Min(corridorWidth / 2f, halfRoom);
+        // 廊下の幅が両方の部屋のうち小さい方より大きくなりすぎないように clamp
+        var minHalfRoom = Mathf.Min(halfLeftRoom, halfRightRoom);
+        var halfCorridorWidth = Mathf.Min(corridorWidth / 2f, minHalfRoom);
 
-        float leftSquareLeft = -halfCorridorLen - roomSide;
+        float leftSquareLeft = -halfCorridorLen - leftRoomSide;
         float leftSquareRight = -halfCorridorLen;
         float rightSquareLeft = halfCorridorLen;
-        float rightSquareRight = halfCorridorLen + roomSide;
-        float topY = halfRoom;
-        float bottomY = -halfRoom;
+        float rightSquareRight = halfCorridorLen + rightRoomSide;
+
+        // 左右の部屋の上下端（より大きい方の部屋に合わせる）
+        float leftTopY = halfLeftRoom;
+        float leftBottomY = -halfLeftRoom;
+        float rightTopY = halfRightRoom;
+        float rightBottomY = -halfRightRoom;
+
         float corridorTopY = halfCorridorWidth;
         float corridorBottomY = -halfCorridorWidth;
 
         // 必ず counter-clockwise になるような順番で頂点を列挙
-        // 左下 → 左部屋右下 → 廊下下 → 右部屋右下 → 右上 → 右部屋左上 → 廊下上 → 左部屋右上 → 左上
-        trackingSpacePoints.Add(new Vector2(leftSquareLeft, bottomY));          // 1
-        trackingSpacePoints.Add(new Vector2(leftSquareRight, bottomY));         // 2
-        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorBottomY)); // 3
-        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorBottomY)); // 4
-        trackingSpacePoints.Add(new Vector2(rightSquareLeft, bottomY));         // 5
-        trackingSpacePoints.Add(new Vector2(rightSquareRight, bottomY));        // 6
-        trackingSpacePoints.Add(new Vector2(rightSquareRight, topY));           // 7
-        trackingSpacePoints.Add(new Vector2(rightSquareLeft, topY));            // 8
-        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorTopY));    // 9
-        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorTopY));    // 10
-        trackingSpacePoints.Add(new Vector2(leftSquareRight, topY));            // 11
-        trackingSpacePoints.Add(new Vector2(leftSquareLeft, topY));             // 12
+        // 左下から時計回りに頂点を配置
+        trackingSpacePoints.Add(new Vector2(leftSquareLeft, leftBottomY));          // 1: 左部屋左下
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, leftBottomY));         // 2: 左部屋右下
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorBottomY));     // 3: 左部屋→廊下接続点（下）
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorBottomY));     // 4: 廊下→右部屋接続点（下）
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, rightBottomY));        // 5: 右部屋左下
+        trackingSpacePoints.Add(new Vector2(rightSquareRight, rightBottomY));       // 6: 右部屋右下
+        trackingSpacePoints.Add(new Vector2(rightSquareRight, rightTopY));          // 7: 右部屋右上
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, rightTopY));           // 8: 右部屋左上
+        trackingSpacePoints.Add(new Vector2(rightSquareLeft, corridorTopY));        // 9: 廊下→右部屋接続点（上）
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, corridorTopY));        // 10: 左部屋→廊下接続点（上）
+        trackingSpacePoints.Add(new Vector2(leftSquareRight, leftTopY));            // 11: 左部屋右上
+        trackingSpacePoints.Add(new Vector2(leftSquareLeft, leftTopY));             // 12: 左部屋左上
 
         return trackingSpacePoints;
     }
 
     public static void GenerateDoubleRoomTrackingSpace(int obstacleType, out List<SingleSpace> physicalSpaces,
-                                                    float roomSide, float corridorWidth, float corridorLength)
+                                                    float leftRoomSide, float rightRoomSide, float corridorWidth, float corridorLength)
     {
-        var trackingSpacePoints = GenerateDoubleRoomTrackingSpacePoints(roomSide, corridorWidth, corridorLength);
+        var trackingSpacePoints = GenerateDoubleRoomTrackingSpacePoints(leftRoomSide, rightRoomSide, corridorWidth, corridorLength);
         var obstaclePolygons = new List<List<Vector2>>();
         var initialPoses = new List<InitialPose>();
 
@@ -323,33 +330,37 @@ public class TrackingSpaceGenerator
             return;
         }
 
-        var halfRoom = roomSide / 2f;
+        var halfLeftRoom = leftRoomSide / 2f;
+        var halfRightRoom = rightRoomSide / 2f;
         var halfCorridorLen = corridorLength / 2f;
 
-        float leftSquareLeft = -halfCorridorLen - roomSide;
+        float leftSquareLeft = -halfCorridorLen - leftRoomSide;
         float leftSquareRight = -halfCorridorLen;
         float rightSquareLeft = halfCorridorLen;
-        float rightSquareRight = halfCorridorLen + roomSide;
-        float topY = halfRoom;
-        float bottomY = -halfRoom;
+        float rightSquareRight = halfCorridorLen + rightRoomSide;
+        float leftTopY = halfLeftRoom;
+        float leftBottomY = -halfLeftRoom;
+        float rightTopY = halfRightRoom;
+        float rightBottomY = -halfRightRoom;
 
-        var distToWall = 0.1f * roomSide;
+        var distToWallLeft = 0.1f * leftRoomSide;
+        var distToWallRight = 0.1f * rightRoomSide;
 
         // ==== Initial Poses ====
         // 左の部屋（2つ）
         initialPoses.Add(new InitialPose(
-            new Vector2(leftSquareLeft + distToWall, topY - distToWall),
+            new Vector2(leftSquareLeft + distToWallLeft, leftTopY - distToWallLeft),
             Vector2.right));  // 廊下方向を向く
         initialPoses.Add(new InitialPose(
-            new Vector2(leftSquareLeft + distToWall, bottomY + distToWall),
+            new Vector2(leftSquareLeft + distToWallLeft, leftBottomY + distToWallLeft),
             Vector2.right));
 
         // 右の部屋（2つ）
         initialPoses.Add(new InitialPose(
-            new Vector2(rightSquareRight - distToWall, topY - distToWall),
+            new Vector2(rightSquareRight - distToWallRight, rightTopY - distToWallRight),
             Vector2.left));   // 廊下方向を向く
         initialPoses.Add(new InitialPose(
-            new Vector2(rightSquareRight - distToWall, bottomY + distToWall),
+            new Vector2(rightSquareRight - distToWallRight, rightBottomY + distToWallRight),
             Vector2.left));
 
         // ==== Obstacles ====
@@ -376,26 +387,29 @@ public class TrackingSpaceGenerator
                 break;
 
             case 2:
-                // 各部屋の中央に小さい正方形の障害物
+                // 各部屋の中央に小さい正方形の障害物（部屋のサイズに応じて調整）
                 {
-                    var halfObs = roomSide * 0.1f;
+                    var halfObsLeft = leftRoomSide * 0.1f;
+                    var halfObsRight = rightRoomSide * 0.1f;
                     var leftCenterX = (leftSquareLeft + leftSquareRight) * 0.5f;
                     var rightCenterX = (rightSquareLeft + rightSquareRight) * 0.5f;
 
+                    // 左の部屋の障害物
                     obstaclePolygons.Add(new List<Vector2>
                     {
-                        new Vector2(leftCenterX - halfObs, -halfObs),
-                        new Vector2(leftCenterX + halfObs, -halfObs),
-                        new Vector2(leftCenterX + halfObs,  halfObs),
-                        new Vector2(leftCenterX - halfObs,  halfObs),
+                        new Vector2(leftCenterX - halfObsLeft, -halfObsLeft),
+                        new Vector2(leftCenterX + halfObsLeft, -halfObsLeft),
+                        new Vector2(leftCenterX + halfObsLeft,  halfObsLeft),
+                        new Vector2(leftCenterX - halfObsLeft,  halfObsLeft),
                     });
 
+                    // 右の部屋の障害物
                     obstaclePolygons.Add(new List<Vector2>
                     {
-                        new Vector2(rightCenterX - halfObs, -halfObs),
-                        new Vector2(rightCenterX + halfObs, -halfObs),
-                        new Vector2(rightCenterX + halfObs,  halfObs),
-                        new Vector2(rightCenterX - halfObs,  halfObs),
+                        new Vector2(rightCenterX - halfObsRight, -halfObsRight),
+                        new Vector2(rightCenterX + halfObsRight, -halfObsRight),
+                        new Vector2(rightCenterX + halfObsRight,  halfObsRight),
+                        new Vector2(rightCenterX - halfObsRight,  halfObsRight),
                     });
                 }
                 break;
