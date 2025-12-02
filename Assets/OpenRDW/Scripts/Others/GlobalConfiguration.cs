@@ -244,43 +244,6 @@ public class GlobalConfiguration : MonoBehaviour
     [Range(1.0f, 5.0f)]
     public float adaptiveFarDistance = 2.0f;
 
-    [Header("Grid-based APF Parameters")]
-    [Tooltip("Cell size for grid-based APF (meters) - smaller = more accurate but slower")]
-    [Range(0.1f, 0.5f)]
-    public float gridCellSize = 0.2f;
-
-    [Tooltip("Minimum distance to consider as open space (meters)")]
-    [Range(0.5f, 3.0f)]
-    public float gridMinOpenDistance = 1.0f;
-
-    [Tooltip("Use local search for open space detection (faster)")]
-    public bool useLocalSearch = true;
-
-    [Tooltip("Search radius for local open space detection (meters)")]
-    [Range(3.0f, 15.0f)]
-    public float localSearchRadius = 8.0f;
-
-    [Header("Grid-based Potential Field Visualization")]
-    [Tooltip("Enable grid-based potential field visualization (heatmap + arrows)")]
-    public bool enableGridPotentialVisualization = false;
-
-    [Tooltip("Show heatmap mesh on the ground")]
-    public bool showGridHeatmap = true;
-
-    [Tooltip("Show arrow field indicating gradient direction")]
-    public bool showGridArrows = true;
-
-    [Tooltip("Color gamma correction (lower = emphasize low potential areas)")]
-    [Range(0.1f, 2.0f)]
-    public float gridColorGamma = 0.5f;
-
-    [Tooltip("Arrow spacing in grid cells (draw arrow every N cells)")]
-    [Range(1, 10)]
-    public int gridArrowSpacing = 2;
-
-    [Tooltip("Realtime update of grid visualization (heavy)")]
-    public bool realtimeGridUpdate = false;
-
     #endregion
 
     #region Avatar
