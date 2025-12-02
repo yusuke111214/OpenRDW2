@@ -187,63 +187,6 @@ public class GlobalConfiguration : MonoBehaviour
     [Tooltip("Realtime update of potential field (performance cost)")]
     public bool realtimePotentialUpdate = false;
 
-    [Header("Attraction Visualization")]
-    [Tooltip("Enable visualization of attractive forces and steering targets")]
-    public bool enableAttractionVisualization = true;
-
-    [Tooltip("Show attractive force vector (cyan arrow)")]
-    public bool showAttractiveForce = true;
-
-    [Tooltip("Show steering target marker (yellow sphere)")]
-    public bool showSteeringTarget = true;
-
-    [Tooltip("Log attraction debug information to console (every 60 frames)")]
-    public bool logAttractionDebugInfo = false;
-
-    #endregion
-
-    #region Attractive Potential Field
-
-    [Header("Attractive Potential Field Parameters")]
-    [Tooltip("Enable attractive forces to solve local minima problem")]
-    public bool enableAttractivePotentialField = true;
-
-    [Tooltip("Attraction strength coefficient (k_att)")]
-    [Range(0.1f, 5.0f)]
-    public float attractionStrength = 1.0f;
-
-    [Tooltip("Weight of attractive force (0-1, will be normalized with repulsive weight)")]
-    [Range(0.0f, 1.0f)]
-    public float attractiveWeight = 0.3f;
-
-    [Tooltip("Weight of repulsive force (0-1, will be normalized with attractive weight)")]
-    [Range(0.0f, 1.0f)]
-    public float repulsiveWeight = 0.7f;
-
-    [Tooltip("Distance beyond which attractive force saturates (meters)")]
-    [Range(1.0f, 10.0f)]
-    public float attractionSaturationDistance = 3.0f;
-
-    [Tooltip("Weight for velocity-based force modulation (0-1)")]
-    [Range(0.0f, 1.0f)]
-    public float attractionVelocityWeight = 0.3f;
-
-    [Tooltip("Update interval for steering target selection (seconds)")]
-    [Range(0.1f, 5.0f)]
-    public float attractionTargetUpdateInterval = 1.0f;
-
-    [Header("Adaptive Weight Adjustment")]
-    [Tooltip("Use adaptive weights based on distance to obstacles")]
-    public bool useAdaptiveWeights = false;
-
-    [Tooltip("Distance threshold for 'close' obstacle (meters) - prioritize repulsion")]
-    [Range(0.3f, 2.0f)]
-    public float adaptiveCloseDistance = 1.0f;
-
-    [Tooltip("Distance threshold for 'far' obstacle (meters) - balance forces")]
-    [Range(1.0f, 5.0f)]
-    public float adaptiveFarDistance = 2.0f;
-
     #endregion
 
     #region Avatar
