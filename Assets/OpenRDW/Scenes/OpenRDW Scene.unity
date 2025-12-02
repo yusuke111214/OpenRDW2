@@ -1062,7 +1062,7 @@ MonoBehaviour:
   directionSamples: 30
   timeStepBase: 0
   timeStepCountDown: 0
-  runInBackstage: 1
+  runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
   useResetPanel: 0
@@ -1095,6 +1095,20 @@ MonoBehaviour:
   showPotentialArrows: 1
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
+  enableAttractionVisualization: 1
+  showAttractiveForce: 1
+  showSteeringTarget: 1
+  logAttractionDebugInfo: 0
+  enableAttractivePotentialField: 1
+  attractionStrength: 1
+  attractiveWeight: 0.3
+  repulsiveWeight: 0.7
+  attractionSaturationDistance: 3
+  attractionVelocityWeight: 0.3
+  attractionTargetUpdateInterval: 1
+  useAdaptiveWeights: 0
+  adaptiveCloseDistance: 1
+  adaptiveFarDistance: 2
   avatarNum: 1
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
@@ -1119,11 +1133,11 @@ MonoBehaviour:
   trackingSpaceVisible: 1
   bufferVisible: 1
   if3dObstacle: 1
-  trackingSpaceChoice: 5
-  obstacleType: 0
+  trackingSpaceChoice: 1
+  obstacleType: 1
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
-  squareWidth: 8
+  squareWidth: 16.76
   doubleRoomLeftRoomSide: 10
   doubleRoomRightRoomSide: 20
   doubleRoomCorridorWidth: 5
@@ -1634,7 +1648,7 @@ MonoBehaviour:
   isRotating: 0
   isWalking: 0
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 4
+  redirectorChoice: 5
   resetterChoice: 1
   globalConfiguration: {fileID: 0}
   visualizationManager: {fileID: 0}

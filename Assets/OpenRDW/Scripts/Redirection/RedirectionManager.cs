@@ -9,7 +9,7 @@ public class RedirectionManager : MonoBehaviour
     const float EPS = 1e-5f;
     public static readonly float MaxSamePosTime = 50;//the max time(in seconds) the avatar can stand on the same position, exceeds this value will make data invalid (stuck in one place)
 
-    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF, SeparateSpace };
+    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, ThomasAPFWithAttraction, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF, SeparateSpace };
     public enum ResetterChoice { None, TwoOneTurn, FreezeTurn, MR2C, R2G, SFR2G, SeparateSpace };
 
     [HideInInspector]
@@ -178,6 +178,8 @@ public class RedirectionManager : MonoBehaviour
                 return typeof(ZigZagRedirector);
             case RedirectorChoice.ThomasAPF:
                 return typeof(ThomasAPF_Redirector);
+            case RedirectorChoice.ThomasAPFWithAttraction:
+                return typeof(ThomasAPF_WithAttraction_Redirector);
             case RedirectorChoice.MessingerAPF:
                 return typeof(MessingerAPF_Redirector);
             case RedirectorChoice.DynamicAPF:
@@ -203,6 +205,8 @@ public class RedirectionManager : MonoBehaviour
             return RedirectorChoice.Zigzag;
         else if (redirector.Equals(typeof(ThomasAPF_Redirector)))
             return RedirectorChoice.ThomasAPF;
+        else if (redirector.Equals(typeof(ThomasAPF_WithAttraction_Redirector)))
+            return RedirectorChoice.ThomasAPFWithAttraction;
         else if (redirector.Equals(typeof(MessingerAPF_Redirector)))
             return RedirectorChoice.MessingerAPF;
         else if (redirector.Equals(typeof(DynamicAPF_Redirector)))
@@ -229,6 +233,8 @@ public class RedirectionManager : MonoBehaviour
                 return typeof(ZigZagRedirector);
             case "thomasapf":
                 return typeof(ThomasAPF_Redirector);
+            case "thomasapfwithattraction":
+                return typeof(ThomasAPF_WithAttraction_Redirector);
             case "messingerapf":
                 return typeof(MessingerAPF_Redirector);
             case "dynamicapf":
