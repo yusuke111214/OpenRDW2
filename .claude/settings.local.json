@@ -8,7 +8,9 @@
       "Bash(git commit:*)",
       "WebFetch(domain:www.frontiersin.org)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
