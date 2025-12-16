@@ -1062,7 +1062,7 @@ MonoBehaviour:
   directionSamples: 30
   timeStepBase: 0
   timeStepCountDown: 0
-  runInBackstage: 1
+  runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
   useResetPanel: 0
@@ -1119,7 +1119,7 @@ MonoBehaviour:
   trackingSpaceVisible: 1
   bufferVisible: 1
   if3dObstacle: 1
-  trackingSpaceChoice: 5
+  trackingSpaceChoice: 1
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
