@@ -1,5 +1,6 @@
 // Predictive Redirected Walking using Lemniscate Path Prediction (PredRedLPP)
-// Based on: "Predictive multiuser redirected walking using artificial potential fields"
+// 予測的リダイレクテッドウォーキング - レムニスケートパス予測を使用
+// 論文: "Predictive multiuser redirected walking using artificial potential fields"
 // (Hirt et al., 2024)
 // Paper: https://www.frontiersin.org/articles/10.3389/frvir.2024.1365344/full
 
@@ -7,35 +8,46 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// PredRedLPP redirector that combines predictive path planning with artificial potential fields.
-/// This algorithm predicts user trajectories using lemniscate-based clothoid curves and evaluates
-/// redirection actions using APF-based cost functions.
+/// PredRedLPPリダイレクター - 予測的パスプランニングと人工ポテンシャル場を組み合わせ
+///
+/// このアルゴリズムの特徴：
+/// - レムニスケートベースのクロソイド曲線でユーザーの軌跡を予測
+/// - APFベースのコスト関数でリダイレクションアクションを評価
+/// - 複数の予測軌跡から最適なものを選択
+///
+/// 処理フロー（毎フレーム）：
+/// 1. 履歴更新：位置・向きを記録
+/// 2. 平滑化（オプション）：HMD用のノイズ除去
+/// 3. 予測：レムニスケート形状から軌跡生成
+/// 4. フィルタリング：障害物衝突チェック
+/// 5. 評価：コスト関数で最適軌跡を選択
+/// 6. リダイレクション適用：選択した軌跡に従ってゲイン設定
 /// </summary>
 public class PredRedLPP_Redirector : APF_Redirector
 {
-    [Header("PredRedLPP Components")]
-    private LemniscatePathPredictor pathPredictor;
-    private TrajectoryEvaluator trajectoryEvaluator;
-    private PathSmoother smoother;
+    [Header("PredRedLPPコンポーネント")]
+    private LemniscatePathPredictor pathPredictor;  // パス予測器
+    private TrajectoryEvaluator trajectoryEvaluator;  // 軌跡評価器
+    private PathSmoother smoother;  // パス平滑化器
 
-    [Header("Movement History")]
-    private Queue<Vector3> positionHistory;
-    private Queue<Vector3> directionHistory;
-    private const int MAX_HISTORY_SIZE = 10;
+    [Header("移動履歴")]
+    private Queue<Vector3> positionHistory;  // 位置履歴（キュー構造）
+    private Queue<Vector3> directionHistory;  // 向き履歴
+    private const int MAX_HISTORY_SIZE = 10;  // 履歴の最大サイズ
 
-    [Header("Current State")]
-    private Trajectory currentBestTrajectory;
+    [Header("現在の状態")]
+    private Trajectory currentBestTrajectory;  // 現在選択されている最良の軌跡
 
-    [Header("Visualization")]
-    private GameObject trajectoryVisualizer;
-    private LineRenderer trajectoryLineRenderer;
-    private GameObject lemniscateVisualizer;
-    private LineRenderer lemniscateLineRenderer;
+    [Header("可視化")]
+    private GameObject trajectoryVisualizer;  // 軌跡描画用オブジェクト
+    private LineRenderer trajectoryLineRenderer;  // 軌跡描画用LineRenderer
+    private GameObject lemniscateVisualizer;  // レムニスケート描画用オブジェクト
+    private LineRenderer lemniscateLineRenderer;  // レムニスケート描画用LineRenderer
 
-    [Header("Debug")]
-    [Tooltip("Show debug information in console")]
+    [Header("デバッグ")]
+    [Tooltip("コンソールにデバッグ情報を表示")]
     public bool showDebugInfo = true;
-    [Tooltip("Visualize predicted trajectories in scene view")]
+    [Tooltip("シーンビューで予測軌跡を可視化")]
     public bool visualizePredictions = true;
 
     private bool isInitialized = false;
@@ -46,7 +58,11 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Ensures components are initialized (lazy initialization).
+    /// コンポーネントが初期化されているか確認（遅延初期化）
+    ///
+    /// 遅延初期化とは：
+    /// - 最初に必要になったタイミングで初期化
+    /// - Awake()での初期化の順序問題を回避
     /// </summary>
     private void EnsureInitialized()
     {
@@ -60,42 +76,57 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Initializes all prediction and evaluation components.
+    /// 全ての予測・評価コンポーネントを初期化
+    ///
+    /// 初期化内容：
+    /// 1. パス予測器（LemniscatePathPredictor）を追加/取得
+    /// 2. 軌跡評価器（TrajectoryEvaluator）を作成
+    /// 3. パス平滑化器（PathSmoother）を作成（デフォルトOFF）
+    /// 4. 可視化オブジェクトを作成
     /// </summary>
     private void InitializeComponents()
     {
-        // Add path predictor component
+        // パス予測器コンポーネントを追加
         pathPredictor = gameObject.GetComponent<LemniscatePathPredictor>();
         if (pathPredictor == null)
         {
             pathPredictor = gameObject.AddComponent<LemniscatePathPredictor>();
         }
 
-        // Initialize trajectory evaluator
+        // 軌跡評価器を初期化
         trajectoryEvaluator = new TrajectoryEvaluator(globalConfiguration);
 
-        // Initialize path smoother (disabled by default for simulation)
+        // パス平滑化器を初期化（シミュレーション用にデフォルトで無効）
         smoother = new PathSmoother();
         smoother.SetEnabled(globalConfiguration.enablePathSmoothing);
 
-        // Initialize visualization GameObjects
+        // 可視化GameObjectを初期化
         InitializeVisualization();
 
         if (showDebugInfo)
         {
-            Debug.Log("PredRedLPP: Components initialized");
+            Debug.Log("PredRedLPP: コンポーネント初期化完了");
         }
     }
 
     /// <summary>
-    /// Initializes visualization GameObjects (similar to APF_Redirector pattern).
+    /// 可視化GameObjectを初期化（APF_Redirectorパターンに類似）
+    ///
+    /// 作成するオブジェクト：
+    /// 1. PredRedLPP_Trajectory：選択された最適軌跡（緑色）
+    /// 2. PredRedLPP_Lemniscate：レムニスケート形状（黄色）
+    ///
+    /// 親子関係：
+    /// - これらはリダイレクターの子として作成
+    /// - useWorldSpace=falseでローカル座標を使用
+    /// - 親（アバター）の移動に自動追従
     /// </summary>
     private void InitializeVisualization()
     {
         if (globalConfiguration.runInBackstage || !visualizePredictions)
             return;
 
-        // Create trajectory visualizer
+        // 軌跡可視化オブジェクトを作成
         trajectoryVisualizer = new GameObject("PredRedLPP_Trajectory");
         trajectoryVisualizer.transform.SetParent(transform);
         trajectoryVisualizer.transform.localPosition = Vector3.zero;
@@ -103,15 +134,15 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         trajectoryLineRenderer = trajectoryVisualizer.AddComponent<LineRenderer>();
         trajectoryLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        trajectoryLineRenderer.startColor = Color.green;
+        trajectoryLineRenderer.startColor = Color.green;  // 緑色：最適軌跡
         trajectoryLineRenderer.endColor = Color.green;
         trajectoryLineRenderer.startWidth = 0.1f;
         trajectoryLineRenderer.endWidth = 0.1f;
         trajectoryLineRenderer.positionCount = 0;
-        trajectoryLineRenderer.useWorldSpace = false; // Use local space coordinates (follows parent)
+        trajectoryLineRenderer.useWorldSpace = false; // ローカル空間座標を使用（親に追従）
         trajectoryLineRenderer.enabled = visualizationManager.ifVisible;
 
-        // Create lemniscate visualizer
+        // レムニスケート可視化オブジェクトを作成
         lemniscateVisualizer = new GameObject("PredRedLPP_Lemniscate");
         lemniscateVisualizer.transform.SetParent(transform);
         lemniscateVisualizer.transform.localPosition = Vector3.zero;
@@ -119,17 +150,21 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         lemniscateLineRenderer = lemniscateVisualizer.AddComponent<LineRenderer>();
         lemniscateLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lemniscateLineRenderer.startColor = Color.yellow;
+        lemniscateLineRenderer.startColor = Color.yellow;  // 黄色：レムニスケート形状
         lemniscateLineRenderer.endColor = Color.yellow;
         lemniscateLineRenderer.startWidth = 0.05f;
         lemniscateLineRenderer.endWidth = 0.05f;
         lemniscateLineRenderer.positionCount = 0;
-        lemniscateLineRenderer.useWorldSpace = false; // Use local space coordinates (follows parent)
+        lemniscateLineRenderer.useWorldSpace = false; // ローカル空間座標を使用（親に追従）
         lemniscateLineRenderer.enabled = visualizationManager.ifVisible;
     }
 
     /// <summary>
-    /// Cleanup visualization GameObjects.
+    /// 可視化GameObjectのクリーンアップ
+    ///
+    /// オブジェクト破棄時：
+    /// - 作成した可視化オブジェクトを削除
+    /// - メモリリークを防ぐ
     /// </summary>
     private void OnDestroy()
     {
@@ -140,7 +175,11 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Initializes position and direction history buffers.
+    /// 位置と向きの履歴バッファを初期化
+    ///
+    /// キュー（Queue）とは：
+    /// - 先入れ先出し（FIFO）のデータ構造
+    /// - 古いデータを自動削除して、最新N個を保持
     /// </summary>
     private void InitializeHistoryBuffers()
     {
@@ -149,18 +188,26 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Main redirection injection method called every frame.
-    /// Implements the full PredRedLPP algorithm pipeline.
+    /// 毎フレーム呼び出されるメインのリダイレクション適用メソッド
+    ///
+    /// PredRedLPPアルゴリズムの完全なパイプラインを実装：
+    /// Step 1: 履歴更新
+    /// Step 2: 平滑化（オプション）
+    /// Step 3: 予測軌跡生成
+    /// Step 4: フィルタリング
+    /// Step 5: 最適軌跡選択
+    /// Step 6: リダイレクション適用
+    /// Step 7-8: 可視化更新
     /// </summary>
     public override void InjectRedirection()
     {
-        // Ensure components are initialized
+        // コンポーネントが初期化されているか確認
         EnsureInitialized();
 
-        // Step 1: Update movement history
+        // Step 1: 移動履歴を更新
         UpdateHistory();
 
-        // Step 2: Apply smoothing if enabled (for HMD use)
+        // Step 2: 有効な場合は平滑化を適用（HMD使用時）
         Queue<Vector3> smoothedPositions = positionHistory;
         Queue<Vector3> smoothedDirections = directionHistory;
 
@@ -173,7 +220,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             smoothedDirections = new Queue<Vector3>(smoothedDirList);
         }
 
-        // Step 3: Generate predicted trajectories
+        // Step 3: 予測軌跡を生成
         List<Trajectory> predictions = pathPredictor.GenerateTrajectories(
             smoothedPositions,
             smoothedDirections,
@@ -183,21 +230,21 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (showDebugInfo)
         {
-            Debug.Log($"PredRedLPP: Generated {predictions.Count} predictions");
+            Debug.Log($"PredRedLPP: {predictions.Count}個の予測を生成");
         }
 
         if (predictions.Count == 0)
         {
-            // No predictions available, apply null action
+            // 予測が利用できない場合、ヌルアクションを適用
             if (showDebugInfo)
             {
-                Debug.LogWarning("PredRedLPP: No predictions generated, applying null action");
+                Debug.LogWarning("PredRedLPP: 予測が生成されませんでした。ヌルアクションを適用");
             }
             ApplyNullRedirection();
             return;
         }
 
-        // Step 4: Filter feasible trajectories (scene awareness)
+        // Step 4: 実行可能な軌跡をフィルタリング（シーン認識）
         SingleSpace physicalSpace = globalConfiguration.physicalSpaces[movementManager.physicalSpaceIndex];
         List<Trajectory> feasibleTrajectories = pathPredictor.FilterFeasibleTrajectories(
             predictions,
@@ -206,21 +253,21 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (showDebugInfo)
         {
-            Debug.Log($"PredRedLPP: {feasibleTrajectories.Count} feasible trajectories (from {predictions.Count})");
+            Debug.Log($"PredRedLPP: {predictions.Count}個中{feasibleTrajectories.Count}個が実行可能な軌跡");
         }
 
         if (feasibleTrajectories.Count == 0)
         {
-            // No feasible trajectories, fall back to reactive behavior
+            // 実行可能な軌跡がない場合、リアクティブ動作にフォールバック
             if (showDebugInfo)
             {
-                Debug.LogWarning("PredRedLPP: No feasible trajectories, falling back to reactive mode");
+                Debug.LogWarning("PredRedLPP: 実行可能な軌跡がありません。リアクティブモードにフォールバック");
             }
             ApplyReactiveRedirection(physicalSpace);
             return;
         }
 
-        // Step 5: Select best trajectory based on cost
+        // Step 5: コストに基づいて最良の軌跡を選択
         Trajectory bestTrajectory = SelectBestTrajectory(
             feasibleTrajectories,
             physicalSpace
@@ -230,7 +277,7 @@ public class PredRedLPP_Redirector : APF_Redirector
         {
             if (showDebugInfo)
             {
-                Debug.LogWarning("PredRedLPP: No valid trajectory found");
+                Debug.LogWarning("PredRedLPP: 有効な軌跡が見つかりませんでした");
             }
             ApplyNullRedirection();
             return;
@@ -238,32 +285,40 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         currentBestTrajectory = bestTrajectory;
 
-        // Step 6: Apply redirection reactively based on best trajectory
-        // Use the trajectory direction to guide the user (similar to ThomasAPF approach)
+        // Step 6: 最良の軌跡に基づいてリダイレクションをリアクティブに適用
+        // 軌跡の方向を使ってユーザーを誘導（ThomasAPFアプローチに類似）
         ApplyRedirectionFromTrajectory(bestTrajectory, physicalSpace);
 
-        // Step 7: Update APF visualization
+        // Step 7: APF可視化を更新
         if (bestTrajectory != null && bestTrajectory.points.Count > 0)
         {
-            // Calculate APF force at current position for visualization
+            // 現在位置でのAPF力を計算（可視化用）
             Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPosReal);
             Vector2 apfForce = CalculateAPFForceAtPosition(currentPos2D, physicalSpace);
             UpdateTotalForcePointer(apfForce);
         }
 
-        // Step 8: Update trajectory visualization
+        // Step 8: 軌跡可視化を更新
         UpdateVisualization();
     }
 
     /// <summary>
-    /// Updates movement history buffers.
+    /// 移動履歴バッファを更新
+    ///
+    /// 処理内容：
+    /// 1. 現在の位置と向きをキューに追加
+    /// 2. サイズ制限（MAX_HISTORY_SIZE=10）を超えたら古いデータを削除
+    ///
+    /// キューの動作：
+    /// - Enqueue（追加）：最新データを末尾に追加
+    /// - Dequeue（削除）：最も古いデータを先頭から削除
     /// </summary>
     private void UpdateHistory()
     {
         positionHistory.Enqueue(redirectionManager.currPosReal);
         directionHistory.Enqueue(redirectionManager.currDirReal);
 
-        // Limit buffer size
+        // バッファサイズを制限
         while (positionHistory.Count > MAX_HISTORY_SIZE)
         {
             positionHistory.Dequeue();
@@ -275,7 +330,12 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Selects the best trajectory based on cost evaluation.
+    /// コスト評価に基づいて最良の軌跡を選択
+    ///
+    /// 選択プロセス：
+    /// 1. 各軌跡のコストを計算（TrajectoryEvaluatorを使用）
+    /// 2. 最小コストの軌跡を選択
+    /// 3. 選択した軌跡を返す
     /// </summary>
     private Trajectory SelectBestTrajectory(
         List<Trajectory> trajectories,
@@ -289,7 +349,7 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         foreach (var trajectory in trajectories)
         {
-            // Calculate cost for this trajectory
+            // この軌跡のコストを計算
             float cost = trajectoryEvaluator.CalculateTotalCost(
                 trajectory,
                 physicalSpace,
@@ -300,6 +360,7 @@ public class PredRedLPP_Redirector : APF_Redirector
 
             trajectory.totalCost = cost;
 
+            // より小さいコストなら更新
             if (cost < minCost)
             {
                 minCost = cost;
@@ -309,15 +370,23 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (showDebugInfo && bestTrajectory != null)
         {
-            Debug.Log($"PredRedLPP: Selected trajectory with cost={minCost:F3}");
+            Debug.Log($"PredRedLPP: コスト={minCost:F3}の軌跡を選択");
         }
 
         return bestTrajectory;
     }
 
     /// <summary>
-    /// Applies redirection based on the selected trajectory.
-    /// Uses a reactive approach similar to ThomasAPF: always set all three gains.
+    /// 選択された軌跡に基づいてリダイレクションを適用
+    ///
+    /// ThomasAPFに類似したリアクティブアプローチ：
+    /// - 常に3つのゲイン全てを設定（Translation, Rotation, Curvature）
+    /// - 軌跡のターゲットポイントに向かうようにゲインを決定
+    ///
+    /// ゲイン設定の戦略：
+    /// - Translation：軌跡との整合性で決定
+    /// - Rotation：回転方向で決定
+    /// - Curvature：操舵方向で決定
     /// </summary>
     private void ApplyRedirectionFromTrajectory(
         Trajectory trajectory,
@@ -329,52 +398,52 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // Get desired direction from trajectory (first few points)
+        // 軌跡から目標方向を取得（最初の数ポイントを使用）
         Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPosReal);
         Vector2 currentDir2D = Utilities.FlattenedDir2D(redirectionManager.currDirReal);
 
-        // Find the target point on trajectory (a few steps ahead)
+        // 軌跡上のターゲットポイントを見つける（数ステップ先）
         int targetIndex = Mathf.Min(3, trajectory.points.Count - 1);
         Vector2 targetPoint = trajectory.points[targetIndex];
 
-        // Calculate desired direction
+        // 目標方向を計算
         Vector2 desiredDir2D = (targetPoint - currentPos2D).normalized;
         Vector3 desiredFacingDirection = Utilities.UnFlatten(desiredDir2D);
 
-        // Calculate steering direction (similar to ThomasAPF)
+        // 操舵方向を計算（ThomasAPFと同様）
         int desiredSteeringDirection = (-1) * (int)Mathf.Sign(
             Utilities.GetSignedAngle(redirectionManager.currDirReal, desiredFacingDirection)
         );
 
-        // Set Translation Gain based on alignment with desired direction
+        // 目標方向との整合性に基づいてTranslation Gainを設定
         float alignment = Vector2.Dot(desiredDir2D, currentDir2D);
         if (alignment < 0)
         {
-            // Moving away from desired direction - compress to slow down
+            // 目標方向から離れている - 圧縮して減速
             SetTranslationGain(globalConfiguration.MIN_TRANS_GAIN);
         }
         else if (alignment > 0.9f)
         {
-            // Well aligned - use maximum translation
+            // よく整列している - 最大移動量を使用
             SetTranslationGain(globalConfiguration.MAX_TRANS_GAIN);
         }
         else
         {
-            // Partially aligned - neutral
+            // 部分的に整列 - ニュートラル
             SetTranslationGain(1.0f);
         }
 
-        // Set Rotation Gain based on turning direction
+        // 回転方向に基づいてRotation Gainを設定
         if (redirectionManager.isRotating)
         {
             if (redirectionManager.deltaDir * desiredSteeringDirection < 0)
             {
-                // Rotating away from desired direction
+                // 目標方向から離れるように回転している
                 SetRotationGain(globalConfiguration.MIN_ROT_GAIN);
             }
             else
             {
-                // Rotating towards desired direction
+                // 目標方向に向かって回転している
                 SetRotationGain(globalConfiguration.MAX_ROT_GAIN);
             }
         }
@@ -383,7 +452,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             SetRotationGain(1.0f);
         }
 
-        // Set Curvature Gain to steer towards trajectory
+        // 軌跡に向かって操舵するためにCurvature Gainを設定
         if (redirectionManager.isWalking)
         {
             SetCurvature(desiredSteeringDirection * 1f / globalConfiguration.CURVATURE_RADIUS);
@@ -393,7 +462,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             SetCurvature(0f);
         }
 
-        // Apply all gains
+        // すべてのゲインを適用
         ApplyGains();
 
         if (showDebugInfo)
@@ -404,11 +473,16 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Applies null redirection (no manipulation).
+    /// ヌルリダイレクションを適用（操作なし）
+    ///
+    /// 処理内容：
+    /// - すべてのゲインをニュートラル値に設定
+    /// - NullRedirectorと同じ動作
+    /// - ユーザーの動きをそのまま仮想空間に反映
     /// </summary>
     private void ApplyNullRedirection()
     {
-        // Set all gains to neutral values (like NullRedirector)
+        // すべてのゲインをニュートラル値に設定（NullRedirectorと同様）
         SetTranslationGain(1.0f);
         SetRotationGain(1.0f);
         SetCurvature(0f);
@@ -416,34 +490,53 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Fallback reactive redirection when no feasible predictions exist.
-    /// Uses ThomasAPF-style reactive behavior.
+    /// 実行可能な予測が存在しない場合のフォールバックリアクティブリダイレクション
+    ///
+    /// 使用タイミング：
+    /// - すべての予測軌跡が障害物と衝突する場合
+    /// - 予測が生成できない緊急時
+    ///
+    /// 動作：
+    /// - ThomasAPFスタイルのリアクティブ動作を使用
+    /// - APFの力の場に基づいてリアルタイムでゲインを設定
     /// </summary>
     private void ApplyReactiveRedirection(SingleSpace physicalSpace)
     {
-        // Calculate APF force
+        // APFの力を計算
         Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPosReal);
         Vector2 ng = CalculateAPFForceAtPosition(currentPos2D, physicalSpace);
 
-        // Apply reactive redirection similar to ThomasAPF
+        // ThomasAPFと同様のリアクティブリダイレクションを適用
         ApplyRedirectionByNegativeGradient(ng);
 
         UpdateTotalForcePointer(ng);
 
         if (showDebugInfo)
         {
-            Debug.Log("PredRedLPP: Fallback to reactive mode");
+            Debug.Log("PredRedLPP: リアクティブモードにフォールバック");
         }
     }
 
     /// <summary>
-    /// Calculates APF repulsive force at a position.
+    /// 特定位置でのAPF反発力を計算
+    ///
+    /// APF（人工ポテンシャル場）とは：
+    /// - 障害物が反発力を生み出す仮想的な力の場
+    /// - 距離が近いほど強い力で押し返す
+    ///
+    /// 計算対象：
+    /// 1. 物理空間の境界壁
+    /// 2. 障害物
+    /// 3. 他のユーザー
+    ///
+    /// 戻り値：
+    /// - 障害物から離れる方向のベクトル（正規化済み）
     /// </summary>
     private Vector2 CalculateAPFForceAtPosition(Vector2 position, SingleSpace physicalSpace)
     {
         List<Vector2> nearestPosList = new List<Vector2>();
 
-        // Physical borders
+        // 物理空間の境界
         for (int i = 0; i < physicalSpace.trackingSpace.Count; i++)
         {
             var p = physicalSpace.trackingSpace[i];
@@ -458,14 +551,14 @@ public class PredRedLPP_Redirector : APF_Redirector
             }
         }
 
-        // Obstacles
+        // 障害物
         foreach (var obstacle in physicalSpace.obstaclePolygons)
         {
             var nearestPos = Utilities.GetNearestPos(position, obstacle);
             nearestPosList.Add(nearestPos);
         }
 
-        // Other users
+        // 他のユーザー
         foreach (var user in globalConfiguration.redirectedAvatars)
         {
             if (user.GetComponent<MovementManager>().physicalSpaceIndex != movementManager.physicalSpaceIndex)
@@ -479,7 +572,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             nearestPosList.Add(nearestPos);
         }
 
-        // Calculate negative gradient
+        // 負の勾配を計算（障害物から離れる方向）
         Vector2 ng = Vector2.zero;
         foreach (var obPos in nearestPosList)
         {
@@ -497,18 +590,25 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Applies redirection based on negative gradient (reactive mode).
-    /// Exactly mirrors ThomasAPF behavior - sets all three gains.
+    /// 負の勾配に基づいてリダイレクションを適用（リアクティブモード）
+    ///
+    /// ThomasAPFの動作を完全に模倣：
+    /// - 3つのゲインすべてを設定
+    /// - APFの力の方向に基づいてゲインを決定
+    ///
+    /// 負の勾配とは：
+    /// - 障害物から離れる方向を示すベクトル
+    /// - この方向にユーザーを誘導することで衝突を回避
     /// </summary>
     private void ApplyRedirectionByNegativeGradient(Vector2 ng)
     {
-        // Calculate desired facing direction from negative gradient
+        // 負の勾配から目標向き方向を計算
         var desiredFacingDirection = Utilities.UnFlatten(ng);
         int desiredSteeringDirection = (-1) * (int)Mathf.Sign(
             Utilities.GetSignedAngle(redirectionManager.currDirReal, desiredFacingDirection)
         );
 
-        // Translation gain (exactly like ThomasAPF)
+        // Translation gain（ThomasAPFと完全同一）
         if (Vector2.Dot(ng, Utilities.FlattenedDir2D(redirectionManager.currDirReal)) < 0)
         {
             SetTranslationGain(globalConfiguration.MAX_TRANS_GAIN);
@@ -518,27 +618,35 @@ public class PredRedLPP_Redirector : APF_Redirector
             SetTranslationGain(1f);
         }
 
-        // Rotation gain (exactly like ThomasAPF)
+        // Rotation gain（ThomasAPFと完全同一）
         if (redirectionManager.deltaDir * desiredSteeringDirection < 0)
         {
-            // Rotating away from negative gradient
+            // 負の勾配から離れるように回転している
             SetRotationGain(globalConfiguration.MIN_ROT_GAIN);
         }
         else
         {
-            // Rotating towards negative gradient
+            // 負の勾配に向かって回転している
             SetRotationGain(globalConfiguration.MAX_ROT_GAIN);
         }
 
-        // Curvature gain (exactly like ThomasAPF)
+        // Curvature gain（ThomasAPFと完全同一）
         SetCurvature(desiredSteeringDirection * 1f / globalConfiguration.CURVATURE_RADIUS);
 
-        // Apply all gains
+        // すべてのゲインを適用
         ApplyGains();
     }
 
     /// <summary>
-    /// Updates visualization using LineRenderer (follows avatar like APF arrow).
+    /// LineRendererを使用して可視化を更新
+    ///
+    /// 可視化対象：
+    /// 1. レムニスケート形状（黄色）
+    /// 2. 選択された最適軌跡（緑色）
+    ///
+    /// 動作：
+    /// - APFの矢印のようにアバターに追従
+    /// - useWorldSpace=falseでローカル座標系を使用
     /// </summary>
     private void UpdateVisualization()
     {
@@ -548,7 +656,7 @@ public class PredRedLPP_Redirector : APF_Redirector
         if (trajectoryLineRenderer == null || lemniscateLineRenderer == null)
             return;
 
-        // Update visibility
+        // 可視性を更新
         bool isVisible = visualizationManager.ifVisible;
         trajectoryLineRenderer.enabled = isVisible;
         lemniscateLineRenderer.enabled = isVisible;
@@ -556,27 +664,36 @@ public class PredRedLPP_Redirector : APF_Redirector
         if (!isVisible)
             return;
 
-        // Get current position and direction in world coordinates
+        // ワールド座標での現在位置と方向を取得
         Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPosReal);
         Vector2 currentDir2D = Utilities.FlattenedDir2D(redirectionManager.currDirReal).normalized;
 
-        // Update lemniscate visualization
+        // レムニスケート可視化を更新
         UpdateLemniscateVisualization(currentPos2D, currentDir2D);
 
-        // Update trajectory visualization
+        // 軌跡可視化を更新
         UpdateTrajectoryVisualization();
     }
 
     /// <summary>
-    /// Updates lemniscate shape visualization.
+    /// レムニスケート形状の可視化を更新
+    ///
+    /// レムニスケートとは：
+    /// - ∞（無限大）記号のような8の字曲線
+    /// - ユーザーの歩行パターンのモデルとして使用
+    ///
+    /// 処理：
+    /// 1. レムニスケート曲線のポイントを生成（50ポイントで滑らかな曲線）
+    /// 2. ワールド座標からローカル座標に変換
+    /// 3. LineRendererで描画
     /// </summary>
     private void UpdateLemniscateVisualization(Vector2 origin, Vector2 direction)
     {
-        // Generate lemniscate curve points
+        // レムニスケート曲線のポイントを生成
         var lemniscatePoints = pathPredictor.GenerateLemniscatePointsForVisualization(
             origin,
             direction,
-            50  // Number of points for smooth curve
+            50  // 滑らかな曲線のためのポイント数
         );
 
         if (lemniscatePoints.Count == 0)
@@ -585,13 +702,13 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // Convert to local coordinates (useWorldSpace = false, parent follows avatar)
+        // ローカル座標に変換（useWorldSpace = false、親がアバターに追従）
         Vector3[] localPositions = new Vector3[lemniscatePoints.Count];
         for (int i = 0; i < lemniscatePoints.Count; i++)
         {
-            // Convert 2D to 3D world position
+            // 2Dから3Dワールド座標に変換
             Vector3 worldPos = Utilities.UnFlatten(lemniscatePoints[i]);
-            // Transform world position to local space of parent (avatar)
+            // ワールド座標を親（アバター）のローカル空間に変換
             localPositions[i] = transform.InverseTransformPoint(worldPos);
         }
 
@@ -600,7 +717,16 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
-    /// Updates best trajectory visualization.
+    /// 最良軌跡の可視化を更新
+    ///
+    /// 処理：
+    /// 1. 現在選択されている最良軌跡のポイントを取得
+    /// 2. ワールド座標からローカル座標に変換
+    /// 3. LineRendererで緑色の線として描画
+    ///
+    /// 注意：
+    /// - currentBestTrajectoryはInjectRedirection()で更新される
+    /// - 軌跡がない場合は何も描画しない
     /// </summary>
     private void UpdateTrajectoryVisualization()
     {
@@ -610,13 +736,13 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // Convert trajectory points to local coordinates (useWorldSpace = false)
+        // 軌跡ポイントをローカル座標に変換（useWorldSpace = false）
         Vector3[] localPositions = new Vector3[currentBestTrajectory.points.Count];
         for (int i = 0; i < currentBestTrajectory.points.Count; i++)
         {
-            // Convert 2D to 3D world position
+            // 2Dから3Dワールド座標に変換
             Vector3 worldPos = Utilities.UnFlatten(currentBestTrajectory.points[i]);
-            // Transform world position to local space of parent (avatar)
+            // ワールド座標を親（アバター）のローカル空間に変換
             localPositions[i] = transform.InverseTransformPoint(worldPos);
         }
 

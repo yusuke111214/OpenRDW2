@@ -1,44 +1,63 @@
 using UnityEngine;
 
 /// <summary>
-/// Defines the type of redirection gain to apply.
+/// リダイレクションゲインの種類を定義
+///
+/// ゲインとは：
+/// - ユーザーの動きを拡大/縮小する倍率のこと
+/// - VR空間での動きと物理空間での動きに差をつけることで、
+///   狭い部屋でも広いVR空間を歩いているように錯覚させます
 /// </summary>
 public enum RedirectionGainType
 {
-    Translation,        // Translational gain (scaling forward movement)
-    Rotation,          // Rotational gain (scaling head rotation)
-    Curvature,         // Curvature gain (injecting path curvature)
-    Combined,          // Combined translation and curvature (as per paper)
-    Null              // No redirection applied
+    Translation,        // 並進ゲイン（前進の速さを変える）
+    Rotation,          // 回転ゲイン（頭の回転を変える）
+    Curvature,         // 曲率ゲイン（歩く軌跡を曲げる）
+    Combined,          // 複合（並進+曲率を組み合わせ、論文通りの実装）
+    Null              // ゲインなし（通常の動き）
 }
 
 /// <summary>
-/// Represents a single redirection action with a specific gain type and value.
-/// Used in predictive RDW algorithms to evaluate different redirection strategies.
+/// リダイレクションアクション（1つの操作）を表すクラス
+///
+/// このクラスの役割：
+/// - どの種類のゲインを、どれくらいの強さで適用するかを保存
+/// - 予測的RDWアルゴリズムで、複数の選択肢を評価する際に使用
 /// </summary>
 public class RedirectionAction
 {
     /// <summary>
-    /// The type of gain to apply.
+    /// 適用するゲインの種類
     /// </summary>
     public RedirectionGainType gainType;
 
     /// <summary>
-    /// Primary gain value.
-    /// - For Translation: gain multiplier (e.g., 0.86 to 1.26)
-    /// - For Rotation: gain multiplier (e.g., 0.8 to 1.49)
-    /// - For Curvature: curvature value in 1/radius (e.g., -7.5 to 7.5)
+    /// 主要なゲイン値
+    ///
+    /// 種類別の意味：
+    /// - Translation（並進）: 倍率（例：0.86～1.26）
+    ///   → 1.0より大きいと速く、小さいと遅く移動
+    /// - Rotation（回転）: 倍率（例：0.8～1.49）
+    ///   → 1.0より大きいと速く、小さいと遅く回転
+    /// - Curvature（曲率）: 曲がり具合の値（例：-7.5～7.5）
+    ///   → 正の値で右、負の値で左に曲がる
     /// </summary>
     public float primaryValue;
 
     /// <summary>
-    /// Secondary gain value (used for Combined type).
-    /// When gainType is Combined, this holds the curvature value while primaryValue holds translation.
+    /// 副次的なゲイン値（Combinedタイプで使用）
+    ///
+    /// Combinedの場合：
+    /// - primaryValue = 並進ゲイン
+    /// - secondaryValue = 曲率ゲイン
     /// </summary>
     public float secondaryValue;
 
     /// <summary>
-    /// Constructor for single-value actions.
+    /// コンストラクタ（単一値のアクション用）
+    ///
+    /// 使用例：
+    /// - Translation、Rotation、Curvatureなど、値が1つだけのゲイン
     /// </summary>
     public RedirectionAction(RedirectionGainType type, float value)
     {
@@ -48,7 +67,10 @@ public class RedirectionAction
     }
 
     /// <summary>
-    /// Constructor for combined actions (translation + curvature).
+    /// コンストラクタ（複合アクション用：並進+曲率）
+    ///
+    /// 使用例：
+    /// - Combinedタイプで、並進と曲率を同時に適用する場合
     /// </summary>
     public RedirectionAction(RedirectionGainType type, float translationGain, float curvatureGain)
     {
@@ -58,7 +80,11 @@ public class RedirectionAction
     }
 
     /// <summary>
-    /// Constructor for null action.
+    /// ヌルアクション（何もしない）を作成
+    ///
+    /// 用途：
+    /// - リダイレクションを適用しない場合
+    /// - すべてのゲインを1.0に設定（通常の動き）
     /// </summary>
     public static RedirectionAction CreateNullAction()
     {
@@ -66,13 +92,18 @@ public class RedirectionAction
     }
 
     /// <summary>
-    /// Note: Action application is handled by the redirector itself (e.g., PredRedLPP_Redirector)
-    /// because SetTranslationGain/SetRotationGain/SetCurvature are protected methods.
-    /// This class only stores the action data.
+    /// 注意：アクションの適用はリダイレクター（PredRedLPP_Redirector等）が行います
+    ///
+    /// 理由：
+    /// - SetTranslationGain/SetRotationGain/SetCurvatureはprotectedメソッド
+    /// - このクラスからは直接呼び出せないため、データの保存のみ行います
     /// </summary>
 
     /// <summary>
-    /// Creates a copy of this action.
+    /// このアクションのコピーを作成
+    ///
+    /// 用途：
+    /// - アクションを変更せず、別の処理で使いたい場合
     /// </summary>
     public RedirectionAction Clone()
     {
@@ -80,7 +111,11 @@ public class RedirectionAction
     }
 
     /// <summary>
-    /// String representation for debugging.
+    /// デバッグ用の文字列表現
+    ///
+    /// 出力例：
+    /// - "Translation: 1.200"
+    /// - "Combined: T=1.100, C=0.500"
     /// </summary>
     public override string ToString()
     {
@@ -99,7 +134,11 @@ public class RedirectionAction
     }
 
     /// <summary>
-    /// Checks if two actions are equivalent.
+    /// 2つのアクションが等価かチェック
+    ///
+    /// 判定基準：
+    /// - ゲインタイプが同じ
+    /// - primaryValueとsecondaryValueがほぼ同じ（誤差0.0001以内）
     /// </summary>
     public bool IsEquivalentTo(RedirectionAction other)
     {
@@ -115,32 +154,45 @@ public class RedirectionAction
 }
 
 /// <summary>
-/// Factory class for generating action sets used in predictive RDW.
+/// アクションセットを生成するファクトリークラス
+///
+/// ファクトリーとは：
+/// - オブジェクトを作成する専門のクラス
+/// - ここでは、予測的RDWで使用する全てのアクションを一括生成します
 /// </summary>
 public static class RedirectionActionFactory
 {
     /// <summary>
-    /// Generates the action set U as described in the PredRedLPP paper.
-    /// Creates 6 uniformly distributed values for each gain type within the noticeability thresholds.
+    /// PredRedLPP論文に基づいたアクションセットUを生成
+    ///
+    /// 生成内容：
+    /// - 各ゲインタイプについて、6つの均等な値を生成
+    /// - 値は「気づかれにくい範囲」（閾値内）に収まるように設定
+    ///
+    /// 例：Translation（並進）の場合
+    /// - MIN_TRANS_GAIN（0.86）からMAX_TRANS_GAIN（1.26）まで
+    /// - 6段階：0.86, 0.94, 1.02, 1.10, 1.18, 1.26
     /// </summary>
-    /// <param name="config">Global configuration containing gain thresholds</param>
-    /// <returns>List of redirection actions</returns>
+    /// <param name="config">ゲイン閾値を含むグローバル設定</param>
+    /// <returns>リダイレクションアクションのリスト</returns>
     public static System.Collections.Generic.List<RedirectionAction> GenerateActionSet(GlobalConfiguration config)
     {
         var actions = new System.Collections.Generic.List<RedirectionAction>();
 
-        // Number of discrete values per gain type (as per paper)
+        // ゲインタイプごとの離散値の数（論文に基づく）
         const int numSteps = 6;
 
-        // Translation gains (6 values from MIN to MAX)
+        // 並進ゲイン（最小値から最大値まで6段階）
         for (int i = 0; i < numSteps; i++)
         {
+            // t: 0～1の範囲で均等分割（0, 0.2, 0.4, 0.6, 0.8, 1.0）
             float t = (float)i / (numSteps - 1);
+            // Lerp: tの値で最小値と最大値を線形補間
             float gt = Mathf.Lerp(config.MIN_TRANS_GAIN, config.MAX_TRANS_GAIN, t);
             actions.Add(new RedirectionAction(RedirectionGainType.Translation, gt));
         }
 
-        // Rotation gains (6 values from MIN to MAX)
+        // 回転ゲイン（最小値から最大値まで6段階）
         for (int i = 0; i < numSteps; i++)
         {
             float t = (float)i / (numSteps - 1);
@@ -148,7 +200,8 @@ public static class RedirectionActionFactory
             actions.Add(new RedirectionAction(RedirectionGainType.Rotation, gr));
         }
 
-        // Curvature gains (6 values from -1/R to +1/R)
+        // 曲率ゲイン（-1/Rから+1/Rまで6段階）
+        // 負の値=左曲がり、正の値=右曲がり
         for (int i = 0; i < numSteps; i++)
         {
             float t = (float)i / (numSteps - 1);
@@ -156,11 +209,11 @@ public static class RedirectionActionFactory
             actions.Add(new RedirectionAction(RedirectionGainType.Curvature, gc));
         }
 
-        // Optional: Combined gains (translation + curvature)
-        // This can be enabled based on configuration
-        // For now, commented out to keep action set size manageable
+        // オプション：複合ゲイン（並進+曲率）
+        // 設定に応じて有効化可能
+        // 現在はコメントアウト（アクションセットのサイズを抑えるため）
         /*
-        for (int i = 0; i < 3; i++) // Fewer combined actions to reduce computation
+        for (int i = 0; i < 3; i++) // 計算量削減のため、複合は少なめに
         {
             float t = (float)i / 2f;
             float gt = Mathf.Lerp(config.MIN_TRANS_GAIN, config.MAX_TRANS_GAIN, t);
@@ -169,20 +222,25 @@ public static class RedirectionActionFactory
         }
         */
 
-        // Null redirection (always included)
+        // ヌルリダイレクション（常に含める）
+        // 何もしない選択肢を用意することで、無理なリダイレクションを避ける
         actions.Add(RedirectionAction.CreateNullAction());
 
         return actions;
     }
 
     /// <summary>
-    /// Generates a minimal action set for testing purposes.
+    /// テスト用の最小限のアクションセットを生成
+    ///
+    /// 通常版との違い：
+    /// - 各ゲインタイプにつき、最小値と最大値の2つだけ
+    /// - 計算を高速化したい場合や、動作確認用に使用
     /// </summary>
     public static System.Collections.Generic.List<RedirectionAction> GenerateMinimalActionSet(GlobalConfiguration config)
     {
         var actions = new System.Collections.Generic.List<RedirectionAction>();
 
-        // Only max/min values for each gain type
+        // 各ゲインタイプについて最小値と最大値のみ
         actions.Add(new RedirectionAction(RedirectionGainType.Translation, config.MIN_TRANS_GAIN));
         actions.Add(new RedirectionAction(RedirectionGainType.Translation, config.MAX_TRANS_GAIN));
 

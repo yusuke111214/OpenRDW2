@@ -2,19 +2,26 @@ using UnityEngine;
 using Curves;
 
 /// <summary>
-/// Simple test script to verify Curves library integration and clothoid generation.
-/// Attach this to a GameObject in the scene to run basic tests in the console.
-/// This can be removed after verification.
+/// Curvesライブラリの統合とクロソイド生成を検証するテストスクリプト
+///
+/// 使い方：
+/// 1. シーン内のGameObjectにこのスクリプトをアタッチ
+/// 2. UnityエディタでContextメニュー（右クリック）からテスト実行
+/// 3. コンソールで結果を確認
+///
+/// 注意：
+/// - 検証完了後は削除可能です
+/// - デバッグ用のスクリプトなので、本番ビルドには不要
 /// </summary>
 public class ClothoidGenerationTest : MonoBehaviour
 {
-    [Header("Test Parameters")]
-    [Tooltip("Enable to run test on Start()")]
+    [Header("テストパラメータ")]
+    [Tooltip("Start()時にテストを自動実行")]
     public bool runTestOnStart = false;
 
-    [Header("Test Configuration")]
+    [Header("テスト設定")]
     public Vector2 startPosition = new Vector2(0, 0);
-    public Vector2 startDirection = new Vector2(1, 0); // Facing right
+    public Vector2 startDirection = new Vector2(1, 0); // 右向き
     public Vector2 endPosition = new Vector2(3, 2);
 
     void Start()
@@ -25,10 +32,10 @@ public class ClothoidGenerationTest : MonoBehaviour
         }
     }
 
-    [ContextMenu("Run All Tests")]
+    [ContextMenu("全テスト実行")]
     public void RunAllTests()
     {
-        Debug.Log("=== Starting Clothoid Generation Tests ===");
+        Debug.Log("=== クロソイド生成テスト開始 ===");
 
         TestBasicClothoidCreation();
         TestCurvesWrapper();
@@ -36,17 +43,17 @@ public class ClothoidGenerationTest : MonoBehaviour
         TestRedirectionActionFactory();
         TestPathSmoother();
 
-        Debug.Log("=== All Tests Completed ===");
+        Debug.Log("=== 全テスト完了 ===");
     }
 
-    [ContextMenu("Test 1: Basic Clothoid Creation")]
+    [ContextMenu("テスト1: 基本的なクロソイド生成")]
     void TestBasicClothoidCreation()
     {
-        Debug.Log("\n--- Test 1: Basic Clothoid Creation ---");
+        Debug.Log("\n--- テスト1: 基本的なクロソイド生成 ---");
 
         try
         {
-            // Test direct Curves library usage
+            // Curvesライブラリを直接使用してテスト
             float angleRad = Mathf.Atan2(startDirection.y, startDirection.x);
             Clothoid clothoid = Clothoid.FromPoseAndPoint(
                 (double)startPosition.x,
@@ -58,34 +65,34 @@ public class ClothoidGenerationTest : MonoBehaviour
 
             if (clothoid != null)
             {
-                Debug.Log($"✓ Clothoid created successfully!");
-                Debug.Log($"  - Clothoid parameter A: {clothoid.A}");
-                Debug.Log($"  - Start: ({startPosition.x}, {startPosition.y})");
-                Debug.Log($"  - End: ({endPosition.x}, {endPosition.y})");
+                Debug.Log($"✓ クロソイド生成成功！");
+                Debug.Log($"  - クロソイドパラメータA: {clothoid.A}");
+                Debug.Log($"  - 開始点: ({startPosition.x}, {startPosition.y})");
+                Debug.Log($"  - 終了点: ({endPosition.x}, {endPosition.y})");
 
-                // Sample some points
+                // いくつかの点をサンプリング
                 Point2D midPoint = clothoid.InterpolatePoint2D(0.5);
-                Debug.Log($"  - Midpoint: ({midPoint.X:F3}, {midPoint.Y:F3})");
+                Debug.Log($"  - 中間点: ({midPoint.X:F3}, {midPoint.Y:F3})");
             }
             else
             {
-                Debug.LogError("✗ Clothoid creation returned null!");
+                Debug.LogError("✗ クロソイド生成がnullを返しました！");
             }
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"✗ Exception during clothoid creation: {e.Message}");
+            Debug.LogError($"✗ クロソイド生成中に例外発生: {e.Message}");
         }
     }
 
-    [ContextMenu("Test 2: CurvesWrapper")]
+    [ContextMenu("テスト2: CurvesWrapper")]
     void TestCurvesWrapper()
     {
-        Debug.Log("\n--- Test 2: CurvesWrapper ---");
+        Debug.Log("\n--- テスト2: CurvesWrapper ---");
 
         try
         {
-            // Test wrapper method
+            // ラッパーメソッドをテスト
             Clothoid clothoid = CurvesWrapper.CreateClothoidFromPoseAndPoint(
                 startPosition,
                 startDirection,
@@ -94,39 +101,39 @@ public class ClothoidGenerationTest : MonoBehaviour
 
             if (CurvesWrapper.IsValidClothoid(clothoid))
             {
-                Debug.Log("✓ CurvesWrapper created valid clothoid!");
+                Debug.Log("✓ CurvesWrapperが有効なクロソイドを生成！");
 
-                // Test sampling
+                // サンプリングテスト
                 Vector2[] points = CurvesWrapper.SamplePoints(clothoid, 10);
-                Debug.Log($"  - Sampled {points.Length} points");
-                Debug.Log($"  - First point: {points[0]}");
-                Debug.Log($"  - Last point: {points[points.Length - 1]}");
+                Debug.Log($"  - {points.Length}個の点をサンプリング");
+                Debug.Log($"  - 最初の点: {points[0]}");
+                Debug.Log($"  - 最後の点: {points[points.Length - 1]}");
 
-                // Test length calculation
+                // 長さ計算テスト
                 float length = CurvesWrapper.GetApproximateLength(clothoid);
-                Debug.Log($"  - Approximate length: {length:F3} meters");
+                Debug.Log($"  - 近似長さ: {length:F3} メートル");
 
-                // Test curvature
+                // 曲率テスト
                 float curvStart = CurvesWrapper.GetCurvatureAt(clothoid, 0f);
                 float curvEnd = CurvesWrapper.GetCurvatureAt(clothoid, 1f);
-                Debug.Log($"  - Curvature at start: {curvStart:F4}");
-                Debug.Log($"  - Curvature at end: {curvEnd:F4}");
+                Debug.Log($"  - 開始点の曲率: {curvStart:F4}");
+                Debug.Log($"  - 終了点の曲率: {curvEnd:F4}");
             }
             else
             {
-                Debug.LogError("✗ CurvesWrapper created invalid clothoid!");
+                Debug.LogError("✗ CurvesWrapperが無効なクロソイドを生成！");
             }
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"✗ Exception in CurvesWrapper: {e.Message}");
+            Debug.LogError($"✗ CurvesWrapperで例外発生: {e.Message}");
         }
     }
 
-    [ContextMenu("Test 3: Trajectory Class")]
+    [ContextMenu("テスト3: Trajectoryクラス")]
     void TestTrajectoryClass()
     {
-        Debug.Log("\n--- Test 3: Trajectory Class ---");
+        Debug.Log("\n--- テスト3: Trajectoryクラス ---");
 
         try
         {
@@ -166,10 +173,10 @@ public class ClothoidGenerationTest : MonoBehaviour
         }
     }
 
-    [ContextMenu("Test 4: RedirectionAction Factory")]
+    [ContextMenu("テスト4: RedirectionActionファクトリー")]
     void TestRedirectionActionFactory()
     {
-        Debug.Log("\n--- Test 4: RedirectionAction Factory ---");
+        Debug.Log("\n--- テスト4: RedirectionActionファクトリー ---");
 
         try
         {
@@ -212,10 +219,10 @@ public class ClothoidGenerationTest : MonoBehaviour
         }
     }
 
-    [ContextMenu("Test 5: PathSmoother")]
+    [ContextMenu("テスト5: PathSmoother")]
     void TestPathSmoother()
     {
-        Debug.Log("\n--- Test 5: PathSmoother ---");
+        Debug.Log("\n--- テスト5: PathSmoother ---");
 
         try
         {
@@ -249,12 +256,12 @@ public class ClothoidGenerationTest : MonoBehaviour
         }
     }
 
-    // Visualization helper for Scene view
+    // Sceneビューでの可視化ヘルパー
     void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
 
-        // Draw a simple test clothoid in the scene
+        // シーンに簡単なテスト用クロソイドを描画
         try
         {
             Clothoid clothoid = CurvesWrapper.CreateClothoidFromPoseAndPoint(
@@ -275,7 +282,7 @@ public class ClothoidGenerationTest : MonoBehaviour
                     Gizmos.DrawLine(p1, p2);
                 }
 
-                // Draw start and end points
+                // 開始点と終了点を描画
                 Gizmos.color = Color.blue;
                 Gizmos.DrawSphere(new Vector3(startPosition.x, 0.1f, startPosition.y), 0.1f);
                 Gizmos.color = Color.red;

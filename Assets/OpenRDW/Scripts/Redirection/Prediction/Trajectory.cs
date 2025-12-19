@@ -3,44 +3,72 @@ using System.Collections.Generic;
 using Curves;
 
 /// <summary>
-/// Represents a predicted trajectory using a clothoid curve.
-/// This class bridges the Curves library with Unity's coordinate system.
+/// 予測された軌跡を表すクラス（クロソイド曲線を使用）
+///
+/// このクラスについて：
+/// - ユーザーが歩くと予測される道筋（軌跡）を表現します
+/// - クロソイド曲線：車の走行軌跡のような滑らかで自然な曲線です
+/// - Curvesライブラリ（外部ツール）とUnityの座標系をつなぐ役割を持ちます
 /// </summary>
 public class Trajectory
 {
     /// <summary>
-    /// The underlying clothoid curve from the Curves library.
+    /// クロソイド曲線の本体（Curvesライブラリから取得）
+    ///
+    /// クロソイド曲線とは：
+    /// - 曲率（曲がり具合）が一定の割合で変化する曲線のこと
+    /// - 車のハンドル操作のように、徐々にカーブしていく自然な動きを表現できます
     /// </summary>
     public Clothoid clothoid;
 
     /// <summary>
-    /// List of points along the trajectory in Unity coordinates (Vector2).
-    /// Used for collision detection and visualization.
+    /// 軌跡上の点のリスト（Unity座標系でVector2として保存）
+    ///
+    /// これが必要な理由：
+    /// - 障害物との衝突判定に使用（ぶつからないか確認）
+    /// - 画面上に軌跡を描画する際に使用
+    /// - 複数の点で表現することで、曲線を折れ線で近似します
     /// </summary>
     public List<Vector2> points;
 
     /// <summary>
-    /// Starting pose of the trajectory.
+    /// 軌跡の始点の情報
+    ///
+    /// startPosition：開始位置（X, Y座標）
+    /// startDirection：開始時の向き（度数法、0度=右向き）
     /// </summary>
     public Vector2 startPosition;
-    public float startDirection; // in degrees
+    public float startDirection; // 度数法で保存
 
     /// <summary>
-    /// Ending pose of the trajectory.
+    /// 軌跡の終点の情報
+    ///
+    /// endPosition：終了位置（X, Y座標）
+    /// endDirection：終了時の向き（度数法、0度=右向き）
     /// </summary>
     public Vector2 endPosition;
-    public float endDirection; // in degrees
+    public float endDirection; // 度数法で保存
 
     /// <summary>
-    /// Total cost calculated for this trajectory (used in PredRedLPP).
+    /// この軌跡のコスト（評価値）
+    ///
+    /// コストとは：
+    /// - この軌跡がどれだけ「良い」かを数値化したもの
+    /// - 値が小さいほど良い軌跡（壁や障害物から遠い、目標に近いなど）
+    /// - PredRedLPPアルゴリズムで最適な軌跡を選ぶ際に使用します
     /// </summary>
     public float totalCost = float.MaxValue;
 
     /// <summary>
-    /// Constructor from a Curves.Clothoid object.
+    /// コンストラクタ（クロソイド曲線から軌跡を作成）
+    ///
+    /// 処理内容：
+    /// 1. クロソイド曲線を受け取る
+    /// 2. 曲線を等間隔でサンプリング（点を取り出す）
+    /// 3. 始点と終点の位置・向きを保存
     /// </summary>
-    /// <param name="clothoid">The clothoid curve</param>
-    /// <param name="numSamples">Number of sample points to generate along the curve</param>
+    /// <param name="clothoid">クロソイド曲線オブジェクト</param>
+    /// <param name="numSamples">曲線から取り出す点の数（デフォルト20点）</param>
     public Trajectory(Clothoid clothoid, int numSamples = 20)
     {
         this.clothoid = clothoid;
@@ -48,7 +76,7 @@ public class Trajectory
 
         if (clothoid != null)
         {
-            // Sample points along the clothoid
+            // クロソイド曲線から点をサンプリング（等間隔で点を取り出す）
             for (int i = 0; i <= numSamples; i++)
             {
                 double t = (double)i / numSamples;
@@ -56,7 +84,8 @@ public class Trajectory
                 points.Add(new Vector2((float)p.X, (float)p.Y));
             }
 
-            // Store start and end poses
+            // 始点と終点の姿勢（位置+向き）を保存
+            // 0.0 = 曲線の開始地点、1.0 = 曲線の終了地点
             Pose2D startPose = clothoid.InterpolatePose2D(0.0);
             Pose2D endPose = clothoid.InterpolatePose2D(1.0);
 
@@ -69,9 +98,13 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Constructor from explicit point list (for testing or custom trajectories).
+    /// コンストラクタ（点のリストから軌跡を作成）
+    ///
+    /// 用途：
+    /// - テスト用にカスタムの軌跡を作成したい場合
+    /// - クロソイド曲線を使わず、手動で軌跡を定義したい場合
     /// </summary>
-    /// <param name="points">List of points defining the trajectory</param>
+    /// <param name="points">軌跡を構成する点のリスト</param>
     public Trajectory(List<Vector2> points)
     {
         this.points = points;
@@ -82,7 +115,7 @@ public class Trajectory
             startPosition = points[0];
             endPosition = points[points.Count - 1];
 
-            // Calculate approximate directions
+            // 向きを近似計算（2点間の方向ベクトルから計算）
             if (points.Count >= 2)
             {
                 Vector2 startDir = (points[1] - points[0]).normalized;
@@ -95,10 +128,14 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Checks if any point on the trajectory collides with virtual obstacles.
+    /// 軌跡が仮想障害物と衝突するかチェック
+    ///
+    /// 処理内容：
+    /// - 軌跡上のすべての点について障害物との衝突を確認
+    /// - 1つでも衝突していたらtrueを返す
     /// </summary>
-    /// <param name="obstaclePolygons">List of obstacle polygons</param>
-    /// <returns>True if collision detected</returns>
+    /// <param name="obstaclePolygons">障害物のポリゴン（多角形）リスト</param>
+    /// <returns>衝突が検出された場合true</returns>
     public bool CheckCollisionWithObstacles(List<List<Vector2>> obstaclePolygons)
     {
         foreach (var point in points)
@@ -115,10 +152,14 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Checks if the trajectory stays within the tracking space boundaries.
+    /// 軌跡がトラッキング空間内に収まっているかチェック
+    ///
+    /// トラッキング空間とは：
+    /// - ユーザーが物理的に歩ける範囲のこと
+    /// - この範囲を出ると、VR体験が中断される可能性があります
     /// </summary>
-    /// <param name="trackingSpaceBoundary">Boundary polygon of the tracking space</param>
-    /// <returns>True if trajectory is fully inside tracking space</returns>
+    /// <param name="trackingSpaceBoundary">トラッキング空間の境界線（ポリゴン）</param>
+    /// <returns>軌跡が完全に空間内にある場合true</returns>
     public bool IsWithinTrackingSpace(List<Vector2> trackingSpaceBoundary)
     {
         foreach (var point in points)
@@ -132,7 +173,11 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Gets the length of the trajectory by summing distances between consecutive points.
+    /// 軌跡の長さを取得
+    ///
+    /// 計算方法：
+    /// - 隣り合う点の間の距離を全て足し合わせる
+    /// - 例：点A→点B（1m）+ 点B→点C（1.5m）= 合計2.5m
     /// </summary>
     public float GetLength()
     {
@@ -145,7 +190,13 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Gets a point along the trajectory at normalized parameter t (0 to 1).
+    /// 軌跡上の特定位置の点を取得
+    ///
+    /// パラメータtについて：
+    /// - t = 0.0：始点
+    /// - t = 0.5：中間点
+    /// - t = 1.0：終点
+    /// - 正規化された値（0～1の範囲）で位置を指定します
     /// </summary>
     public Vector2 GetPointAt(float t)
     {
@@ -163,9 +214,14 @@ public class Trajectory
     }
 
     /// <summary>
-    /// Gets the direction (heading) at normalized parameter t (0 to 1).
+    /// 軌跡上の特定位置での向き（進行方向）を取得
+    ///
+    /// パラメータtについて：
+    /// - t = 0.0：始点での向き
+    /// - t = 0.5：中間点での向き
+    /// - t = 1.0：終点での向き
     /// </summary>
-    /// <returns>Direction in degrees</returns>
+    /// <returns>向き（度数法、0度=右向き）</returns>
     public float GetDirectionAt(float t)
     {
         if (clothoid != null)

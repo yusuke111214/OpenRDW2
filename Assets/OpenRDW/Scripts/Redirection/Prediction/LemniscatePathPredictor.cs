@@ -3,25 +3,34 @@ using System.Collections.Generic;
 using Curves;
 
 /// <summary>
-/// Lemniscate-based Path Predictor (LPP) for PredRedLPP algorithm.
-/// Generates predicted trajectories by creating clothoid curves to endpoints
-/// distributed on a lemniscate shape ahead of the user.
-/// Based on: "Predictive multiuser redirected walking using artificial potential fields" (Hirt et al., 2024)
+/// レムニスケートベースのパス予測器（LPP）- PredRedLPPアルゴリズム用
+///
+/// レムニスケートとは：
+/// - ∞（無限大）の形をした数学曲線
+/// - ユーザーの前方にこの形を配置し、その上の点へのクロソイド曲線を生成
+///
+/// 動作原理：
+/// 1. ユーザーの前方にレムニスケート形状を配置
+/// 2. その形状上に複数のエンドポイント（終了地点）を等間隔で設定
+/// 3. 現在位置から各エンドポイントへのクロソイド曲線を生成
+/// 4. これらの曲線が「ユーザーが歩きそうな軌跡の候補」となる
+///
+/// 論文: "Predictive multiuser redirected walking using artificial potential fields" (Hirt et al., 2024)
 /// </summary>
 public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
 {
-    [Header("Prediction Parameters")]
-    [Tooltip("Prediction horizon in meters (A_Lem in the paper, typically 3m)")]
+    [Header("予測パラメータ")]
+    [Tooltip("予測ホライゾン（メートル）。論文のA_Lem、通常3m")]
     public float predictionHorizon = 3f;
 
-    [Tooltip("Number of endpoints on the lemniscate (odd number recommended for symmetry)")]
+    [Tooltip("レムニスケート上のエンドポイント数（左右対称のため奇数推奨）")]
     public int lemniscateEndpoints = 11;
 
-    [Tooltip("Number of sample points per trajectory")]
+    [Tooltip("1つの軌跡あたりのサンプル点数")]
     public int trajectorySamplePoints = 20;
 
-    [Tooltip("Lookback steps for prediction start point (t-T in the paper, 0 = use current position)")]
-    public int lookbackSteps = 0; // Use current position for simulation environments
+    [Tooltip("予測開始点のルックバックステップ数（論文のt-T、0=現在位置を使用）")]
+    public int lookbackSteps = 0; // シミュレーション環境では現在位置を使用
 
     private GlobalConfiguration globalConfiguration;
 
@@ -41,7 +50,13 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
-    /// Generates predicted trajectories using the Lemniscate-based approach.
+    /// レムニスケートベースの手法で予測軌跡を生成
+    ///
+    /// 処理フロー：
+    /// 1. 予測開始点を決定（現在 or T steps前）
+    /// 2. レムニスケートのエンドポイントを生成
+    /// 3. 各エンドポイントへのクロソイド曲線を生成
+    /// 4. 有効な軌跡のリストを返す
     /// </summary>
     public List<Trajectory> GenerateTrajectories(
         Queue<Vector3> positionHistory,
@@ -51,19 +66,19 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     {
         List<Trajectory> trajectories = new List<Trajectory>();
 
-        // Determine prediction starting point (t-T from the paper)
-        // Note: Queue.ToArray() returns oldest first, newest last
+        // 予測開始点を決定（論文のt-T）
+        // 注意：Queue.ToArray()は古い順（最初が一番古い）
         Vector3 predictionStartPos;
         Vector3 predictionStartDir;
 
         if (positionHistory.Count >= lookbackSteps && lookbackSteps > 0)
         {
-            // Use historical position from T steps ago
-            // Queue order: [oldest, ..., newest]
+            // Tステップ前の履歴位置を使用
+            // Queueの順序：[最古, ..., 最新]
             Vector3[] posArray = positionHistory.ToArray();
             Vector3[] dirArray = directionHistory.ToArray();
 
-            // Get position T steps back from the end (most recent)
+            // 最新からTステップ戻った位置を取得
             int lookbackIndex = posArray.Length - lookbackSteps;
             if (lookbackIndex < 0) lookbackIndex = 0;
 
@@ -72,16 +87,17 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
         }
         else
         {
-            // Not enough history, use current pose
+            // 履歴が不十分な場合は現在の姿勢を使用
             predictionStartPos = currentPosition;
             predictionStartDir = currentDirection;
         }
 
-        // Convert to 2D (XZ plane)
+        // 2D（XZ平面）に変換
+        // Unity: Y軸=上、XZ平面=地面
         Vector2 startPos2D = Utilities.FlattenedPos2D(predictionStartPos);
         Vector2 startDir2D = Utilities.FlattenedDir2D(predictionStartDir).normalized;
 
-        // Generate lemniscate endpoints
+        // レムニスケートのエンドポイントを生成
         List<Vector2> endpoints = GenerateLemniscatePoints(
             startPos2D,
             startDir2D,
@@ -89,16 +105,18 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             lemniscateEndpoints
         );
 
-        // Generate clothoid trajectories to each endpoint
+        // 各エンドポイントへのクロソイド軌跡を生成
         int validCount = 0;
         foreach (var endpoint in endpoints)
         {
+            // 開始点からエンドポイントへのクロソイド曲線を作成
             Clothoid clothoid = CurvesWrapper.CreateClothoidFromPoseAndPoint(
                 startPos2D,
                 startDir2D,
                 endpoint
             );
 
+            // 有効なクロソイドかチェック
             if (CurvesWrapper.IsValidClothoid(clothoid))
             {
                 Trajectory trajectory = new Trajectory(clothoid, trajectorySamplePoints);
@@ -107,24 +125,30 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             }
         }
 
-        // Debug: Log trajectory generation (can be commented out for performance)
-        // Debug.Log($"LemniscatePredictor: Generated {validCount}/{endpoints.Count} valid clothoid trajectories");
+        // デバッグ：軌跡生成をログ出力（パフォーマンス重視なら削除可）
+        // Debug.Log($"LemniscatePredictor: {endpoints.Count}個中{validCount}個の有効なクロソイド軌跡を生成");
 
         return trajectories;
     }
 
     /// <summary>
-    /// Generates endpoints distributed on a lemniscate curve.
-    /// Lemniscate equation (Eq. 1 in the paper):
-    /// x(t) = A_Lem * sin(t) / (1 + cos^2(t))
-    /// y(t) = A_Lem * sin(t)cos(t) / (1 + cos^2(t))
-    /// where t ∈ (0, π)
+    /// レムニスケート曲線上に分布するエンドポイントを生成
+    ///
+    /// レムニスケート方程式（論文 Eq.1）：
+    /// x(t) = A_Lem × sin(t) / (1 + cos²(t))
+    /// y(t) = A_Lem × sin(t)cos(t) / (1 + cos²(t))
+    /// ここで t ∈ (0, π)
+    ///
+    /// この式の意味：
+    /// - tを0からπまで変化させると、∞（無限大）の形を描く
+    /// - A_Lemは形状のサイズ（大きいほど広がる）
+    /// - 原点と向きに応じて、この形状を配置
     /// </summary>
-    /// <param name="origin">Origin point of the lemniscate</param>
-    /// <param name="direction">Forward direction (determines lemniscate orientation)</param>
-    /// <param name="size">Lemniscate size parameter (A_Lem)</param>
-    /// <param name="numPoints">Number of endpoint samples</param>
-    /// <returns>List of endpoint positions in world coordinates</returns>
+    /// <param name="origin">レムニスケートの原点</param>
+    /// <param name="direction">前進方向（レムニスケートの向きを決定）</param>
+    /// <param name="size">レムニスケートのサイズパラメータ（A_Lem）</param>
+    /// <param name="numPoints">エンドポイントのサンプル数</param>
+    /// <returns>ワールド座標でのエンドポイント位置のリスト</returns>
     private List<Vector2> GenerateLemniscatePoints(
         Vector2 origin,
         Vector2 direction,
@@ -133,17 +157,17 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     {
         List<Vector2> endpoints = new List<Vector2>();
 
-        // Sample parameter t over (0, π)
-        // Skip t=0 and t=π to avoid singularities
+        // パラメータtを(0, π)の範囲でサンプリング
+        // t=0とt=πは特異点なので避ける（計算が不安定になる）
         float tMin = 0.05f;
         float tMax = Mathf.PI - 0.05f;
 
         for (int i = 0; i < numPoints; i++)
         {
-            // Uniformly distribute t over (0, π)
+            // tを(0, π)で均等に分布
             float t = tMin + (tMax - tMin) * (float)i / (numPoints - 1);
 
-            // Compute lemniscate point in local coordinates
+            // ローカル座標でレムニスケート点を計算
             float sinT = Mathf.Sin(t);
             float cosT = Mathf.Cos(t);
             float denom = 1f + cosT * cosT;
@@ -151,12 +175,13 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             float x_local = size * sinT / denom;
             float y_local = size * sinT * cosT / denom;
 
-            // Transform to world coordinates
-            // Rotate by the forward direction angle
+            // ワールド座標に変換
+            // 前進方向の角度で回転
             float angle = Mathf.Atan2(direction.y, direction.x);
             float cosAngle = Mathf.Cos(angle);
             float sinAngle = Mathf.Sin(angle);
 
+            // 回転行列による座標変換
             float x_world = origin.x + (x_local * cosAngle - y_local * sinAngle);
             float y_world = origin.y + (x_local * sinAngle + y_local * cosAngle);
 
@@ -167,7 +192,13 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
-    /// Filters trajectories based on scene awareness (obstacle collision detection).
+    /// シーン認識に基づいて軌跡をフィルタリング（障害物衝突検出）
+    ///
+    /// フィルタリング条件：
+    /// 1. 仮想障害物との衝突がないこと
+    /// 2. トラッキング空間内に収まっていること
+    ///
+    /// 両方の条件を満たす軌跡のみを「実行可能」として返す
     /// </summary>
     public List<Trajectory> FilterFeasibleTrajectories(
         List<Trajectory> trajectories,
@@ -177,12 +208,13 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
 
         foreach (var trajectory in trajectories)
         {
-            // Check collision with virtual obstacles
+            // 仮想障害物との衝突をチェック
             bool hasCollision = trajectory.CheckCollisionWithObstacles(space.obstaclePolygons);
 
-            // Check if trajectory stays within tracking space
+            // トラッキング空間内に収まっているかチェック
             bool withinBounds = trajectory.IsWithinTrackingSpace(space.trackingSpace);
 
+            // 衝突なし かつ 範囲内 なら実行可能
             if (!hasCollision && withinBounds)
             {
                 feasible.Add(trajectory);
@@ -193,7 +225,7 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
-    /// Gets the current prediction horizon.
+    /// 現在の予測ホライゾンを取得
     /// </summary>
     public float GetPredictionHorizon()
     {
@@ -201,7 +233,7 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
-    /// Sets the prediction horizon.
+    /// 予測ホライゾンを設定
     /// </summary>
     public void SetPredictionHorizon(float horizon)
     {
@@ -209,8 +241,11 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
-    /// Generates lemniscate points for visualization purposes.
-    /// Called by the redirector to draw the lemniscate curve.
+    /// 可視化用のレムニスケート点を生成
+    ///
+    /// 使用目的：
+    /// - リダイレクターがレムニスケート曲線を描画するために呼び出す
+    /// - デバッグ時に予測範囲を視覚的に確認できる
     /// </summary>
     public List<Vector2> GenerateLemniscatePointsForVisualization(Vector2 origin, Vector2 direction, int numPoints)
     {

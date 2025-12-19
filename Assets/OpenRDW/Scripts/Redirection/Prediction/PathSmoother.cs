@@ -3,27 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// Provides path smoothing functionality using double exponential smoothing with damping.
-/// Used to reduce noise in trajectory prediction (mainly for HMD tracking).
-/// For simulated environments, this can be disabled as SimulatedWalker data is already clean.
+/// 二重指数平滑化とダンピングを使ったパス平滑化機能
+///
+/// 平滑化とは：
+/// - ノイズ（ランダムなブレ）を除去して、データを滑らかにすること
+/// - HMDトラッキングの揺れを軽減するために使用
+///
+/// シミュレーション環境では：
+/// - SimulatedWalkerのデータは既にクリーン（ノイズがない）
+/// - この平滑化は無効にできます（デフォルトOFF）
 /// </summary>
 public class PathSmoother
 {
     /// <summary>
-    /// Smoothing parameters based on Holt-Winters double exponential smoothing.
+    /// Holt-Winters二重指数平滑化のパラメータ
+    ///
+    /// 専門用語の説明：
+    /// - 二重指数平滑化：トレンド（変化の傾向）を考慮した平滑化手法
+    /// - Holt-Winters法：時系列データの予測によく使われる統計手法
     /// </summary>
-    private float alpha = 0.3f;  // Level smoothing parameter (0 < alpha < 1)
-    private float beta = 0.1f;   // Trend smoothing parameter (0 < beta < 1)
-    private float phi = 0.8f;    // Damping factor (0 < phi < 1)
+    private float alpha = 0.3f;  // レベル平滑化パラメータ（0～1、大きいほど元データに近い）
+    private float beta = 0.1f;   // トレンド平滑化パラメータ（0～1、変化の追従度）
+    private float phi = 0.8f;    // ダンピング係数（0～1、予測の減衰率）
 
     /// <summary>
-    /// If true, smoothing is bypassed (passthrough mode).
-    /// Useful for simulation environments where data is already clean.
+    /// trueの場合、平滑化をスキップ（パススルーモード）
+    ///
+    /// 使い分け：
+    /// - シミュレーション環境：false（データが既にクリーン）
+    /// - HMD使用時：true（トラッキングノイズを除去）
     /// </summary>
     public bool enableSmoothing = false;
 
     /// <summary>
-    /// Internal state for double exponential smoothing.
+    /// 二重指数平滑化の内部状態
+    ///
+    /// これらの変数について：
+    /// - level：現在の値（平滑化済み）
+    /// - trend：変化の傾向（速度のようなもの）
+    /// - 位置と向きでそれぞれ別々に管理
     /// </summary>
     private Vector3 levelPosition;
     private Vector3 trendPosition;
@@ -33,7 +51,10 @@ public class PathSmoother
     private bool initialized = false;
 
     /// <summary>
-    /// Constructor with default parameters (smoothing disabled for simulation).
+    /// コンストラクタ（デフォルトパラメータ、シミュレーション用）
+    ///
+    /// デフォルト設定：
+    /// - 平滑化は無効（シミュレーション環境向け）
     /// </summary>
     public PathSmoother()
     {
@@ -41,12 +62,17 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Constructor with custom parameters.
+    /// コンストラクタ（カスタムパラメータ指定）
+    ///
+    /// パラメータ調整：
+    /// - alpha：大きい→元データに忠実、小さい→より滑らか
+    /// - beta：トレンドの追従度
+    /// - phi：予測の減衰率
     /// </summary>
-    /// <param name="alpha">Level smoothing (0 to 1, higher = less smoothing)</param>
-    /// <param name="beta">Trend smoothing (0 to 1)</param>
-    /// <param name="phi">Damping factor (0 to 1)</param>
-    /// <param name="enabled">Enable or disable smoothing</param>
+    /// <param name="alpha">レベル平滑化（0～1、大きいほど平滑化が弱い）</param>
+    /// <param name="beta">トレンド平滑化（0～1）</param>
+    /// <param name="phi">ダンピング係数（0～1）</param>
+    /// <param name="enabled">平滑化を有効/無効</param>
     public PathSmoother(float alpha, float beta, float phi, bool enabled = true)
     {
         this.alpha = Mathf.Clamp01(alpha);
@@ -56,7 +82,11 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Resets the smoother state.
+    /// 平滑化の状態をリセット
+    ///
+    /// 使用タイミング：
+    /// - 新しいデータ系列を処理する前
+    /// - パラメータを変更した後
     /// </summary>
     public void Reset()
     {
@@ -68,20 +98,25 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Smooths a queue of positions.
+    /// 位置のキューを平滑化
+    ///
+    /// 処理内容：
+    /// - 生データの履歴を1つずつ処理
+    /// - 平滑化されたデータのリストを返す
+    /// - 平滑化無効の場合はそのまま返す（パススルー）
     /// </summary>
-    /// <param name="rawPositions">Raw position history (oldest to newest)</param>
-    /// <returns>Smoothed positions</returns>
+    /// <param name="rawPositions">生の位置履歴（古い→新しい順）</param>
+    /// <returns>平滑化された位置のリスト</returns>
     public List<Vector3> SmoothPositions(Queue<Vector3> rawPositions)
     {
         if (!enableSmoothing || rawPositions == null || rawPositions.Count == 0)
         {
-            // Passthrough mode
+            // パススルーモード（平滑化しない）
             return rawPositions.ToList();
         }
 
         var smoothed = new List<Vector3>();
-        Reset(); // Reset state for new sequence
+        Reset(); // 新しいシーケンスのために状態をリセット
 
         foreach (var pos in rawPositions)
         {
@@ -92,20 +127,24 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Smooths a queue of directions.
+    /// 向きのキューを平滑化
+    ///
+    /// 位置の平滑化と同様の処理：
+    /// - 方向ベクトルも同じアルゴリズムで平滑化
+    /// - ただし最後に正規化（長さを1に）
     /// </summary>
-    /// <param name="rawDirections">Raw direction history (oldest to newest)</param>
-    /// <returns>Smoothed directions</returns>
+    /// <param name="rawDirections">生の向き履歴（古い→新しい順）</param>
+    /// <returns>平滑化された向きのリスト</returns>
     public List<Vector3> SmoothDirections(Queue<Vector3> rawDirections)
     {
         if (!enableSmoothing || rawDirections == null || rawDirections.Count == 0)
         {
-            // Passthrough mode
+            // パススルーモード（平滑化しない）
             return rawDirections.ToList();
         }
 
         var smoothed = new List<Vector3>();
-        Reset(); // Reset state for new sequence
+        Reset(); // 新しいシーケンスのために状態をリセット
 
         foreach (var dir in rawDirections)
         {
@@ -116,66 +155,77 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Applies double exponential smoothing to a single position observation.
+    /// 1つの位置観測値に二重指数平滑化を適用（内部処理）
+    ///
+    /// アルゴリズム：
+    /// 1. レベルを更新（現在値の平滑化）
+    /// 2. トレンドを更新（変化の傾向）
+    /// 3. 予測値を計算（レベル + ダンピング済みトレンド）
     /// </summary>
     private Vector3 SmoothPosition(Vector3 observation)
     {
         if (!initialized)
         {
-            // Initialize with first observation
+            // 最初の観測値で初期化
             levelPosition = observation;
             trendPosition = Vector3.zero;
             initialized = true;
             return observation;
         }
 
-        // Update level
+        // レベルを更新（現在の値）
         Vector3 prevLevel = levelPosition;
         levelPosition = alpha * observation + (1f - alpha) * (levelPosition + trendPosition);
 
-        // Update trend
+        // トレンドを更新（変化の傾向）
         trendPosition = beta * (levelPosition - prevLevel) + (1f - beta) * trendPosition;
 
-        // Forecast (with damping)
+        // 予測値を計算（ダンピング付き）
         Vector3 smoothed = levelPosition + phi * trendPosition;
 
         return smoothed;
     }
 
     /// <summary>
-    /// Applies double exponential smoothing to a single direction observation.
-    /// Directions are normalized after smoothing.
+    /// 1つの向き観測値に二重指数平滑化を適用（内部処理）
+    ///
+    /// 向きの場合：
+    /// - 平滑化後に正規化が必要（向きベクトルは長さ1）
     /// </summary>
     private Vector3 SmoothDirection(Vector3 observation)
     {
         if (!initialized)
         {
-            // Initialize with first observation
+            // 最初の観測値で初期化（正規化して保存）
             levelDirection = observation.normalized;
             trendDirection = Vector3.zero;
             initialized = true;
             return observation.normalized;
         }
 
-        // Ensure observation is normalized
+        // 観測値を正規化（向きは長さ1）
         Vector3 normObservation = observation.normalized;
 
-        // Update level
+        // レベルを更新
         Vector3 prevLevel = levelDirection;
         levelDirection = alpha * normObservation + (1f - alpha) * (levelDirection + trendDirection);
 
-        // Update trend
+        // トレンドを更新
         trendDirection = beta * (levelDirection - prevLevel) + (1f - beta) * trendDirection;
 
-        // Forecast (with damping)
+        // 予測値を計算（ダンピング付き）
         Vector3 smoothed = levelDirection + phi * trendDirection;
 
-        // Normalize the result since it's a direction
+        // 向きなので正規化して返す
         return smoothed.normalized;
     }
 
     /// <summary>
-    /// Smooths a single position value (stateful - maintains internal state).
+    /// 1つの位置を平滑化（状態保持版）
+    ///
+    /// 状態保持とは：
+    /// - 前回の処理結果を記憶している
+    /// - 連続してこのメソッドを呼ぶことで、滑らかな結果が得られる
     /// </summary>
     public Vector3 SmoothPositionStateful(Vector3 position)
     {
@@ -187,7 +237,10 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Smooths a single direction value (stateful - maintains internal state).
+    /// 1つの向きを平滑化（状態保持版）
+    ///
+    /// 位置の平滑化と同様：
+    /// - 連続して呼び出すことで滑らかな結果
     /// </summary>
     public Vector3 SmoothDirectionStateful(Vector3 direction)
     {
@@ -199,7 +252,11 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Simple moving average smoothing (alternative method, stateless).
+    /// 単純移動平均による平滑化（代替手法、状態なし）
+    ///
+    /// 移動平均とは：
+    /// - 直近N個のデータの平均を取る、シンプルな平滑化手法
+    /// - 二重指数平滑化より単純だが、トレンドは考慮しない
     /// </summary>
     public static List<Vector3> SimpleMovingAverage(Queue<Vector3> data, int windowSize)
     {
@@ -214,15 +271,18 @@ public class PathSmoother
 
         for (int i = 0; i < dataList.Count; i++)
         {
+            // 移動平均のウィンドウ範囲を計算
             int start = Mathf.Max(0, i - windowSize + 1);
             int count = i - start + 1;
 
+            // ウィンドウ内のデータを合計
             Vector3 sum = Vector3.zero;
             for (int j = start; j <= i; j++)
             {
                 sum += dataList[j];
             }
 
+            // 平均を計算
             smoothed.Add(sum / count);
         }
 
@@ -230,7 +290,11 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Sets smoothing parameters at runtime.
+    /// 実行時に平滑化パラメータを設定
+    ///
+    /// 使用例：
+    /// - HMDのトラッキング品質に応じて調整
+    /// - リセットも自動で行われる
     /// </summary>
     public void SetParameters(float alpha, float beta, float phi)
     {
@@ -241,7 +305,10 @@ public class PathSmoother
     }
 
     /// <summary>
-    /// Enables or disables smoothing.
+    /// 平滑化の有効/無効を切り替え
+    ///
+    /// 有効にした場合：
+    /// - 自動的にリセットされる
     /// </summary>
     public void SetEnabled(bool enabled)
     {
