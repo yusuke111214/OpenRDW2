@@ -110,6 +110,26 @@ public class GlobalConfiguration : MonoBehaviour
     [Range(1, 23)]
     public float CURVATURE_RADIUS = 7.5f;
 
+    [Header("PredRedLPP Settings")]
+    [Tooltip("Prediction horizon in meters (A_Lem in the paper)")]
+    [Range(1f, 10f)]
+    public float predictionHorizon = 3f;
+
+    [Tooltip("Number of endpoints on lemniscate (odd number recommended for symmetry)")]
+    [Range(5, 21)]
+    public int lemniscateEndpoints = 11;
+
+    [Tooltip("Enable path smoothing (for HMD use, disable for simulation)")]
+    public bool enablePathSmoothing = false;
+
+    [Tooltip("Discount factor for cost calculation (alpha in the paper)")]
+    [Range(0f, 1f)]
+    public float discountFactor = 0.8f;
+
+    [Tooltip("Heading cost weight (h0 in the paper)")]
+    [Range(0f, 5f)]
+    public float headingCostWeight = 1f;
+
     [Tooltip("Buffer width for triggering reset")]
     [SerializeField, Range(0f, 1f)]
     public float RESET_TRIGGER_BUFFER = 0.5f;

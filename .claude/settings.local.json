@@ -10,7 +10,8 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "Bash(mkdir:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(TrajectoryEvaluator \")"
     ],
     "deny": [],
     "ask": []
