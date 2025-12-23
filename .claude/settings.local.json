@@ -11,7 +11,9 @@
       "WebFetch(domain:github.com)",
       "Bash(mkdir:*)",
       "Bash(ls:*)",
-      "Bash(TrajectoryEvaluator \")"
+      "Bash(TrajectoryEvaluator \")",
+      "Bash(git checkout:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
