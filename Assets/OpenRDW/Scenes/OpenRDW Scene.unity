@@ -1062,7 +1062,7 @@ MonoBehaviour:
   directionSamples: 30
   timeStepBase: 0
   timeStepCountDown: 0
-  runInBackstage: 0
+  runInBackstage: 1
   loadFromTxt: 0
   multiCmdFiles: 0
   useResetPanel: 0
@@ -1093,11 +1093,11 @@ MonoBehaviour:
   startTimeOfProgram: 
   negArrow: {fileID: 717936904266117204, guid: f68566b61c5ebc74784982a22ecef585, type: 3}
   readyToStart: 0
-  enablePotentialFieldVisualization: 1
+  enablePotentialFieldVisualization: 0
   potentialFieldGridSize: 0.172
-  showPotentialHeatmap: 1
+  showPotentialHeatmap: 0
   potentialColorGamma: 0.174
-  showPotentialArrows: 1
+  showPotentialArrows: 0
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
   avatarNum: 1
@@ -1124,7 +1124,7 @@ MonoBehaviour:
   trackingSpaceVisible: 1
   bufferVisible: 1
   if3dObstacle: 1
-  trackingSpaceChoice: 1
+  trackingSpaceChoice: 5
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt

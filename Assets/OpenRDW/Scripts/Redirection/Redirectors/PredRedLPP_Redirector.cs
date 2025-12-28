@@ -244,13 +244,21 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // Step 5: コストに基づいて最良の軌跡を選択
-        Trajectory bestTrajectory = SelectBestTrajectory(
+        // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
+        List<RedirectionAction> actionSet = RedirectionActionFactory.GenerateActionSet(globalConfiguration);
+
+        // Step 6: 全(軌跡, アクション)ペアを評価し、最良のものを選択（論文 Section 3.3）
+        // 論文のロジック：各アクション π を各軌跡に適用して T_red を生成し、そのコストを評価
+        (RedirectionAction bestAction, Trajectory bestTrajectory) = trajectoryEvaluator.EvaluateAllActions(
             feasibleTrajectories,
-            physicalSpace
+            actionSet,
+            physicalSpace,
+            globalConfiguration.redirectedAvatars,
+            movementManager.physicalSpaceIndex,
+            movementManager.avatarId
         );
 
-        if (bestTrajectory == null)
+        if (bestAction == null || bestTrajectory == null)
         {
             ApplyNullRedirection();
             return;
@@ -258,11 +266,10 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         currentBestTrajectory = bestTrajectory;
 
-        // Step 6: 最良の軌跡に基づいてリダイレクションをリアクティブに適用
-        // 軌跡の方向を使ってユーザーを誘導（ThomasAPFアプローチに類似）
-        ApplyRedirectionFromTrajectory(bestTrajectory, physicalSpace);
+        // Step 7: 選択されたアクション π_optimal を適用（論文 Section 3.3）
+        ApplyRedirectionAction(bestAction);
 
-        // Step 7: APF可視化を更新
+        // Step 8: APF可視化を更新
         if (bestTrajectory != null && bestTrajectory.points.Count > 0)
         {
             // 現在位置でのAPF力を計算（可視化用）
@@ -271,7 +278,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             UpdateTotalForcePointer(apfForce);
         }
 
-        // Step 8: 軌跡可視化を更新
+        // Step 9: 軌跡可視化を更新
         UpdateVisualization();
     }
 
@@ -448,6 +455,72 @@ public class PredRedLPP_Redirector : APF_Redirector
         SetTranslationGain(1.0f);
         SetRotationGain(1.0f);
         SetCurvature(0f);
+        ApplyGains();
+    }
+
+    /// <summary>
+    /// 選択されたリダイレクションアクションを適用（論文準拠）
+    ///
+    /// 処理内容：
+    /// - アクションのゲインタイプに応じて適切なゲイン値を設定
+    /// - 使用しないゲインは中立値（Translation/Rotation=1.0, Curvature=0）に設定
+    ///
+    /// ゲインタイプ別の動作：
+    /// - Translation: 並進ゲインのみ適用、他は中立
+    /// - Rotation: 回転ゲインのみ適用、他は中立
+    /// - Curvature: 曲率ゲインのみ適用、他は中立
+    /// - Combined: 並進＋曲率を同時適用、回転は中立
+    /// - Null: すべて中立（リダイレクションなし）
+    /// </summary>
+    /// <param name="action">適用するリダイレクションアクション</param>
+    private void ApplyRedirectionAction(RedirectionAction action)
+    {
+        if (action == null)
+        {
+            ApplyNullRedirection();
+            return;
+        }
+
+        switch (action.gainType)
+        {
+            case RedirectionGainType.Translation:
+                // 並進ゲインのみ適用
+                SetTranslationGain(action.primaryValue);
+                SetRotationGain(1.0f);  // 中立
+                SetCurvature(0f);       // 中立
+                break;
+
+            case RedirectionGainType.Rotation:
+                // 回転ゲインのみ適用
+                SetTranslationGain(1.0f);       // 中立
+                SetRotationGain(action.primaryValue);
+                SetCurvature(0f);       // 中立
+                break;
+
+            case RedirectionGainType.Curvature:
+                // 曲率ゲインのみ適用
+                SetTranslationGain(1.0f);  // 中立
+                SetRotationGain(1.0f);     // 中立
+                SetCurvature(action.primaryValue);
+                break;
+
+            case RedirectionGainType.Combined:
+                // 並進＋曲率を同時適用（論文 Table 2）
+                SetTranslationGain(action.primaryValue);
+                SetRotationGain(1.0f);  // 中立
+                SetCurvature(action.secondaryValue);
+                break;
+
+            case RedirectionGainType.Null:
+            default:
+                // 中立値を設定（リダイレクションなし）
+                SetTranslationGain(1.0f);
+                SetRotationGain(1.0f);
+                SetCurvature(0f);
+                break;
+        }
+
+        // ゲインを適用
         ApplyGains();
     }
 

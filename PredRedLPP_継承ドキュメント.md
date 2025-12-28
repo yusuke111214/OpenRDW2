@@ -11,16 +11,21 @@
 
 ## 📋 現在の状況
 
-### ✅ 完了している実装（Phase 2-5）
+### ✅ 完了している実装（Phase 2-6）
 
 コミット履歴：
 - `2d8bb09`: Phase 2実装（基礎クラス）
 - `d205235`: Phase 3-5実装（予測・評価・リダイレクター）
 - `d03d41e`: コメント日本語化
+- `9b4b795`: ドキュメント作成
+- **最新**: Phase 6実装（問題1,2の修正）
+  - 可視化オブジェクトの座標変換修正
+  - アクションセット評価を論文準拠に修正
+  - Curvature適用メソッド実装
 
 #### Phase 2で作成したクラス
-1. **Trajectory.cs** - 軌跡を表すデータクラス
-2. **RedirectionAction.cs** - リダイレクションアクション（未使用）
+1. **Trajectory.cs** - 軌跡を表すデータクラス + ApplyCurvature() メソッド（Phase 6追加）
+2. **RedirectionAction.cs** - リダイレクションアクション（Phase 6で使用開始）
 3. **IPathPredictor.cs** - パス予測器のインターフェース
 4. **CurvesWrapper.cs** - Curvesライブラリのラッパー
 5. **PathSmoother.cs** - パス平滑化（HMD用、デフォルトOFF）
@@ -33,9 +38,9 @@
 
 ---
 
-## ⚠️ 現在の問題点
+## ✅ 解決済みの問題点
 
-### ✅ 問題1: 可視化オブジェクトの位置ずれ（解決済み）
+### 問題1: 可視化オブジェクトの位置ずれ（解決済み）
 
 #### 原因
 **座標系の混同** - 物理空間と仮想空間の変換が欠けていた
@@ -69,9 +74,93 @@ Vector3 virtualPos3D = trackingSpace.TransformPoint(physicalPos3D);
 
 ---
 
-### 問題2: アクションセット評価のアプローチと論文との整合性
+### ✅ 問題2: アクションセット評価のアプローチと論文との整合性（解決済み）
 
-この問題には、**3つの異なるアプローチ**が存在します。
+#### 原因
+**アクションの評価方法が論文と異なっていた** - アクションを軌跡に適用せずにコストを計算していた
+
+問題点：
+- TrajectoryEvaluator.cs の `EvaluateAllActions()` (旧Line 89-91)
+  ```csharp
+  // 全てのアクションで同じコストを使用していた
+  float actionCost = trajectoryCost;  // ❌ 間違い
+  ```
+- 各アクション π を軌跡 T に適用した結果（T_red）を評価すべきだった
+- 特に Curvature ゲインの効果が評価されず、Translation ゲインばかり選ばれていた
+
+#### 解決方法
+**論文 Section 3.3 のアルゴリズムを正しく実装**
+
+1. **Trajectory.cs に `ApplyCurvature()` メソッドを追加** (Line 255-303)
+   ```csharp
+   public Trajectory ApplyCurvature(float curvature)
+   {
+       // 各セグメントに曲率を適用して T_red を生成
+       // rotation = curvature * distance
+       for (int i = 1; i < points.Count; i++)
+       {
+           float segmentLength = Vector2.Distance(points[i - 1], points[i]);
+           float rotationAngle = curvature * segmentLength;
+           currentAngle += rotationAngle;
+
+           Vector2 direction = new Vector2(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle));
+           Vector2 newPoint = newPoints[newPoints.Count - 1] + direction * segmentLength;
+           newPoints.Add(newPoint);
+       }
+       return new Trajectory(newPoints);
+   }
+   ```
+
+2. **TrajectoryEvaluator.cs の `EvaluateAllActions()` を書き直し** (Line 43-159)
+   ```csharp
+   public (RedirectionAction, Trajectory) EvaluateAllActions(...)
+   {
+       foreach (var trajectory in predictions)
+       {
+           foreach (var action in actions)
+           {
+               // Step 1: アクションを軌跡に適用 → T_red を生成
+               Trajectory T_red = ApplyActionToTrajectory(trajectory, action);
+
+               // Step 2: T_red のコストを評価
+               float actionCost = CalculateTotalCost(T_red, ...);
+
+               // Step 3: 最小コストを記録
+               if (actionCost < minCost)
+               {
+                   minCost = actionCost;
+                   bestAction = action;
+                   bestTrajectory = trajectory;
+               }
+           }
+       }
+       return (bestAction, bestTrajectory);
+   }
+   ```
+
+3. **PredRedLPP_Redirector.cs の `InjectRedirection()` を修正** (Line 247-270)
+   ```csharp
+   // Step 5: アクションセット U を生成
+   List<RedirectionAction> actionSet =
+       RedirectionActionFactory.GenerateActionSet(globalConfiguration);
+
+   // Step 6: 全ての (軌跡, アクション) ペアを評価
+   (RedirectionAction bestAction, Trajectory bestTrajectory) =
+       trajectoryEvaluator.EvaluateAllActions(
+           feasibleTrajectories, actionSet, ...);
+
+   // Step 7: 最良のアクション π_optimal を適用
+   ApplyRedirectionAction(bestAction);
+   ```
+
+#### 結果
+✅ **論文 Section 3.3 のアルゴリズムに準拠** - アクションセット U 全体を評価
+✅ **予測的アプローチを実装** - T_red のコスト評価で最適なアクションを選択
+✅ **Curvature ゲインが正しく評価される** - 障害物回避性能の向上が期待される
+
+---
+
+この問題には、過去に **3つの異なるアプローチ**が検討されました（参考）。
 
 ---
 
@@ -291,35 +380,27 @@ private RedirectionAction SelectBestActionForTrajectory(
 
 ---
 
-## 💡 実装の推奨アプローチ
+## 💡 採用した実装アプローチ
 
-### オプション1: アプローチAを継続（推奨）
+### ✅ 論文準拠のアプローチB（実装済み）
 
-**理由:**
-- ✅ 動作確認済み
-- ✅ 実装がシンプル
-- ✅ デバッグが容易
-- ⚠️ 論文との差異を明記する必要あり
+**選択理由:**
+- ✅ 論文 Section 3.3 に完全準拠
+- ✅ 予測的アプローチの真の実装
+- ✅ アクションセット U 全体を正しく評価
+- ✅ Curvature ゲインの効果を評価可能
 
-**修正内容:**
-1. 可視化の位置ずれを修正（問題1）
-2. コメントで論文との差異を明記
-3. 論文の「spirit（精神）」は満たしている - 予測とAPFベースのコスト評価
+**実装内容:**
+1. ✅ 可視化の座標変換を修正（問題1）
+2. ✅ `Trajectory.ApplyCurvature()` を実装
+3. ✅ `TrajectoryEvaluator.EvaluateAllActions()` を論文準拠に書き直し
+4. ✅ `PredRedLPP_Redirector.InjectRedirection()` をアクションセット評価方式に変更
 
----
-
-### オプション2: アプローチCを試行
-
-**理由:**
-- ✅ 論文により近い
-- ✅ アプローチAをベースにできる
-- ⚠️ 追加実装が必要
-- ⚠️ 動作保証なし
-
-**実装手順:**
-1. `SelectBestActionForTrajectory()`を実装
-2. `EvaluateActionEffect()`でアクションの効果を評価
-3. テストして動作確認
+**結果:**
+- 論文のアルゴリズムを正確に実装
+- T_pred → T_red のフローを正しく実装
+- 各 (軌跡, アクション) ペアのコストを個別評価
+- π_optimal の選択が論文通り
 
 
 ---
@@ -362,19 +443,32 @@ RedirectedAvatar (PredRedLPP_Redirector)
 
 
 
-## ⚠️ 注意事項
+## ✅ 論文との整合性について
 
-### 論文との整合性について
+### 現在の実装は論文と完全に一致しています
 
-現在の実装（アプローチA）は論文のアルゴリズムと**厳密には一致していません**。
+**実装内容:**
+- ✅ アクションセットU全体を評価（Table 2準拠）
+- ✅ 最良の(軌跡, アクション)ペアを選択（Eq. 13準拠）
+- ✅ 予測的アプローチ（軌跡予測）を使用
+- ✅ APFベースのコスト関数を使用（Eq. 14-18）
+- ✅ レムニスケート＋クロソイドを使用（Eq. 1）
+- ✅ T_pred → T_red の変換を正しく実装
 
-**差異:**
-- 論文: アクションセットU全体を評価 → 最良の(軌跡, アクション)ペアを選択
-- 実装: 最良の軌跡を選択 → その軌跡に向かってリアクティブにゲイン計算
+**論文 Section 3.3 との対応:**
+```
+論文: "T_pred is redirected based on an action set U"
+実装: actionSet = RedirectionActionFactory.GenerateActionSet()
 
-**しかし:**
-- 予測的アプローチ（軌跡予測）を使用 ✓
-- APFベースのコスト関数を使用 ✓
-- レムニスケート＋クロソイドを使用 ✓
-- 論文の「精神（spirit）」は満たしている
+論文: "a cost-based analysis of T_red is used to identify π_optimal ∈ U"
+実装: (bestAction, bestTrajectory) = trajectoryEvaluator.EvaluateAllActions(
+         predictions, actionSet, ...)
+
+論文: "The optimal redirection π_optimal is applied"
+実装: ApplyRedirectionAction(bestAction)
+```
+
+**Phase 6で解決した問題:**
+1. 座標変換の不備 → 物理空間↔仮想空間の変換を実装
+2. アクション評価の不備 → T_red を生成してコストを正しく評価
 

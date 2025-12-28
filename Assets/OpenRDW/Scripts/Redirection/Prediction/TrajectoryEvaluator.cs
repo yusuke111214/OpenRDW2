@@ -41,18 +41,26 @@ public class TrajectoryEvaluator
     }
 
     /// <summary>
-    /// 全てのアクション-軌跡の組み合わせを評価し、最良のものを返す
+    /// 全てのアクション-軌跡の組み合わせを評価し、最良のものを返す（論文準拠版）
     ///
-    /// 評価プロセス：
-    /// 1. 各軌跡のコストを計算
-    /// 2. 各アクションと組み合わせて評価
-    /// 3. 最小コストのアクション-軌跡ペアを選択
+    /// 論文のロジック（Section 3.3）：
+    /// 1. 各予測軌跡 T_pred に対して
+    /// 2. 各アクション π ∈ U に対して
+    /// 3. π を T_pred に適用して T_red を生成
+    /// 4. T_red のコストを計算
+    /// 5. 最小コストの(T_pred, π)ペアを選択
+    ///
+    /// 重要な実装詳細：
+    /// - Curvature gainは物理空間での軌跡を変更する
+    /// - Translation/Rotation gainは軌跡を変更しないが、将来的にJ_Gain,iで評価可能
+    /// - 現在の実装ではJ_Gain,i=0なので、Curvature gainのみが実質的にコストに影響
     /// </summary>
-    /// <param name="predictions">予測された軌跡のリスト</param>
-    /// <param name="actions">リダイレクションアクションのリスト</param>
+    /// <param name="predictions">予測された軌跡のリスト（T_pred）</param>
+    /// <param name="actions">リダイレクションアクションのリスト（U）</param>
     /// <param name="physicalSpace">現在の物理空間</param>
     /// <param name="redirectedAvatars">他のユーザーのリスト（APF計算用）</param>
     /// <param name="currentUserIndex">現在のユーザーの物理空間インデックス</param>
+    /// <param name="currentAvatarId">現在のユーザーのアバターID</param>
     /// <returns>最良のアクションと対応する軌跡のタプル</returns>
     public (RedirectionAction bestAction, Trajectory bestTrajectory) EvaluateAllActions(
         List<Trajectory> predictions,
@@ -65,39 +73,36 @@ public class TrajectoryEvaluator
         float minCost = float.MaxValue;
         RedirectionAction bestAction = null;
         Trajectory bestTrajectory = null;
+        Trajectory bestRedirectedTrajectory = null;
 
-        // Evaluate each trajectory
+        // 各予測軌跡を評価
         foreach (var trajectory in predictions)
         {
-            // 簡略化のため、リダイレクションアクションは予測軌跡の形状に
-            // 大きな影響を与えないと仮定（論文の実装ノートに基づく）
-            // この軌跡のコストを計算
-            float trajectoryCost = CalculateTotalCost(
-                trajectory,
-                physicalSpace,
-                redirectedAvatars,
-                currentUserIndex,
-                currentAvatarId
-            );
-
-            trajectory.totalCost = trajectoryCost;
-
-            // 各アクションについて、コストは同様（簡略化モデル）
-            // 完全な実装では、アクションが軌跡に与える影響をシミュレート
+            // 各アクションを評価
             foreach (var action in actions)
             {
-                // 簡略版では軌跡コストを直接使用
-                // より複雑な版では、アクションに基づいて軌跡を修正
-                float actionCost = trajectoryCost;
+                // アクションを軌跡に適用してT_redを生成
+                Trajectory T_red = ApplyActionToTrajectory(trajectory, action);
 
-                // オプション：ゲインコストを追加（現在は論文で未使用）
+                // T_redのコストを計算
+                float actionCost = CalculateTotalCost(
+                    T_red,
+                    physicalSpace,
+                    redirectedAvatars,
+                    currentUserIndex,
+                    currentAvatarId
+                );
+
+                // オプション：ゲインコストを追加（現在は論文でJ_Gain,i=0）
                 // actionCost += CalculateGainCost(action);
 
+                // 最小コストを更新
                 if (actionCost < minCost)
                 {
                     minCost = actionCost;
                     bestAction = action;
-                    bestTrajectory = trajectory;
+                    bestTrajectory = trajectory; // 元の予測軌跡
+                    bestRedirectedTrajectory = T_red; // リダイレクト後の軌跡
                 }
             }
         }
@@ -106,9 +111,51 @@ public class TrajectoryEvaluator
         if (bestAction == null)
         {
             bestAction = RedirectionAction.CreateNullAction();
+            if (predictions.Count > 0)
+            {
+                bestTrajectory = predictions[0];
+            }
+        }
+
+        // 最良の軌跡のコストを記録（可視化やデバッグ用）
+        if (bestRedirectedTrajectory != null)
+        {
+            bestTrajectory.totalCost = minCost;
         }
 
         return (bestAction, bestTrajectory);
+    }
+
+    /// <summary>
+    /// アクションを軌跡に適用してT_red（リダイレクト後の軌跡）を生成
+    ///
+    /// 論文の意図：
+    /// - Curvature gainを適用すると、ユーザーの物理空間での実際の軌跡が曲がる
+    /// - Translation/Rotation gainは物理空間での軌跡を変更しない
+    /// - この「実際の軌跡」のAPFコストを評価することで、障害物回避性能を正しく評価できる
+    /// </summary>
+    /// <param name="trajectory">元の予測軌跡（T_pred）</param>
+    /// <param name="action">適用するリダイレクションアクション（π）</param>
+    /// <returns>アクションを適用した軌跡（T_red）</returns>
+    private Trajectory ApplyActionToTrajectory(Trajectory trajectory, RedirectionAction action)
+    {
+        // Curvature gainの場合のみ軌跡を変更
+        if (action.gainType == RedirectionGainType.Curvature)
+        {
+            // Curvatureを適用した新しい軌跡を生成
+            return trajectory.ApplyCurvature(action.primaryValue);
+        }
+        else if (action.gainType == RedirectionGainType.Combined)
+        {
+            // Combined（Translation + Curvature）の場合、Curvature部分のみが軌跡に影響
+            return trajectory.ApplyCurvature(action.secondaryValue);
+        }
+        else
+        {
+            // Translation, Rotation, Nullの場合は軌跡を変更しない
+            // （物理空間での軌跡は同じ）
+            return trajectory;
+        }
     }
 
     /// <summary>

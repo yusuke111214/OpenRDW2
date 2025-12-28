@@ -237,4 +237,68 @@ public class Trajectory
         }
         return 0f;
     }
+
+    /// <summary>
+    /// Curvature gain を適用した新しい軌跡を生成（論文のT_red計算）
+    ///
+    /// 論文の意図：
+    /// - Curvature gainは物理空間での軌跡を変更する唯一のゲイン
+    /// - ユーザーは仮想空間で直進しているつもりだが、実際には曲線を歩く
+    /// - この実際の軌跡（T_red）を計算することで、障害物回避性能を評価できる
+    ///
+    /// 実装方法：
+    /// - 元の軌跡の各セグメント（点と点の間）に対して、curvatureによる曲がりを加える
+    /// - 曲がり具合は距離に比例（長く歩くほど大きく曲がる）
+    /// </summary>
+    /// <param name="curvature">曲率ゲイン値（正=右曲がり、負=左曲がり、単位：1/m）</param>
+    /// <returns>Curvatureを適用した新しい軌跡</returns>
+    public Trajectory ApplyCurvature(float curvature)
+    {
+        if (points == null || points.Count < 2)
+        {
+            // 点が不足している場合は元の軌跡のコピーを返す
+            return new Trajectory(new List<Vector2>(points));
+        }
+
+        if (Mathf.Abs(curvature) < 0.0001f)
+        {
+            // Curvatureがほぼ0の場合は元の軌跡のコピーを返す
+            return new Trajectory(new List<Vector2>(points));
+        }
+
+        List<Vector2> newPoints = new List<Vector2>();
+        newPoints.Add(points[0]); // 始点は変わらない
+
+        // 現在の向き（ラジアン）
+        Vector2 currentDir = (points[1] - points[0]).normalized;
+        float currentAngle = Mathf.Atan2(currentDir.y, currentDir.x);
+
+        // 各セグメントを処理
+        for (int i = 1; i < points.Count; i++)
+        {
+            // 元のセグメントの長さ
+            float segmentLength = Vector2.Distance(points[i - 1], points[i]);
+
+            // Curvatureによる回転角度（ラジアン）
+            // rotation = curvature * distance
+            float rotationAngle = curvature * segmentLength;
+
+            // 新しい向きを計算
+            currentAngle += rotationAngle;
+
+            // 新しい向きで次のポイントを計算
+            Vector2 direction = new Vector2(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle));
+            Vector2 newPoint = newPoints[newPoints.Count - 1] + direction * segmentLength;
+
+            newPoints.Add(newPoint);
+        }
+
+        // 新しい軌跡を作成
+        Trajectory redirectedTrajectory = new Trajectory(newPoints);
+
+        // コストは未計算としてマーク
+        redirectedTrajectory.totalCost = float.MaxValue;
+
+        return redirectedTrajectory;
+    }
 }
