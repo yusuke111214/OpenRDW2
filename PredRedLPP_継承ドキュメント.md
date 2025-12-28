@@ -443,6 +443,298 @@ RedirectedAvatar (PredRedLPP_Redirector)
 
 
 
+## ⚠️ 現在の問題点
+
+### 問題3: 計算時間が著しく重い（未解決）
+
+#### 症状
+- バックグラウンドでシミュレーションを実行すると、他のアルゴリズムと比べて著しく遅い
+- 10分以上待ってもシミュレーションが終了しないほど重い
+- 実用的な速度での動作確認ができない
+
+#### 原因分析
+
+**計算量の詳細:**
+
+1. **基本パラメータ（デフォルト設定）**
+   - 軌跡数: **11本** (`lemniscateEndpoints = 11`)
+   - アクション数: **19個** (Translation 6 + Rotation 6 + Curvature 6 + Null 1)
+   - 1軌跡あたりの点数: **20点** (`trajectorySamplePoints = 20`)
+
+2. **1フレームあたりの計算量**
+   ```
+   総評価回数 = 軌跡数 × アクション数 × 点数
+              = 11 × 19 × 20
+              = 4,180回のコスト計算/フレーム
+   ```
+
+3. **各コスト計算の内訳** (TrajectoryEvaluator.cs:171-199)
+   ```csharp
+   for (int i = 0; i < trajectory.points.Count; i++)  // 20回
+   {
+       J_APF = CalculateAPFCost(...);      // O(境界線数 + 障害物数 + アバター数)
+       J_Heading = CalculateHeadingCost(...);  // O(1)
+       J_Reset = CalculateResetCost(...);      // O(1)
+       totalCost += Mathf.Pow(discountFactor, i) * (J_APF + J_Heading + J_Reset);
+   }
+   ```
+
+4. **APFコスト計算の詳細** (TrajectoryEvaluator.cs:211-258)
+   - トラッキング空間の全エッジをループ（通常4本）
+   - 全ての障害物ポリゴンをループ
+   - 全ての他アバターをループ
+   - 各要素について最近傍点の計算 (`GetNearestPos`)
+
+5. **他のアルゴリズムとの比較**
+
+   | アルゴリズム | 1フレームあたりの計算量 |
+   |------------|---------------------|
+   | ThomasAPF（リアクティブ） | 1回のAPF力計算 |
+   | PredRedLPP（現在の実装） | **4,180回のコスト計算** |
+   | 計算量の差 | **約4,180倍** |
+
+#### なぜこれほど重いのか？
+
+**論文準拠の実装による必然的な結果:**
+
+1. **予測的アプローチの特性**
+   - リアクティブ手法: 現在の状況だけを見て即座に反応
+   - 予測的手法: 全ての可能な未来のシナリオを事前評価
+
+2. **アクションセット評価の代償**
+   - 論文 Section 3.3 のアルゴリズムを正確に実装
+   - 全ての (軌跡, アクション) ペアを評価する必要がある
+   - これが論文の「予測的RDW」の本質
+
+3. **コスト関数の複雑さ**
+   - 論文 Eq. 14-18 を忠実に実装
+   - APF（人工ポテンシャル場）ベースの計算は本質的に重い
+
+#### 最適化の方向性
+
+以下の方法で計算時間を短縮できます。**論文の精神を維持しながら実用的な速度を実現する**アプローチを推奨します。
+
+---
+
+### 🚀 最適化オプション一覧
+
+#### オプション1: アクションセットのサイズ削減 ⭐⭐⭐（推奨）
+
+**方法A: Minimalアクションセットを使用**
+
+`RedirectionActionFactory.GenerateMinimalActionSet()` を使用（既に実装済み）
+
+```csharp
+// PredRedLPP_Redirector.cs Line 247 を変更
+// 変更前
+List<RedirectionAction> actionSet =
+    RedirectionActionFactory.GenerateActionSet(globalConfiguration);
+
+// 変更後
+List<RedirectionAction> actionSet =
+    RedirectionActionFactory.GenerateMinimalActionSet(globalConfiguration);
+```
+
+**効果:**
+- アクション数: 19個 → **7個** (約63%削減)
+- 総計算量: 4,180回 → **1,540回** (約63%削減)
+
+**内訳:**
+- Translation: 最小値・最大値の2個
+- Rotation: 最小値・最大値の2個
+- Curvature: 最小値・最大値の2個
+- Null: 1個
+
+**メリット:**
+- ✅ 1行の変更で実装可能
+- ✅ 論文の本質（アクションセット評価）は維持
+- ✅ 極端な値（最小・最大）は評価されるため、効果は保たれる
+
+**デメリット:**
+- ⚠️ 中間的なゲイン値が評価されない
+- ⚠️ 細かい調整ができない可能性
+
+---
+
+**方法B: numStepsを削減**
+
+`RedirectionAction.cs` Line 183 の `numSteps` を変更
+
+```csharp
+// 変更前
+const int numSteps = 6;  // 各ゲインタイプ6段階
+
+// 変更後
+const int numSteps = 3;  // 各ゲインタイプ3段階
+```
+
+**効果:**
+- アクション数: 19個 → **10個** (約47%削減)
+- 総計算量: 4,180回 → **2,200回** (約47%削減)
+
+**内訳:**
+- Translation: 3個 (最小、中間、最大)
+- Rotation: 3個
+- Curvature: 3個
+- Null: 1個
+
+**メリット:**
+- ✅ 中間値も評価される
+- ✅ 論文の本質を維持
+
+**デメリット:**
+- ⚠️ オプションAより削減効果が小さい
+
+---
+
+#### オプション2: 軌跡数の削減 ⭐⭐
+
+**方法: lemniscateEndpointsを削減**
+
+`GlobalConfiguration.cs` または Unity Inspector で設定変更
+
+```csharp
+// 変更前
+public int lemniscateEndpoints = 11;
+
+// 変更後
+public int lemniscateEndpoints = 5;  // 論文でも5～21が推奨範囲
+```
+
+**効果:**
+- 軌跡数: 11本 → **5本** (約55%削減)
+- 総計算量: 4,180回 → **1,900回** (約55%削減)
+
+**メリット:**
+- ✅ 大幅な計算量削減
+- ✅ 論文の推奨範囲内（5～21）
+
+**デメリット:**
+- ⚠️ 予測の多様性が減る
+- ⚠️ 複雑な環境で最適な軌跡を見逃す可能性
+
+---
+
+#### オプション3: 評価頻度の削減 ⭐⭐⭐（推奨）
+
+**方法: Nフレームごとに評価**
+
+`PredRedLPP_Redirector.cs` の `InjectRedirection()` にフレームカウンター追加
+
+```csharp
+private int evaluationFrameCounter = 0;
+private const int EVALUATION_INTERVAL = 2;  // 2フレームに1回評価
+private RedirectionAction cachedBestAction = null;
+
+protected override void InjectRedirection()
+{
+    evaluationFrameCounter++;
+
+    if (evaluationFrameCounter >= EVALUATION_INTERVAL)
+    {
+        evaluationFrameCounter = 0;
+
+        // 通常の評価処理
+        List<RedirectionAction> actionSet = ...;
+        (cachedBestAction, Trajectory bestTrajectory) =
+            trajectoryEvaluator.EvaluateAllActions(...);
+    }
+
+    // キャッシュされたアクションを適用
+    ApplyRedirectionAction(cachedBestAction);
+}
+```
+
+**効果:**
+- 評価頻度: 毎フレーム → **2フレームに1回** (50%削減)
+- 実質的な計算量: 4,180回 → **2,090回/フレーム（平均）**
+
+**メリット:**
+- ✅ 計算量を大幅削減
+- ✅ ユーザーの動きは比較的遅いため、影響は小さい
+- ✅ 他の最適化と組み合わせ可能
+
+**デメリット:**
+- ⚠️ 急な状況変化への対応が遅れる可能性
+- ⚠️ 実装に若干の手間がかかる
+
+---
+
+#### オプション4: サンプル点数の削減 ⭐
+
+**方法: trajectorySamplePointsを削減**
+
+```csharp
+// LemniscatePathPredictor.cs または GlobalConfiguration
+// 変更前
+public int trajectorySamplePoints = 20;
+
+// 変更後
+public int trajectorySamplePoints = 10;
+```
+
+**効果:**
+- 点数: 20点 → **10点** (50%削減)
+- 総計算量: 4,180回 → **2,090回** (50%削減)
+
+**メリット:**
+- ✅ 単純な設定変更で実装可能
+
+**デメリット:**
+- ⚠️ 軌跡の精度が落ちる
+- ⚠️ 障害物との衝突判定が甘くなる
+
+---
+
+### 📊 組み合わせ最適化の効果
+
+複数の最適化を組み合わせた場合の効果：
+
+| 組み合わせ | 計算量削減 | 推奨度 |
+|-----------|----------|-------|
+| **A: Minimal actionSet** | 63% | ⭐⭐⭐ |
+| **B: A + lemniscate=5** | 86% (4,180 → 570回) | ⭐⭐⭐ |
+| **C: B + 2フレーム間隔** | 93% (平均285回/フレーム) | ⭐⭐⭐⭐⭐ |
+| D: C + samples=10 | 96% (平均143回/フレーム) | ⭐⭐⭐⭐ |
+
+**推奨設定（組み合わせC）:**
+```csharp
+// 1. Minimalアクションセットを使用
+actionSet = RedirectionActionFactory.GenerateMinimalActionSet(config);
+
+// 2. 軌跡数を削減
+lemniscateEndpoints = 5;
+
+// 3. 2フレームに1回評価
+EVALUATION_INTERVAL = 2;
+
+// 結果: 4,180回 → 平均285回/フレーム（93%削減）
+```
+
+この設定であれば、論文の本質を維持しながら実用的な速度が得られる可能性が高いです。
+
+---
+
+### 🔬 将来的な最適化（高度）
+
+1. **Unity Job System による並列処理**
+   - コスト計算を並列化
+   - マルチコアCPUを活用
+
+2. **コスト計算のキャッシング**
+   - 軌跡が変わらない場合は再計算しない
+   - インクリメンタルな更新
+
+3. **Early stopping**
+   - コストが閾値を超えたら評価を打ち切り
+
+4. **空間分割（Spatial hashing）**
+   - APF計算で近傍の障害物のみを考慮
+
+これらは実装が複雑なため、まずは上記の基本的な最適化を試すことを推奨します。
+
+---
+
 ## ✅ 論文との整合性について
 
 ### 現在の実装は論文と完全に一致しています
@@ -471,4 +763,51 @@ RedirectedAvatar (PredRedLPP_Redirector)
 **Phase 6で解決した問題:**
 1. 座標変換の不備 → 物理空間↔仮想空間の変換を実装
 2. アクション評価の不備 → T_red を生成してコストを正しく評価
+
+---
+
+## 🔜 次のステップ（推奨作業）
+
+### Phase 7: 計算量最適化（優先度: 高）
+
+**目的:** 実用的な速度で動作確認できるようにする
+
+**推奨する実装順序:**
+
+1. **まず試す: 組み合わせC（93%削減）**
+   ```
+   ✅ Minimalアクションセット使用（1行変更）
+   ✅ lemniscateEndpoints = 5（設定変更）
+   ✅ 2フレームに1回評価（実装必要）
+   ```
+   - これで動作確認が可能になれば十分
+
+2. **それでも遅い場合: オプション4を追加**
+   ```
+   ✅ trajectorySamplePoints = 10
+   ```
+   - さらに50%の削減（合計96%削減）
+
+3. **動作確認後: パフォーマンス測定**
+   - 各最適化の効果を定量的に評価
+   - 精度とのトレードオフを検証
+
+4. **必要に応じて: パラメータの微調整**
+   - シミュレーション結果を見ながら調整
+   - 論文と同等の性能が得られるか確認
+
+### Phase 8: 検証と評価
+
+1. **動作確認**
+   - シミュレーションが完了するか
+   - アバターが正しくカーブするか
+   - 障害物を回避できるか
+
+2. **性能評価**
+   - 他のアルゴリズムと比較
+   - 論文の結果と比較（可能な範囲で）
+
+3. **ドキュメント更新**
+   - 最適化の結果を記録
+   - 最終的なパラメータ設定を記載
 
