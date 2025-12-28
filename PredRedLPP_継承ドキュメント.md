@@ -35,67 +35,37 @@
 
 ## ⚠️ 現在の問題点
 
-### 問題1: 可視化オブジェクトの位置ずれ
+### ✅ 問題1: 可視化オブジェクトの位置ずれ（解決済み）
 
-#### 現象
-- `PredRedLPP_Trajectory`と`PredRedLPP_Lemniscate`の位置はBodyと一致
-- しかし、**回転が一致しない**（可視化: 0,0,0 / Body: Y:91.624）
-- 回転を手動で合わせても、Bodyの位置と一致しない
+#### 原因
+**座標系の混同** - 物理空間と仮想空間の変換が欠けていた
 
-#### 原因分析
+Redirected Walkingの仕組み：
+- **仮想空間**（`currPos`/`currDir`）：ユーザーが見ている世界、Unityワールド座標
+  - アバター、Plane、カメラはこの座標系で動く
+  - ユーザーは直進していると感じる
+- **物理空間**（`currPosReal`/`currDirReal`）：実際のトラッキングスペース
+  - `trackingSpace.transform`のローカル座標系
+  - 予測軌跡はこの座標系で生成される（障害物回避のため）
+  - 実際にはカーブして歩いている
 
-**RedirectedAvatarの階層構造:**
-```
-RedirectedAvatar (PredRedLPP_Redirector がアタッチ)
-├── rotation: (0, 0, 0) ← RedirectedAvatar本体の回転
-├── Body (HeadFollower)
-│   ├── position: currPos（仮想空間）
-│   └── rotation: Quaternion.LookRotation(currDir) ← currDirに基づく回転
-├── TrackingSpace0
-└── Simulated Avatar/Head
-```
+#### 解決方法
+**座標変換の実装**（`trackingSpace.TransformPoint()`）
 
-**座標系の違い:**
-
-| 変数 | 座標系 | 計算方法 | 格納場所 |
-|------|--------|----------|----------|
-| `currPos` | 仮想空間 | `headTransform.position` | RedirectionManager.cs:578 |
-| `currDir` | 仮想空間 | `headTransform.forward` | RedirectionManager.cs:579 |
-| `currPosReal` | 物理空間 | `GetRelativePosition(currPos, trackingSpace)` | RedirectionManager.cs:578 |
-| `currDirReal` | 物理空間 | `GetRelativeDirection(currDir, transform)` | RedirectionManager.cs:580 |
-
-**現在の実装（元の状態）:**
 ```csharp
-// PredRedLPP_Redirector.cs UpdateVisualization()
-Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPosReal); // 物理空間
-Vector2 currentDir2D = Utilities.FlattenedDir2D(redirectionManager.currDirReal); // 物理空間
-
-// GameObjectのTransform更新は行っていない
-// → trajectoryVisualizer/lemniscateVisualizerは親(RedirectedAvatar)のTransformに従う
+// 物理空間の2D座標 → 仮想空間の3D座標
+Vector3 physicalPos3D = Utilities.UnFlatten(physicalPoint2D);
+Vector3 virtualPos3D = trackingSpace.TransformPoint(physicalPos3D);
 ```
 
-**正しい実装（APF_Redirector.cs:29のパターン）:**
-```csharp
-// 仮想空間の座標を使用
-totalForcePointer.transform.position = redirectionManager.currPos;
-totalForcePointer.transform.forward = transform.rotation * Utilities.UnFlatten(forceT);
-```
+変換の仕組み：
+- 仮想→物理：`GetPosReal(pos)` = `Inverse(trackingSpace.rotation) * (pos - trackingSpace.position)`
+- 物理→仮想：`trackingSpace.TransformPoint(posReal)` = 逆変換
 
-**修正方法:**
-```csharp
-// UpdateVisualization()で以下を追加:
-trajectoryVisualizer.transform.position = redirectionManager.currPos;
-trajectoryVisualizer.transform.rotation = Quaternion.LookRotation(redirectionManager.currDir, Vector3.up);
-// または
-trajectoryVisualizer.transform.rotation = body.rotation;
-
-lemniscateVisualizer.transform.position = redirectionManager.currPos;
-lemniscateVisualizer.transform.rotation = Quaternion.LookRotation(redirectionManager.currDir, Vector3.up);
-
-// 可視化用の座標も仮想空間を使用
-Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPos);
-Vector2 currentDir2D = Utilities.FlattenedDir2D(redirectionManager.currDir).normalized;
-```
+修正箇所：
+1. `UpdateLemniscateVisualization()`: 物理空間の座標を仮想空間に変換して描画
+2. `UpdateTrajectoryVisualization()`: 同上
+3. LineRendererは`useWorldSpace=true`で仮想空間のワールド座標を使用
 
 ---
 
@@ -351,144 +321,9 @@ private RedirectionAction SelectBestActionForTrajectory(
 2. `EvaluateActionEffect()`でアクションの効果を評価
 3. テストして動作確認
 
----
-
-### オプション3: 論文著者に問い合わせ
-
-**理由:**
-- 論文のアルゴリズム記述が不明確
-- 実装の詳細がGitHubで公開されていない可能性
-
-**問い合わせ内容:**
-1. アクションセットUの適用方法
-2. T_redの計算方法
-3. リファレンス実装の有無
 
 ---
 
-## 📝 今後の修正タスク
-
-### 優先度: 高（必須）
-
-#### タスク1: 可視化の位置ずれ修正
-
-**ファイル:** `PredRedLPP_Redirector.cs`
-**メソッド:** `UpdateVisualization()`
-
-**修正内容:**
-```csharp
-private void UpdateVisualization()
-{
-    if (!visualizePredictions || globalConfiguration.runInBackstage)
-        return;
-
-    if (trajectoryLineRenderer == null || lemniscateLineRenderer == null)
-        return;
-
-    bool isVisible = visualizationManager.ifVisible;
-    trajectoryLineRenderer.enabled = isVisible;
-    lemniscateLineRenderer.enabled = isVisible;
-
-    if (!isVisible)
-        return;
-
-    // 【修正】GameObjectのTransformをBodyと同期
-    // APF_Redirectorパターン（APF_Redirector.cs:29）を参考
-    trajectoryVisualizer.transform.position = redirectionManager.currPos;
-    trajectoryVisualizer.transform.rotation = Quaternion.LookRotation(redirectionManager.currDir, Vector3.up);
-
-    lemniscateVisualizer.transform.position = redirectionManager.currPos;
-    lemniscateVisualizer.transform.rotation = Quaternion.LookRotation(redirectionManager.currDir, Vector3.up);
-
-    // 仮想空間の座標を使用（物理空間ではない）
-    Vector2 currentPos2D = Utilities.FlattenedPos2D(redirectionManager.currPos);
-    Vector2 currentDir2D = Utilities.FlattenedDir2D(redirectionManager.currDir).normalized;
-
-    UpdateLemniscateVisualization(currentPos2D, currentDir2D);
-    UpdateTrajectoryVisualization();
-}
-```
-
-**検証方法:**
-1. Unity Editorで再生
-2. Inspectorで以下を確認：
-   - `PredRedLPP_Trajectory` の position/rotation が `Body` と一致
-   - `PredRedLPP_Lemniscate` の position/rotation が `Body` と一致
-3. アバター移動時に可視化も追従することを確認
-
----
-
-### 優先度: 中（アプローチ選択後）
-
-#### タスク2: アプローチの決定と実装
-
-**選択肢:**
-1. **アプローチA継続** - 最小限の修正（可視化のみ）
-2. **アプローチC実装** - ハイブリッドアプローチ
-3. **論文著者問い合わせ** - 正確な実装方法の確認
-
-**アプローチA継続の場合:**
-- コメントで論文との差異を明記
-- クラス・メソッドのドキュメントを更新
-
-**アプローチC実装の場合:**
-```csharp
-// 新規メソッド
-private RedirectionAction SelectBestActionForTrajectory(
-    Trajectory trajectory,
-    List<RedirectionAction> actionSet,
-    SingleSpace physicalSpace)
-{
-    // 実装内容:
-    // 1. 各アクションの効果を評価
-    // 2. 最小コストのアクションを選択
-    // 3. 全てのアクションが評価されることを保証
-}
-
-private float EvaluateActionEffect(
-    RedirectionAction action,
-    Trajectory trajectory,
-    SingleSpace physicalSpace)
-{
-    // 実装内容:
-    // 1. アクションを適用した場合の「効果」を計算
-    // 2. 軌跡の目標方向とアクションの方向の一致度
-    // 3. APFコストとの組み合わせ
-}
-```
-
----
-
-## 🔍 デバッグ情報
-
-### コンソールログの確認ポイント
-
-#### アプローチA（現在）
-```
-PredRedLPP: Generated 11 predictions
-PredRedLPP: 11 feasible trajectories (from 11)
-PredRedLPP: Selected trajectory with cost=X.XXX
-// ApplyRedirectionFromTrajectory()内のログ（追加推奨）
-```
-
-#### アプローチB（論文準拠）
-```
-PredRedLPP: Generated 11 predictions
-PredRedLPP: 19個のリダイレクションアクションを生成
-PredRedLPP: 11 feasible trajectories (from 11)
-PredRedLPP: Applied Translation action - T=1.100, R=1.000, C=0.000
-// ← 常にTranslationのみ（問題）
-```
-
-#### 期待される動作
-```
-PredRedLPP: Applied Translation action - T=1.100, R=1.000, C=0.000
-PredRedLPP: Applied Rotation action - T=1.000, R=1.200, C=0.000
-PredRedLPP: Applied Curvature action - T=1.000, R=1.000, C=0.150
-// ← 状況に応じて異なるアクション
-```
-
----
 
 ## 📚 参考情報
 
@@ -504,21 +339,6 @@ PredRedLPP: Applied Curvature action - T=1.000, R=1.000, C=0.150
 | `APF_Redirector.cs` | APF基底クラス | ⭐⭐ |
 | `HeadFollower.cs` | Body更新 | ⭐ |
 
-### 座標系まとめ
-
-```csharp
-// 仮想空間（VR空間、アバター表示に使用）
-Vector3 currPos = redirectionManager.currPos;  // headTransform.position
-Vector3 currDir = redirectionManager.currDir;  // headTransform.forward
-
-// 物理空間（トラッキングスペース、APF計算に使用）
-Vector3 currPosReal = redirectionManager.currPosReal;  // GetRelativePosition(currPos, trackingSpace)
-Vector3 currDirReal = redirectionManager.currDirReal;  // GetRelativeDirection(currDir, transform)
-
-// 変換
-Vector2 pos2D = Utilities.FlattenedPos2D(currPos);    // XZ平面に射影
-Vector2 dir2D = Utilities.FlattenedDir2D(currDir);    // XZ平面に射影
-Vector3 pos3D = Utilities.UnFlatten(pos2D);           // Y=0で3Dに戻す
 ```
 
 ### GameObjectの親子関係
@@ -536,25 +356,11 @@ RedirectedAvatar (PredRedLPP_Redirector)
 └── PredRedLPP_Lemniscate (LineRenderer)
     └── 親: RedirectedAvatar
     └── useWorldSpace = false (ローカル座標)
+└── Arrow(Clone)
+
 ```
 
----
 
-## 🎯 次のセッションで実施すべきこと
-
-### 必須タスク
-1. **可視化の位置ずれを修正** - タスク1を実装
-2. **動作確認** - Unity Editorでテスト
-
-### 推奨タスク
-1. **アプローチの決定** - A継続 or C実装 or 論文著者問い合わせ
-2. **ドキュメント更新** - 選択したアプローチに基づいてコメント修正
-
-### オプションタスク
-1. **論文との対応表作成** - 実装と論文の対応関係を明確化
-2. **パラメータチューニング** - コスト関数のweightなど
-
----
 
 ## ⚠️ 注意事項
 
@@ -572,61 +378,3 @@ RedirectedAvatar (PredRedLPP_Redirector)
 - レムニスケート＋クロソイドを使用 ✓
 - 論文の「精神（spirit）」は満たしている
 
-**推奨:**
-- 現在の実装を「PredRedLPP-Reactive」として扱う
-- 論文準拠版を実装する場合は「PredRedLPP-ActionSet」として別クラス化
-- 両方を比較評価
-
----
-
-## 📞 問い合わせ先
-
-**論文著者:**
-- Christian Hirt (hirtc@ethz.ch)
-- ETH Zurich, Innovation Center Virtual Reality
-
-**問い合わせ内容案:**
-```
-Subject: Implementation question about PredRedLPP algorithm
-
-Dear Dr. Hirt,
-
-I am implementing your PredRedLPP algorithm from the paper
-"Predictive multiuser redirected walking using artificial potential fields"
-in our VR locomotion system.
-
-I have a question about Section 3.3, specifically how to apply
-the action set U to the predicted trajectories:
-
-1. How should we calculate T_red from T and π?
-2. Should we simulate the effect of each action on each trajectory?
-3. Is there a reference implementation available?
-
-Thank you for your excellent work!
-```
-
----
-
-## 📄 変更履歴
-
-| 日付 | 変更者 | 内容 |
-|------|--------|------|
-| 2025-12-23 | Claude Code | 初版作成、問題点整理 |
-
----
-
-**このドキュメントをClaude Codeに渡す際の推奨プロンプト:**
-
-```
-以下の引き継ぎドキュメントを読んで、PredRedLPP実装の現状を理解してください。
-
-[このドキュメント全文を貼り付け]
-
-現在の優先タスクは「可視化の位置ずれ修正（タスク1）」です。
-ドキュメントの指示に従って修正を実装してください。
-
-修正後は必ず以下を確認してください：
-1. 可視化オブジェクト（PredRedLPP_Trajectory/Lemniscate）がBodyと同じ位置・回転になっているか
-2. アバター移動時に可視化も追従するか
-3. Console.logでエラーが出ていないか
-```

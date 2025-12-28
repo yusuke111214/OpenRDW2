@@ -102,11 +102,6 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         // 可視化GameObjectを初期化
         InitializeVisualization();
-
-        if (showDebugInfo)
-        {
-            Debug.Log("PredRedLPP: コンポーネント初期化完了");
-        }
     }
 
     /// <summary>
@@ -118,8 +113,8 @@ public class PredRedLPP_Redirector : APF_Redirector
     ///
     /// 親子関係：
     /// - これらはリダイレクターの子として作成
-    /// - useWorldSpace=falseでローカル座標を使用
-    /// - 親（アバター）の移動に自動追従
+    /// - useWorldSpace=trueでワールド座標を使用（Arrow(Clone)と同じアプローチ）
+    /// - 毎フレーム位置を更新して追従を実現
     /// </summary>
     private void InitializeVisualization()
     {
@@ -139,7 +134,7 @@ public class PredRedLPP_Redirector : APF_Redirector
         trajectoryLineRenderer.startWidth = 0.1f;
         trajectoryLineRenderer.endWidth = 0.1f;
         trajectoryLineRenderer.positionCount = 0;
-        trajectoryLineRenderer.useWorldSpace = false; // ローカル空間座標を使用（親に追従）
+        trajectoryLineRenderer.useWorldSpace = true; // ワールド空間座標を使用（Arrow(Clone)と同じ）
         trajectoryLineRenderer.enabled = visualizationManager.ifVisible;
 
         // レムニスケート可視化オブジェクトを作成
@@ -155,7 +150,7 @@ public class PredRedLPP_Redirector : APF_Redirector
         lemniscateLineRenderer.startWidth = 0.05f;
         lemniscateLineRenderer.endWidth = 0.05f;
         lemniscateLineRenderer.positionCount = 0;
-        lemniscateLineRenderer.useWorldSpace = false; // ローカル空間座標を使用（親に追従）
+        lemniscateLineRenderer.useWorldSpace = true; // ワールド空間座標を使用（Arrow(Clone)と同じ）
         lemniscateLineRenderer.enabled = visualizationManager.ifVisible;
     }
 
@@ -228,18 +223,9 @@ public class PredRedLPP_Redirector : APF_Redirector
             redirectionManager.currDirReal
         );
 
-        if (showDebugInfo)
-        {
-            Debug.Log($"PredRedLPP: {predictions.Count}個の予測を生成");
-        }
-
         if (predictions.Count == 0)
         {
             // 予測が利用できない場合、ヌルアクションを適用
-            if (showDebugInfo)
-            {
-                Debug.LogWarning("PredRedLPP: 予測が生成されませんでした。ヌルアクションを適用");
-            }
             ApplyNullRedirection();
             return;
         }
@@ -251,18 +237,9 @@ public class PredRedLPP_Redirector : APF_Redirector
             physicalSpace
         );
 
-        if (showDebugInfo)
-        {
-            Debug.Log($"PredRedLPP: {predictions.Count}個中{feasibleTrajectories.Count}個が実行可能な軌跡");
-        }
-
         if (feasibleTrajectories.Count == 0)
         {
             // 実行可能な軌跡がない場合、リアクティブ動作にフォールバック
-            if (showDebugInfo)
-            {
-                Debug.LogWarning("PredRedLPP: 実行可能な軌跡がありません。リアクティブモードにフォールバック");
-            }
             ApplyReactiveRedirection(physicalSpace);
             return;
         }
@@ -275,10 +252,6 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (bestTrajectory == null)
         {
-            if (showDebugInfo)
-            {
-                Debug.LogWarning("PredRedLPP: 有効な軌跡が見つかりませんでした");
-            }
             ApplyNullRedirection();
             return;
         }
@@ -366,11 +339,6 @@ public class PredRedLPP_Redirector : APF_Redirector
                 minCost = cost;
                 bestTrajectory = trajectory;
             }
-        }
-
-        if (showDebugInfo && bestTrajectory != null)
-        {
-            Debug.Log($"PredRedLPP: コスト={minCost:F3}の軌跡を選択");
         }
 
         return bestTrajectory;
@@ -464,12 +432,6 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         // すべてのゲインを適用
         ApplyGains();
-
-        if (showDebugInfo)
-        {
-            Debug.Log($"PredRedLPP: Applied gains - T={redirectionManager.gt:F3}, " +
-                     $"R={redirectionManager.gr:F3}, C={redirectionManager.curvature:F3}");
-        }
     }
 
     /// <summary>
@@ -510,11 +472,6 @@ public class PredRedLPP_Redirector : APF_Redirector
         ApplyRedirectionByNegativeGradient(ng);
 
         UpdateTotalForcePointer(ng);
-
-        if (showDebugInfo)
-        {
-            Debug.Log("PredRedLPP: リアクティブモードにフォールバック");
-        }
     }
 
     /// <summary>
@@ -646,7 +603,7 @@ public class PredRedLPP_Redirector : APF_Redirector
     ///
     /// 動作：
     /// - APFの矢印のようにアバターに追従
-    /// - useWorldSpace=falseでローカル座標系を使用
+    /// - useWorldSpace=trueでワールド座標系を使用（Arrow(Clone)と同じ）
     /// </summary>
     private void UpdateVisualization()
     {
@@ -683,13 +640,19 @@ public class PredRedLPP_Redirector : APF_Redirector
     /// - ユーザーの歩行パターンのモデルとして使用
     ///
     /// 処理：
-    /// 1. レムニスケート曲線のポイントを生成（50ポイントで滑らかな曲線）
-    /// 2. ワールド座標からローカル座標に変換
-    /// 3. LineRendererで描画
+    /// 1. レムニスケート曲線のポイントを生成（物理空間、50ポイント）
+    /// 2. 物理空間→仮想空間に座標変換（trackingSpace.TransformPoint）
+    /// 3. LineRendererで描画（useWorldSpace = true）
+    ///
+    /// 座標系の理解：
+    /// - origin/directionは物理空間の座標（currPosReal/currDirReal）
+    /// - 予測は物理空間で行われる（障害物回避のため）
+    /// - 描画は仮想空間で行う（カメラが仮想空間にいるため）
+    /// - trackingSpace.TransformPointで物理→仮想変換
     /// </summary>
     private void UpdateLemniscateVisualization(Vector2 origin, Vector2 direction)
     {
-        // レムニスケート曲線のポイントを生成
+        // レムニスケート曲線のポイントを生成（物理空間の2D座標）
         var lemniscatePoints = pathPredictor.GenerateLemniscatePointsForVisualization(
             origin,
             direction,
@@ -702,27 +665,35 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // ローカル座標に変換（useWorldSpace = false、親がアバターに追従）
-        Vector3[] localPositions = new Vector3[lemniscatePoints.Count];
+        // 物理空間から仮想空間に変換
+        Vector3[] virtualPositions = new Vector3[lemniscatePoints.Count];
         for (int i = 0; i < lemniscatePoints.Count; i++)
         {
-            // 2Dから3Dワールド座標に変換
-            Vector3 worldPos = Utilities.UnFlatten(lemniscatePoints[i]);
-            // ワールド座標を親（アバター）のローカル空間に変換
-            localPositions[i] = transform.InverseTransformPoint(worldPos);
+            // 2D（物理空間）→ 3D（物理空間）
+            Vector3 physicalPos3D = Utilities.UnFlatten(lemniscatePoints[i]);
+
+            // 3D（物理空間）→ 3D（仮想空間）
+            // trackingSpace.TransformPointは物理空間のローカル座標を仮想空間のワールド座標に変換
+            virtualPositions[i] = redirectionManager.trackingSpace.TransformPoint(physicalPos3D);
         }
 
-        lemniscateLineRenderer.positionCount = localPositions.Length;
-        lemniscateLineRenderer.SetPositions(localPositions);
+        lemniscateLineRenderer.positionCount = virtualPositions.Length;
+        lemniscateLineRenderer.SetPositions(virtualPositions);
     }
 
     /// <summary>
     /// 最良軌跡の可視化を更新
     ///
     /// 処理：
-    /// 1. 現在選択されている最良軌跡のポイントを取得
-    /// 2. ワールド座標からローカル座標に変換
-    /// 3. LineRendererで緑色の線として描画
+    /// 1. 現在選択されている最良軌跡のポイントを取得（物理空間の2D座標）
+    /// 2. 物理空間→仮想空間に座標変換（trackingSpace.TransformPoint）
+    /// 3. LineRendererで緑色の線として描画（useWorldSpace = true）
+    ///
+    /// 座標系の理解：
+    /// - currentBestTrajectory.pointsは物理空間の座標
+    /// - 予測軌跡は物理空間で生成される（障害物回避のため）
+    /// - 描画は仮想空間で行う（カメラが仮想空間にいるため）
+    /// - trackingSpace.TransformPointで物理→仮想変換
     ///
     /// 注意：
     /// - currentBestTrajectoryはInjectRedirection()で更新される
@@ -736,17 +707,19 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // 軌跡ポイントをローカル座標に変換（useWorldSpace = false）
-        Vector3[] localPositions = new Vector3[currentBestTrajectory.points.Count];
+        // 物理空間から仮想空間に変換
+        Vector3[] virtualPositions = new Vector3[currentBestTrajectory.points.Count];
         for (int i = 0; i < currentBestTrajectory.points.Count; i++)
         {
-            // 2Dから3Dワールド座標に変換
-            Vector3 worldPos = Utilities.UnFlatten(currentBestTrajectory.points[i]);
-            // ワールド座標を親（アバター）のローカル空間に変換
-            localPositions[i] = transform.InverseTransformPoint(worldPos);
+            // 2D（物理空間）→ 3D（物理空間）
+            Vector3 physicalPos3D = Utilities.UnFlatten(currentBestTrajectory.points[i]);
+
+            // 3D（物理空間）→ 3D（仮想空間）
+            // trackingSpace.TransformPointは物理空間のローカル座標を仮想空間のワールド座標に変換
+            virtualPositions[i] = redirectionManager.trackingSpace.TransformPoint(physicalPos3D);
         }
 
-        trajectoryLineRenderer.positionCount = localPositions.Length;
-        trajectoryLineRenderer.SetPositions(localPositions);
+        trajectoryLineRenderer.positionCount = virtualPositions.Length;
+        trajectoryLineRenderer.SetPositions(virtualPositions);
     }
 }
