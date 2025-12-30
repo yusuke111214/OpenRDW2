@@ -1101,7 +1101,7 @@ MonoBehaviour:
   showPotentialArrows: 0
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
-  avatarNum: 1
+  avatarNum: 2
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   bufferVisible: 1
   if3dObstacle: 1
   trackingSpaceChoice: 1
-  obstacleType: 2
+  obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
   squareWidth: 20
