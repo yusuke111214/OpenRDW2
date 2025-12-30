@@ -185,14 +185,16 @@ public class PredRedLPP_Redirector : APF_Redirector
     /// <summary>
     /// 毎フレーム呼び出されるメインのリダイレクション適用メソッド
     ///
-    /// PredRedLPPアルゴリズムの完全なパイプラインを実装：
+    /// PredRedLPPアルゴリズムの完全なパイプラインを実装（論文準拠）：
     /// Step 1: 履歴更新
     /// Step 2: 平滑化（オプション）
-    /// Step 3: 予測軌跡生成
-    /// Step 4: フィルタリング
-    /// Step 5: 最適軌跡選択
-    /// Step 6: リダイレクション適用
-    /// Step 7-8: 可視化更新
+    /// Step 3: 予測軌跡生成（レムニスケート + クロソイド）
+    /// Step 4: Scene awareness（障害物衝突検出）
+    /// Step 4.5: Path similarity measure（MSEで最良軌跡T_predを選択）← 問題4の解決
+    /// Step 5: アクションセット生成
+    /// Step 6: アクション評価（T_predに各アクションを適用してコスト評価）
+    /// Step 7: リダイレクション適用
+    /// Step 8-9: 可視化更新
     /// </summary>
     public override void InjectRedirection()
     {
@@ -244,16 +246,32 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
+        // Step 4.5: Path similarity measureで単一の最良軌跡T_predを選択（論文Section 3.2.2）
+        // 2段階選択プロセスの第1段階（予測）
+        // HMD履歴との類似度（MSE）を使って、最もユーザーの移動パターンに近い軌跡を選択
+        Trajectory T_pred = pathPredictor.SelectBestTrajectoryUsingSimilarityMeasure(
+            feasibleTrajectories,
+            positionHistory
+        );
+
+        if (T_pred == null)
+        {
+            ApplyNullRedirection();
+            return;
+        }
+
         // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
         // Inspector設定に基づいて、Minimalアクションセット（7個）または完全なアクションセット（19個）を使用
         List<RedirectionAction> actionSet = globalConfiguration.useMinimalActionSet
             ? RedirectionActionFactory.GenerateMinimalActionSet(globalConfiguration)
             : RedirectionActionFactory.GenerateActionSet(globalConfiguration);
 
-        // Step 6: 全(軌跡, アクション)ペアを評価し、最良のものを選択（論文 Section 3.3）
-        // 論文のロジック：各アクション π を各軌跡に適用して T_red を生成し、そのコストを評価
-        (RedirectionAction bestAction, Trajectory bestTrajectory) = trajectoryEvaluator.EvaluateAllActions(
-            feasibleTrajectories,
+        // Step 6: T_predに各アクションを適用して評価（論文Section 3.3）
+        // 2段階選択プロセスの第2段階（アクション選択）
+        // 計算量削減：N_trajectories × N_actions → N_trajectories + N_actions
+        // 例：11軌跡 × 19アクション = 209回 → 11回 + 19回 = 30回（約7倍高速化）
+        (RedirectionAction bestAction, Trajectory bestTrajectory) = trajectoryEvaluator.EvaluateActionsForSingleTrajectory(
+            T_pred,
             actionSet,
             physicalSpace,
             globalConfiguration.redirectedAvatars,

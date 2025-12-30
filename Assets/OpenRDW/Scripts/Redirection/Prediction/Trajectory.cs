@@ -239,6 +239,73 @@ public class Trajectory
     }
 
     /// <summary>
+    /// HMD履歴との類似度を計算（Mean-squared error）
+    ///
+    /// 論文Section 3.2.2（Path similarity measure）:
+    /// - MSEを使用してHMDデータバッファとの一致度を計算
+    /// - 割引係数で最近の履歴を重視
+    /// - この値が小さいほど、ユーザーの実際の移動パターンに近い予測
+    ///
+    /// 計算方法：
+    /// 1. 履歴の各点について、軌跡上の最も近い点との距離を計算
+    /// 2. 距離の二乗を計算（MSE）
+    /// 3. 新しい履歴ほど高い重みを付ける（割引係数）
+    /// 4. 重み付き平均を返す
+    ///
+    /// 小さいMSE = 履歴に近い軌跡 = より良い予測
+    /// </summary>
+    /// <param name="positionHistory">HMDの位置履歴（古い順）</param>
+    /// <param name="discountFactor">割引係数（デフォルト0.8、最近の履歴を重視）</param>
+    /// <returns>MSEスコア（小さいほど良い）</returns>
+    public float CalculatePathSimilarity(Queue<Vector3> positionHistory, float discountFactor = 0.8f)
+    {
+        if (positionHistory == null || positionHistory.Count == 0)
+            return float.MaxValue;
+
+        if (points == null || points.Count == 0)
+            return float.MaxValue;
+
+        // 履歴を配列に変換（古い順: [0]=最古, [N-1]=最新）
+        Vector3[] historyArray = positionHistory.ToArray();
+
+        // MSEを計算
+        float mse = 0f;
+        float totalWeight = 0f;
+
+        // 履歴の各点について、軌跡上の最も近い点との距離を計算
+        for (int i = 0; i < historyArray.Length; i++)
+        {
+            // 割引係数：新しい履歴ほど重要
+            // i=0（最古）→ discount^(N-1)
+            // i=N-1（最新）→ discount^0 = 1.0
+            int reverseIndex = historyArray.Length - 1 - i;
+            float weight = Mathf.Pow(discountFactor, reverseIndex);
+
+            // 履歴点を2Dに変換
+            Vector2 historyPoint = Utilities.FlattenedPos2D(historyArray[i]);
+
+            // 軌跡上の最も近い点を見つける
+            float minDistance = float.MaxValue;
+            foreach (var trajectoryPoint in points)
+            {
+                float distance = Vector2.Distance(historyPoint, trajectoryPoint);
+                if (distance < minDistance)
+                    minDistance = distance;
+            }
+
+            // 重み付きの二乗誤差を加算
+            mse += weight * minDistance * minDistance;
+            totalWeight += weight;
+        }
+
+        // 正規化
+        if (totalWeight > 0)
+            mse /= totalWeight;
+
+        return mse;
+    }
+
+    /// <summary>
     /// Curvature gain を適用した新しい軌跡を生成（論文のT_red計算）
     ///
     /// 論文の意図：

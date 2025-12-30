@@ -127,6 +127,90 @@ public class TrajectoryEvaluator
     }
 
     /// <summary>
+    /// 単一の軌跡に対して全てのアクションを評価し、最良のものを返す（論文準拠版）
+    ///
+    /// 論文の2段階選択プロセス（Section 3.2.2 + 3.3）：
+    /// Phase 1: Path similarity measureでT_predを選択（呼び出し側で実施済み）
+    /// Phase 2: T_predに各アクション π ∈ U を適用してコスト評価
+    ///
+    /// 計算量の違い：
+    /// - EvaluateAllActions: N_trajectories × N_actions回のコスト計算
+    /// - このメソッド: N_actions回のコスト計算（約7倍高速化）
+    ///
+    /// 処理フロー：
+    /// 1. T_predに対して
+    /// 2. 各アクション π ∈ U に対して
+    /// 3. π を T_pred に適用して T_red を生成
+    /// 4. T_red のコストを計算
+    /// 5. 最小コストのπを選択
+    /// </summary>
+    /// <param name="T_pred">選択された最良予測軌跡</param>
+    /// <param name="actions">リダイレクションアクションのリスト（U）</param>
+    /// <param name="physicalSpace">現在の物理空間</param>
+    /// <param name="redirectedAvatars">他のユーザーのリスト（APF計算用）</param>
+    /// <param name="currentUserIndex">現在のユーザーの物理空間インデックス</param>
+    /// <param name="currentAvatarId">現在のユーザーのアバターID</param>
+    /// <returns>最良のアクションと対応する軌跡のタプル</returns>
+    public (RedirectionAction bestAction, Trajectory bestTrajectory) EvaluateActionsForSingleTrajectory(
+        Trajectory T_pred,
+        List<RedirectionAction> actions,
+        SingleSpace physicalSpace,
+        List<GameObject> redirectedAvatars,
+        int currentUserIndex,
+        int currentAvatarId)
+    {
+        if (T_pred == null)
+        {
+            return (RedirectionAction.CreateNullAction(), null);
+        }
+
+        float minCost = float.MaxValue;
+        RedirectionAction bestAction = null;
+        Trajectory bestRedirectedTrajectory = null;
+
+        // 各アクションを評価
+        foreach (var action in actions)
+        {
+            // アクションを軌跡に適用してT_redを生成
+            Trajectory T_red = ApplyActionToTrajectory(T_pred, action);
+
+            // T_redのコストを計算
+            float actionCost = CalculateTotalCost(
+                T_red,
+                physicalSpace,
+                redirectedAvatars,
+                currentUserIndex,
+                currentAvatarId
+            );
+
+            // オプション：ゲインコストを追加（現在は論文でJ_Gain,i=0）
+            // actionCost += CalculateGainCost(action);
+
+            // 最小コストを更新
+            if (actionCost < minCost)
+            {
+                minCost = actionCost;
+                bestAction = action;
+                bestRedirectedTrajectory = T_red; // リダイレクト後の軌跡
+            }
+        }
+
+        // 有効なアクションが見つからない場合はヌルアクションにフォールバック
+        if (bestAction == null)
+        {
+            bestAction = RedirectionAction.CreateNullAction();
+        }
+
+        // 最良の軌跡のコストを記録（可視化やデバッグ用）
+        if (bestRedirectedTrajectory != null)
+        {
+            T_pred.totalCost = minCost;
+        }
+
+        return (bestAction, T_pred);
+    }
+
+    /// <summary>
     /// アクションを軌跡に適用してT_red（リダイレクト後の軌跡）を生成
     ///
     /// 論文の意図：

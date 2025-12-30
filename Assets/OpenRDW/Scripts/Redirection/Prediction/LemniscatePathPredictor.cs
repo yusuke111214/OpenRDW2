@@ -225,6 +225,62 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     }
 
     /// <summary>
+    /// Path similarity measureを使用して単一の最良軌跡を選択（論文Section 3.2.2）
+    ///
+    /// 論文の記述:
+    /// "From this generated set of trajectories, a single best prediction is isolated
+    /// using a simple mean-squared error enhanced by a discount factor."
+    ///
+    /// これが論文のアルゴリズムの核心部分：
+    /// - 複数の予測軌跡からT_pred（単一の最良予測）を選択
+    /// - MSEベースの類似度測定を使用
+    /// - 2段階選択プロセスの第1段階（予測）
+    ///
+    /// 処理フロー：
+    /// 1. 各軌跡のMSEスコアを計算（Trajectory.CalculatePathSimilarity）
+    /// 2. 最小MSEの軌跡を選択
+    /// 3. 単一の最良軌跡T_predを返す
+    ///
+    /// 効果：
+    /// - 計算量を削減（N_trajectories × N_actions → N_trajectories + N_actions）
+    /// - 予測精度の向上（ユーザーの移動パターンに近い軌跡を選択）
+    /// </summary>
+    /// <param name="trajectories">フィルタリング済みの実行可能な軌跡リスト</param>
+    /// <param name="positionHistory">HMDの位置履歴</param>
+    /// <returns>最良の予測軌跡T_pred、またはnull</returns>
+    public Trajectory SelectBestTrajectoryUsingSimilarityMeasure(
+        List<Trajectory> trajectories,
+        Queue<Vector3> positionHistory)
+    {
+        if (trajectories == null || trajectories.Count == 0)
+            return null;
+
+        if (positionHistory == null || positionHistory.Count == 0)
+        {
+            // 履歴がない場合は最初の軌跡を返す
+            // 初期フレームでは履歴が不足している可能性があるため
+            return trajectories[0];
+        }
+
+        float minMSE = float.MaxValue;
+        Trajectory bestTrajectory = null;
+
+        foreach (var trajectory in trajectories)
+        {
+            // MSEスコアを計算（割引係数はTrajectory内でデフォルト0.8）
+            float mse = trajectory.CalculatePathSimilarity(positionHistory);
+
+            if (mse < minMSE)
+            {
+                minMSE = mse;
+                bestTrajectory = trajectory;
+            }
+        }
+
+        return bestTrajectory;
+    }
+
+    /// <summary>
     /// 現在の予測ホライゾンを取得
     /// </summary>
     public float GetPredictionHorizon()
