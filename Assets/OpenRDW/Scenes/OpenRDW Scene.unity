@@ -1078,14 +1078,14 @@ MonoBehaviour:
   MIN_ROT_GAIN: 0.8
   CURVATURE_RADIUS: 5.14
   predictionHorizon: 3
-  lemniscateEndpoints: 11
+  lemniscateEndpoints: 5
   enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 1
   RESET_TRIGGER_BUFFER: 0.05
   useMinimalActionSet: 1
   simulatedTime: 0
-  targetFPS: 20
+  targetFPS: 30
   trialsForRepeating: 1
   experimentIterator: 0
   experimentSetupsListIterator: 0
