@@ -134,6 +134,9 @@ public class GlobalConfiguration : MonoBehaviour
     [SerializeField, Range(0f, 1f)]
     public float RESET_TRIGGER_BUFFER = 0.5f;
 
+    [Tooltip("Use minimal action set (7 actions) for reduced computation (63% faster)")]
+    public bool useMinimalActionSet = false;
+
     [HideInInspector]
     public float simulatedTime = 0;//accumulated simulation time, clear after each trial
 

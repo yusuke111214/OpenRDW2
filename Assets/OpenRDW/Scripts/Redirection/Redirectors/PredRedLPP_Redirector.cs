@@ -245,7 +245,10 @@ public class PredRedLPP_Redirector : APF_Redirector
         }
 
         // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
-        List<RedirectionAction> actionSet = RedirectionActionFactory.GenerateActionSet(globalConfiguration);
+        // Inspector設定に基づいて、Minimalアクションセット（7個）または完全なアクションセット（19個）を使用
+        List<RedirectionAction> actionSet = globalConfiguration.useMinimalActionSet
+            ? RedirectionActionFactory.GenerateMinimalActionSet(globalConfiguration)
+            : RedirectionActionFactory.GenerateActionSet(globalConfiguration);
 
         // Step 6: 全(軌跡, アクション)ペアを評価し、最良のものを選択（論文 Section 3.3）
         // 論文のロジック：各アクション π を各軌跡に適用して T_red を生成し、そのコストを評価
