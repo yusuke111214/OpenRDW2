@@ -4,11 +4,15 @@ using System.Collections.Generic;
 /// <summary>
 /// PredRedLPPアルゴリズムのコスト関数を使った軌跡評価器
 ///
-/// 論文のコスト関数を実装：
+/// 論文のコスト関数を実装（Section 3.3.3）：
 /// - APFコスト（Eq. 16）：障害物との距離
-/// - 見出しコスト（Eq. 17）：軌跡の向きの適切さ
+/// - 見出しコスト（Eq. 17）：軌跡の向きの適切さ → 論文では0に設定
 /// - リセットコスト（Eq. 18）：範囲外に出るペナルティ
+/// - ゲインコスト：ゲインの大きさのペナルティ → 論文では0に設定
 /// - 総コスト（Eq. 14-15）：割引率を適用した合計
+///
+/// 論文Section 3.3.3より：
+/// "JGain,i and JHeading,i were set to 0 for simplicity"
 ///
 /// コストとは：
 /// - 各軌跡の「悪さ」を数値化したもの
@@ -23,7 +27,7 @@ public class TrajectoryEvaluator
 
     // コストパラメータ
     private float discountFactor; // α（論文）- 割引率、通常0.8
-    private float headingCostWeight; // h0（論文）- 見出しコストの重み、通常1.0
+    private float headingCostWeight; // h0（論文）- 見出しコストの重み、論文では0に設定（将来の拡張用）
     private const float RESET_PENALTY = 1000f; // 範囲外ペナルティ（大きな値）
 
     /// <summary>
@@ -129,13 +133,20 @@ public class TrajectoryEvaluator
     /// <summary>
     /// 単一の軌跡に対して全てのアクションを評価し、最良のものを返す（論文準拠版）
     ///
+    /// 論文Section 3.3（page 6）より：
+    /// "Conceptually, the predictive RDW entails a simple approach:
+    /// • it predicts a single path Tpred;
+    /// • Tpred is redirected based on an action set U consisting of multiple
+    ///   redirection techniques and different gains, resulting in Tred;
+    /// • a cost-based analysis of Tred is used to identify the best redirection πoptimal ∈ U"
+    ///
     /// 論文の2段階選択プロセス（Section 3.2.2 + 3.3）：
     /// Phase 1: Path similarity measureでT_predを選択（呼び出し側で実施済み）
-    /// Phase 2: T_predに各アクション π ∈ U を適用してコスト評価
+    /// Phase 2: T_predに各アクション π ∈ U を適用してコスト評価（このメソッド）
     ///
-    /// 計算量の違い：
-    /// - EvaluateAllActions: N_trajectories × N_actions回のコスト計算
-    /// - このメソッド: N_actions回のコスト計算（約7倍高速化）
+    /// 計算量（論文準拠）：
+    /// - このメソッド: N_actions回のコスト計算
+    /// - 2段階プロセス全体: N_trajectories + N_actions（論文通り）
     ///
     /// 処理フロー：
     /// 1. T_predに対して
@@ -267,9 +278,12 @@ public class TrajectoryEvaluator
 
             // 個別コスト要素を計算（Eq. 15）
             float J_APF = CalculateAPFCost(point, space, redirectedAvatars, currentUserIndex, currentAvatarId);
-            float J_Heading = CalculateHeadingCost(i, trajectory, space, redirectedAvatars, currentUserIndex, currentAvatarId);
+
+            // 論文 Section 3.3.3（ページ7）：
+            // "JGain,i and JHeading,i were set to 0 for simplicity"
+            float J_Heading = 0f; // 論文準拠：簡潔さのため0に設定
             float J_Reset = CalculateResetCost(point, space);
-            float J_Gain = 0f; // 現在の実装では未使用
+            float J_Gain = 0f; // 論文準拠：簡潔さのため0に設定
 
             // 個別コスト（Eq. 15）
             float J_i = J_APF + J_Heading + J_Reset + J_Gain;

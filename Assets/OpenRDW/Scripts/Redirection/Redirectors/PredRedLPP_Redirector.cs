@@ -246,8 +246,11 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        // Step 4.5: Path similarity measureで単一の最良軌跡T_predを選択（論文Section 3.2.2）
-        // 2段階選択プロセスの第1段階（予測）
+        // Step 4.5: Path similarity measureで単一の最良軌跡T_predを選択（論文Section 3.2.2, page 5）
+        // 論文より："From this generated set of trajectories, a single best prediction
+        // is isolated using a simple mean-squared error enhanced by a discount factor."
+        //
+        // 2段階選択プロセスの第1段階（予測）- 論文準拠
         // HMD履歴との類似度（MSE）を使って、最もユーザーの移動パターンに近い軌跡を選択
         Trajectory T_pred = pathPredictor.SelectBestTrajectoryUsingSimilarityMeasure(
             feasibleTrajectories,
@@ -266,10 +269,17 @@ public class PredRedLPP_Redirector : APF_Redirector
             ? RedirectionActionFactory.GenerateMinimalActionSet(globalConfiguration)
             : RedirectionActionFactory.GenerateActionSet(globalConfiguration);
 
-        // Step 6: T_predに各アクションを適用して評価（論文Section 3.3）
-        // 2段階選択プロセスの第2段階（アクション選択）
-        // 計算量削減：N_trajectories × N_actions → N_trajectories + N_actions
-        // 例：11軌跡 × 19アクション = 209回 → 11回 + 19回 = 30回（約7倍高速化）
+        // Step 6: T_predに各アクションを適用して評価（論文Section 3.3, page 6）
+        // 論文より："Conceptually, the predictive RDW entails a simple approach:
+        // • it predicts a single path Tpred;
+        // • Tpred is redirected based on an action set U consisting of multiple
+        //   redirection techniques and different gains, resulting in Tred;
+        // • a cost-based analysis of Tred is used to identify the best redirection πoptimal ∈ U"
+        //
+        // 2段階選択プロセスの第2段階（アクション選択）- 論文準拠
+        // 単一の軌跡T_predに対して、全てのアクション∈Uを評価
+        // 計算量：N_trajectories + N_actions（論文準拠の2段階プロセス）
+        // 例：11軌跡の評価 + 19アクションの評価 = 30回
         (RedirectionAction bestAction, Trajectory bestTrajectory) = trajectoryEvaluator.EvaluateActionsForSingleTrajectory(
             T_pred,
             actionSet,

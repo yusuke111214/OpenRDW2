@@ -126,9 +126,9 @@ public class GlobalConfiguration : MonoBehaviour
     [Range(0f, 1f)]
     public float discountFactor = 0.8f;
 
-    [Tooltip("Heading cost weight (h0 in the paper)")]
+    [Tooltip("Heading cost weight (h0 in the paper) - Currently set to 0 per paper Section 3.3.3. This is a placeholder for future extensions.")]
     [Range(0f, 5f)]
-    public float headingCostWeight = 1f;
+    public float headingCostWeight = 0f; // 論文準拠：現在は0（将来の拡張用プレースホルダー）
 
     [Tooltip("Buffer width for triggering reset")]
     [SerializeField, Range(0f, 1f)]

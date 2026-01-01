@@ -209,18 +209,16 @@ public static class RedirectionActionFactory
             actions.Add(new RedirectionAction(RedirectionGainType.Curvature, gc));
         }
 
-        // オプション：複合ゲイン（並進+曲率）
-        // 設定に応じて有効化可能
-        // 現在はコメントアウト（アクションセットのサイズを抑えるため）
-        /*
-        for (int i = 0; i < 3; i++) // 計算量削減のため、複合は少なめに
+        // 複合ゲイン（並進+曲率）- 論文 Section 3.3.1, Table 2
+        // "a combination of translation and curvature gains (Grechkin et al., 2016)"
+        // 論文準拠のため、3段階の複合ゲインを追加
+        for (int i = 0; i < 3; i++)
         {
             float t = (float)i / 2f;
             float gt = Mathf.Lerp(config.MIN_TRANS_GAIN, config.MAX_TRANS_GAIN, t);
             float gc = Mathf.Lerp(-1f / config.CURVATURE_RADIUS, 1f / config.CURVATURE_RADIUS, t);
             actions.Add(new RedirectionAction(RedirectionGainType.Combined, gt, gc));
         }
-        */
 
         // ヌルリダイレクション（常に含める）
         // 何もしない選択肢を用意することで、無理なリダイレクションを避ける
