@@ -778,6 +778,77 @@ if (trajectoryLength >= minTrajectoryLength)
 - 適切な長さの軌跡（1.5m以上）のみが評価対象になる
 - 両方向のカーブ移動が正常に動作している
 
+### 🟡 問題10: 急激な旋回時にアバターが直進する問題（2026-01-09発見・調査中）
+
+#### 症状
+
+**症状:**
+- 緩い旋回（小さな曲率ゲイン）: 時計回り・反時計回り両方正常に動作
+- 急激な旋回（最大曲率ゲイン）: 時計回りの軌跡が選択されてもアバターが直進してしまう
+- 反時計回りの最大曲率では現象未確認
+
+**観察された動作:**
+- 可視化：最大曲率のシアン軌跡（時計回り）が表示される
+- 実際の動き：アバターが曲がらず直進し続ける
+- 緩い曲率では正常に旋回できる
+
+#### 考えられる原因
+
+1. **回転ゲインとの競合（最有力）:**
+   - `SetRotationGain()` と `SetCurvature()` が同じ `rotationInDegrees` を奪い合っている
+   - `Redirector.cs:76`: `if (Mathf.Abs(rotationInDegreesGC) > Mathf.Abs(rotationInDegrees))`
+   - 急激な旋回時に回転ゲインの方が大きくなり、曲率ゲインが無視される可能性
+
+2. **isWalkingの条件:**
+   - 急激な旋回時に `isWalking` が false になっている可能性
+   - `SetCurvature()` は `isWalking` が true の場合のみ適用
+
+3. **deltaPos.magnitudeの影響:**
+   - 移動量が小さいと回転角度も小さくなる
+   - `rotationInDegreesGC = Mathf.Rad2Deg * deltaPos.magnitude * curvature`
+
+#### 追加したデバッグログ（2026-01-09）
+
+**PredRedLPP_Redirector.cs:555:**
+```csharp
+Debug.Log($"[PredRedLPP] Applying Curvature: {action.primaryValue:F3}, isWalking={redirectionManager.isWalking}, deltaPos.magnitude={redirectionManager.deltaPos.magnitude:F3}");
+```
+
+**Redirector.cs:87, 95:**
+```csharp
+// 大きな曲率の場合
+Debug.Log($"[Redirector] SetCurvature: input={originalCurvature:F3}, clamped={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F3}, rotationGC={rotationInDegreesGC:F2}°, prevRotation={rotationInDegrees - rotationInDegreesGC:F2}°, applied={applied}");
+
+// isWalking=false の場合
+Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature={curvature:F3}");
+```
+
+#### 修正内容（2026-01-09）
+
+**ApplyCurvatureの符号修正:**
+- `Trajectory.cs:360`: `currentAngle -= rotationAngle` → `currentAngle += rotationAngle`
+- 可視化される軌跡の向きと実際の動きを一致させる修正
+- これにより緩い旋回は正常に動作するようになった
+
+**曲率のクランプ処理追加:**
+- `TrajectoryEvaluator.cs:273-283`: `ApplyActionToTrajectory()` で曲率を事前にクランプ
+- 可視化される軌跡と実際に適用される曲率を一致させる
+
+#### 次のステップ
+
+1. デバッグログを確認して原因を特定
+2. 確認すべきログ：
+   - `[PredRedLPP] Applying Curvature: ...` → isWalking の状態
+   - `[Redirector] SetCurvature: ...` → 曲率が適用されているか (applied=true/false)
+   - `[Redirector] SetCurvature: NOT APPLIED ...` → isWalking=false の警告
+
+3. 原因に応じた修正:
+   - 回転ゲインとの競合 → PredRedLPPでは回転ゲインを1.0f（中立）に設定済み
+   - isWalking=false → 条件の見直し
+   - deltaPos が小さい → 移動量の計算方法を確認
+
+**ステータス:** 🟡 調査中（原因特定のためのデバッグログ追加済み）
+
 ---
 
 ## 📊 論文との整合性評価

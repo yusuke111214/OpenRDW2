@@ -138,11 +138,6 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             }
         }
 
-        if (filteredCount > 0)
-        {
-            Debug.Log($"[LemniscatePredictor] Filtered out {filteredCount} trajectories shorter than {minTrajectoryLength:F2}m");
-        }
-
         // デバッグ：軌跡生成をログ出力（パフォーマンス重視なら削除可）
         // Debug.Log($"LemniscatePredictor: {endpoints.Count}個中{validCount}個の有効なクロソイド軌跡を生成");
 

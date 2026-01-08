@@ -308,11 +308,6 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        if (showDebugInfo)
-        {
-            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}");
-        }
-
         currentBestTrajectory = bestTrajectory;
 
         // Step 7: 選択されたアクション π_optimal を適用（論文 Section 3.3）
