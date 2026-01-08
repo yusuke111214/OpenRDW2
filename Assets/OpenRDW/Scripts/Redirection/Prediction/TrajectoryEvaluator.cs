@@ -29,7 +29,7 @@ using System.Collections.Generic;
 /// </summary>
 public class TrajectoryEvaluator
 {
-    private GlobalConfiguration globalConfiguration;
+    private GlobalConfiguration globalConfigurationuration;
 
     // コストパラメータ
     private float discountFactor; // α（論文）- 割引率、通常0.8
@@ -54,7 +54,7 @@ public class TrajectoryEvaluator
     /// </summary>
     public TrajectoryEvaluator(GlobalConfiguration config)
     {
-        this.globalConfiguration = config;
+        this.globalConfigurationuration = config;
         this.discountFactor = config.discountFactor;
         this.headingCostWeight = config.headingCostWeight;
         this.apfMaxValue = config.apfMaxValue;
@@ -270,12 +270,12 @@ public class TrajectoryEvaluator
         if (action.gainType == RedirectionGainType.Curvature)
         {
             // 実際の適用時の制限に合わせて曲率をクランプ（Redirector.SetCurvatureと同じ処理）
-            float maxCurvature = 1f / globalConfig.CURVATURE_RADIUS;
+            float maxCurvature = 1f / globalConfiguration.CURVATURE_RADIUS;
             float clampedCurvature = UnityEngine.Mathf.Clamp(action.primaryValue, -maxCurvature, maxCurvature);
 
             if (enableDebugLog && UnityEngine.Mathf.Abs(action.primaryValue) > maxCurvature)
             {
-                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Curvature clamped: {action.primaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3}, RADIUS={globalConfig.CURVATURE_RADIUS:F1}m)");
+                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Curvature clamped: {action.primaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3}, RADIUS={globalConfiguration.CURVATURE_RADIUS:F1}m)");
             }
 
             // Curvatureを適用した新しい軌跡を生成
@@ -284,7 +284,7 @@ public class TrajectoryEvaluator
         else if (action.gainType == RedirectionGainType.Combined)
         {
             // Combined（Translation + Curvature）の場合、Curvature部分のみが軌跡に影響
-            float maxCurvature = 1f / globalConfig.CURVATURE_RADIUS;
+            float maxCurvature = 1f / globalConfiguration.CURVATURE_RADIUS;
             float clampedCurvature = UnityEngine.Mathf.Clamp(action.secondaryValue, -maxCurvature, maxCurvature);
 
             if (enableDebugLog && UnityEngine.Mathf.Abs(action.secondaryValue) > maxCurvature)
