@@ -105,6 +105,20 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             lemniscateEndpoints
         );
 
+        // デバッグ: 予測パラメータとエンドポイントをログ出力
+        if (endpoints.Count > 0)
+        {
+            float minDist = float.MaxValue;
+            float maxDist = 0f;
+            foreach (var ep in endpoints)
+            {
+                float dist = Vector2.Distance(startPos2D, ep);
+                minDist = Mathf.Min(minDist, dist);
+                maxDist = Mathf.Max(maxDist, dist);
+            }
+            Debug.Log($"[LemniscatePredictor] predictionHorizon={predictionHorizon:F2}m, endpoints={endpoints.Count}, distance range=[{minDist:F2}m, {maxDist:F2}m]");
+        }
+
         // 各エンドポイントへのクロソイド軌跡を生成
         int validCount = 0;
         foreach (var endpoint in endpoints)

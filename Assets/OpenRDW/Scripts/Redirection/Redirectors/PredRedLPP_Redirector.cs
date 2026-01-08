@@ -229,6 +229,11 @@ public class PredRedLPP_Redirector : APF_Redirector
             redirectionManager.currDirReal
         );
 
+        if (showDebugInfo && predictions.Count > 0)
+        {
+            Debug.Log($"[PredRedLPP] Generated {predictions.Count} predictions. First prediction: {predictions[0].points.Count} points, distance: {Vector2.Distance(predictions[0].startPosition, predictions[0].endPosition):F2}m");
+        }
+
         if (predictions.Count == 0)
         {
             // 予測が利用できない場合、ヌルアクションを適用
@@ -269,9 +274,16 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        if (showDebugInfo && T_pred.points.Count == 0)
+        if (showDebugInfo)
         {
-            Debug.LogWarning($"[PredRedLPP] T_pred has no points. Trajectory ID issue.");
+            if (T_pred.points.Count == 0)
+            {
+                Debug.LogWarning($"[PredRedLPP] T_pred has no points. Trajectory ID issue.");
+            }
+            else
+            {
+                Debug.Log($"[PredRedLPP] T_pred selected: {T_pred.points.Count} points, distance: {Vector2.Distance(T_pred.startPosition, T_pred.endPosition):F2}m");
+            }
         }
 
         // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
@@ -310,7 +322,8 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (showDebugInfo)
         {
-            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}");
+            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}, distance: {Vector2.Distance(bestTrajectory.startPosition, bestTrajectory.endPosition):F2}m");
+            Debug.Log($"[PredRedLPP] bestTrajectory first point: {bestTrajectory.points[0]}, last point: {bestTrajectory.points[bestTrajectory.points.Count - 1]}");
         }
 
         currentBestTrajectory = bestTrajectory;

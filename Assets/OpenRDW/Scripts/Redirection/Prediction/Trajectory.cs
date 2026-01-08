@@ -335,11 +335,11 @@ public class Trajectory
         if (Mathf.Abs(curvature) < 0.0001f)
         {
             // Curvatureがほぼ0の場合は元の軌跡のコピーを返す
-            // Debug.Log($"[Trajectory] ApplyCurvature: curvature={curvature:F4} is near zero, returning copy");
+            UnityEngine.Debug.Log($"[Trajectory] ApplyCurvature: curvature={curvature:F4} is near zero, returning copy with {points.Count} points");
             return new Trajectory(new List<Vector2>(points));
         }
 
-        // Debug.Log($"[Trajectory] ApplyCurvature: Applying curvature={curvature:F4} to {points.Count} points");
+        UnityEngine.Debug.Log($"[Trajectory] ApplyCurvature: Applying curvature={curvature:F4} to {points.Count} points, original distance={Vector2.Distance(points[0], points[points.Count - 1]):F2}m");
         List<Vector2> newPoints = new List<Vector2>();
         newPoints.Add(points[0]); // 始点は変わらない
 
@@ -372,6 +372,8 @@ public class Trajectory
 
         // コストは未計算としてマーク
         redirectedTrajectory.totalCost = float.MaxValue;
+
+        UnityEngine.Debug.Log($"[Trajectory] ApplyCurvature: Result has {redirectedTrajectory.points.Count} points, distance={Vector2.Distance(redirectedTrajectory.points[0], redirectedTrajectory.points[redirectedTrajectory.points.Count - 1]):F2}m");
 
         return redirectedTrajectory;
     }
