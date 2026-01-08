@@ -108,7 +108,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     [Tooltip("Radius applied by curvature gain")]
     [Range(1, 23)]
-    public float CURVATURE_RADIUS = 3.0f;  // 7.5f→3.0fに変更（急激な旋回を可能にするため）
+    public float CURVATURE_RADIUS = 7.5f;
 
     [Header("PredRedLPP Settings")]
     [Tooltip("Prediction horizon in meters (A_Lem in the paper)")]
