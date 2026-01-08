@@ -29,7 +29,7 @@ using System.Collections.Generic;
 /// </summary>
 public class TrajectoryEvaluator
 {
-    private GlobalConfiguration globalConfigurationuration;
+    private GlobalConfiguration globalConfiguration;
 
     // コストパラメータ
     private float discountFactor; // α（論文）- 割引率、通常0.8
@@ -54,7 +54,7 @@ public class TrajectoryEvaluator
     /// </summary>
     public TrajectoryEvaluator(GlobalConfiguration config)
     {
-        this.globalConfigurationuration = config;
+        this.globalConfiguration = config;
         this.discountFactor = config.discountFactor;
         this.headingCostWeight = config.headingCostWeight;
         this.apfMaxValue = config.apfMaxValue;
