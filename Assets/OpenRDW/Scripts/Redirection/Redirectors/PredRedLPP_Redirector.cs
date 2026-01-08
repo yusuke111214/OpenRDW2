@@ -129,10 +129,12 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         trajectoryLineRenderer = trajectoryVisualizer.AddComponent<LineRenderer>();
         trajectoryLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        trajectoryLineRenderer.startColor = Color.green;  // 緑色：最適軌跡
-        trajectoryLineRenderer.endColor = Color.green;
-        trajectoryLineRenderer.startWidth = 0.1f;
-        trajectoryLineRenderer.endWidth = 0.1f;
+        // より目立つ明るいシアン色（緑+青）に変更
+        trajectoryLineRenderer.startColor = new Color(0f, 1f, 1f, 1f);  // シアン：最適軌跡
+        trajectoryLineRenderer.endColor = new Color(0f, 1f, 1f, 1f);
+        // 幅を大きくして見やすく
+        trajectoryLineRenderer.startWidth = 0.2f;
+        trajectoryLineRenderer.endWidth = 0.2f;
         trajectoryLineRenderer.positionCount = 0;
         trajectoryLineRenderer.useWorldSpace = true; // ワールド空間座標を使用（Arrow(Clone)と同じ）
         trajectoryLineRenderer.enabled = visualizationManager.ifVisible;
@@ -145,10 +147,12 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         lemniscateLineRenderer = lemniscateVisualizer.AddComponent<LineRenderer>();
         lemniscateLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lemniscateLineRenderer.startColor = Color.yellow;  // 黄色：レムニスケート形状
-        lemniscateLineRenderer.endColor = Color.yellow;
-        lemniscateLineRenderer.startWidth = 0.05f;
-        lemniscateLineRenderer.endWidth = 0.05f;
+        // より明るい黄色に変更
+        lemniscateLineRenderer.startColor = new Color(1f, 1f, 0f, 0.6f);  // 黄色（半透明）：レムニスケート形状
+        lemniscateLineRenderer.endColor = new Color(1f, 1f, 0f, 0.6f);
+        // 幅を少し大きくして見やすく
+        lemniscateLineRenderer.startWidth = 0.08f;
+        lemniscateLineRenderer.endWidth = 0.08f;
         lemniscateLineRenderer.positionCount = 0;
         lemniscateLineRenderer.useWorldSpace = true; // ワールド空間座標を使用（Arrow(Clone)と同じ）
         lemniscateLineRenderer.enabled = visualizationManager.ifVisible;
@@ -836,6 +840,8 @@ public class PredRedLPP_Redirector : APF_Redirector
         if (showDebugInfo)
         {
             Debug.Log($"[PredRedLPP] UpdateTrajectoryVisualization: Rendering {currentBestTrajectory.points.Count} points");
+            // 最初と最後の点の座標をデバッグ出力
+            Debug.Log($"[PredRedLPP] First point (physical): {currentBestTrajectory.points[0]}, Last point (physical): {currentBestTrajectory.points[currentBestTrajectory.points.Count - 1]}");
         }
 
         // 物理空間から仮想空間に変換
@@ -848,6 +854,12 @@ public class PredRedLPP_Redirector : APF_Redirector
             // 3D（物理空間）→ 3D（仮想空間）
             // trackingSpace.TransformPointは物理空間のローカル座標を仮想空間のワールド座標に変換
             virtualPositions[i] = redirectionManager.trackingSpace.TransformPoint(physicalPos3D);
+        }
+
+        if (showDebugInfo)
+        {
+            // 変換後の最初と最後の点の座標をデバッグ出力
+            Debug.Log($"[PredRedLPP] First point (virtual): {virtualPositions[0]}, Last point (virtual): {virtualPositions[virtualPositions.Length - 1]}");
         }
 
         trajectoryLineRenderer.positionCount = virtualPositions.Length;

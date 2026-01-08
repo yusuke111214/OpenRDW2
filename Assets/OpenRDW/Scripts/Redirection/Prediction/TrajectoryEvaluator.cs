@@ -239,15 +239,18 @@ public class TrajectoryEvaluator
         if (bestAction == null)
         {
             bestAction = RedirectionAction.CreateNullAction();
+            bestRedirectedTrajectory = T_pred; // Null actionの場合はT_predをそのまま使用
         }
 
         // 最良の軌跡のコストを記録（可視化やデバッグ用）
         if (bestRedirectedTrajectory != null)
         {
-            T_pred.totalCost = minCost;
+            bestRedirectedTrajectory.totalCost = minCost;
         }
 
-        return (bestAction, T_pred);
+        // ★修正: T_predではなく、bestRedirectedTrajectory（T_red）を返す
+        // これにより、リダイレクション適用後の実際の軌跡を可視化できる
+        return (bestAction, bestRedirectedTrajectory);
     }
 
     /// <summary>
