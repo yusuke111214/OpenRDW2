@@ -6,6 +6,7 @@ using System.Collections.Generic;
 ///
 /// 論文のコスト関数を実装（Section 3.3.3）：
 /// - APFコスト（Eq. 16）：障害物との距離
+///   → 非調和APF（Eq. 11）を使用：F_rep,i = a_o × exp(-b_o × d_o²)  (if d_o ≤ d_d)
 /// - 見出しコスト（Eq. 17）：軌跡の向きの適切さ → 論文では0に設定
 /// - リセットコスト（Eq. 18）：範囲外に出るペナルティ
 /// - ゲインコスト：ゲインの大きさのペナルティ → 論文では0に設定
@@ -19,6 +20,11 @@ using System.Collections.Generic;
 /// - 値が小さいほど良い軌跡
 /// - 複数の要素（障害物、向き、範囲）を組み合わせて評価
 ///
+/// APF方式：
+/// - 非調和APF（anharmonic APF）を使用（論文準拠、Eq. 11）
+/// - ThomasAPF（1/d方式）から変更（問題4、問題5への対処）
+/// - 閾値距離を超えると反発力が0になり、安定点通過後の挙動が改善される
+///
 /// 論文: "Predictive multiuser redirected walking using artificial potential fields" (Hirt et al., 2024)
 /// </summary>
 public class TrajectoryEvaluator
@@ -30,18 +36,27 @@ public class TrajectoryEvaluator
     private float headingCostWeight; // h0（論文）- 見出しコストの重み、論文では0に設定（将来の拡張用）
     private const float RESET_PENALTY = 1000f; // 範囲外ペナルティ（大きな値）
 
+    // 非調和APFパラメータ（論文Eq. 11）
+    private float apfMaxValue; // a_o - 最大APF値
+    private float apfDistributionWidth; // b_o - 分布幅
+    private float apfThresholdDistance; // d_d - 閾値距離
+
     /// <summary>
     /// コンストラクタ（設定ファイルから初期化）
     ///
     /// パラメータ読み込み：
     /// - 割引率（discountFactor）
     /// - 見出しコストの重み（headingCostWeight）
+    /// - 非調和APFパラメータ（apfMaxValue, apfDistributionWidth, apfThresholdDistance）
     /// </summary>
     public TrajectoryEvaluator(GlobalConfiguration config)
     {
         this.globalConfiguration = config;
         this.discountFactor = config.discountFactor;
         this.headingCostWeight = config.headingCostWeight;
+        this.apfMaxValue = config.apfMaxValue;
+        this.apfDistributionWidth = config.apfDistributionWidth;
+        this.apfThresholdDistance = config.apfThresholdDistance;
     }
 
     /// <summary>
@@ -300,11 +315,23 @@ public class TrajectoryEvaluator
     /// 点でのAPFコストを計算
     ///
     /// 論文 Eq. 16 を実装： J_APF = ||F_red||
+    /// 論文 Eq. 11 の非調和APFを使用： F_rep,i = a_o × exp(-b_o × d_o²) × e_o  (if d_o ≤ d_d)
     ///
     /// APFコストとは：
     /// - その点での反発力の大きさ
     /// - 障害物に近いほど大きくなる
-    /// - ThomasAPFスタイルの1/d方式を使用
+    /// - 非調和APF（anharmonic APF）方式を使用（論文準拠）
+    ///
+    /// 非調和APFの特徴：
+    /// - 閾値距離d_dを超えると反発力が完全に0
+    /// - 指数関数的減衰により、壁に近づくと反発力が爆発的に増加
+    /// - 局所的影響：閾値内の障害物のみが影響する
+    ///
+    /// 計算手順（重要）：
+    /// 1. 各障害物iから反発力ベクトル F_rep,i を計算
+    /// 2. すべてのF_rep,iをベクトル合成して F_red を得る
+    /// 3. F_redのノルム（大きさ）を返す
+    /// ※スカラー値の単純な足し算ではなく、ベクトル合成が必要
     /// </summary>
     private float CalculateAPFCost(
         Vector2 point,
@@ -355,19 +382,28 @@ public class TrajectoryEvaluator
             nearestPosList.Add(nearestPos);
         }
 
-        // ThomasAPF方式で反発力の大きさを計算
-        float repulsiveForce = 0f;
+        // 非調和APF方式で反発力ベクトルを計算してから大きさを取得
+        // 論文Eq. 16: J_APF = ||F_red||
+        // F_red = Σ F_rep,i （全障害物からの反発力ベクトルの合計）
+        Vector2 repulsiveForceVector = Vector2.zero;
         foreach (var obPos in nearestPosList)
         {
-            float distance = (point - obPos).magnitude;
-            if (distance > 0.01f) // ゼロ除算を回避
+            Vector2 diff = point - obPos;
+            float distance = diff.magnitude;
+
+            if (distance > 0.01f && distance <= apfThresholdDistance) // ゼロ除算を回避、閾値内のみ
             {
-                // 距離の逆数で反発力を表現（近いほど大きい）
-                repulsiveForce += 1f / distance;
+                // 非調和APF（Eq. 11）: F_rep,i = a_o × exp(-b_o × d_o²) × e_o
+                // e_o: 障害物から点への単位方向ベクトル
+                float forceMagnitude = apfMaxValue * Mathf.Exp(-apfDistributionWidth * distance * distance);
+                Vector2 forceDirection = diff.normalized;
+                repulsiveForceVector += forceMagnitude * forceDirection;
             }
+            // distance > apfThresholdDistance の場合は force = 0（追加しない）
         }
 
-        return repulsiveForce;
+        // ベクトルの大きさ（ノルム）を返す
+        return repulsiveForceVector.magnitude;
     }
 
     /// <summary>
@@ -435,6 +471,9 @@ public class TrajectoryEvaluator
     /// CalculateAPFCostとの違い：
     /// - APFコスト：大きさ（スカラー）を返す
     /// - こちら：方向（ベクトル）を返す
+    ///
+    /// 非調和APF（Eq. 11）を使用：
+    /// F_rep = a_o × exp(-b_o × d²) × (p - o).normalized  (if d ≤ d_d)
     /// </summary>
     private Vector2 CalculateRepulsiveForceVector(
         Vector2 point,
@@ -485,22 +524,25 @@ public class TrajectoryEvaluator
             nearestPosList.Add(nearestPos);
         }
 
-        // 負の勾配（反発力の方向）を計算
-        Vector2 ng = Vector2.zero;
+        // 反発力ベクトルを計算（非調和APF、CalculateAPFCostと同じパラメータを使用）
+        Vector2 repulsiveForceVector = Vector2.zero;
         foreach (var obPos in nearestPosList)
         {
             Vector2 diff = point - obPos;
             float distance = diff.magnitude;
 
-            if (distance > 0.01f) // ゼロ除算を回避
+            if (distance > 0.01f && distance <= apfThresholdDistance) // ゼロ除算を回避、閾値内のみ
             {
-                // 勾配の寄与： g = -1/d^2 * (p - o) / ||p - o||
-                Vector2 gDelta = -1f / distance * diff.normalized;
-                ng += -gDelta; // 負の勾配
+                // 非調和APF（Eq. 11）のベクトル形式
+                // F_rep = a_o × exp(-b_o × d²) × (p - o).normalized
+                float forceMagnitude = apfMaxValue * Mathf.Exp(-apfDistributionWidth * distance * distance);
+                Vector2 forceDirection = diff.normalized;
+                repulsiveForceVector += forceMagnitude * forceDirection;
             }
+            // distance > apfThresholdDistance の場合は force = 0（追加しない）
         }
 
-        return ng;
+        return repulsiveForceVector;
     }
 
     /// <summary>
@@ -538,10 +580,14 @@ public class TrajectoryEvaluator
     ///
     /// 実行時の調整：
     /// - GlobalConfigurationの値が変わった場合に呼び出す
+    /// - インスペクターでパラメータを調整した際に反映される
     /// </summary>
     public void UpdateParameters(GlobalConfiguration config)
     {
         this.discountFactor = config.discountFactor;
         this.headingCostWeight = config.headingCostWeight;
+        this.apfMaxValue = config.apfMaxValue;
+        this.apfDistributionWidth = config.apfDistributionWidth;
+        this.apfThresholdDistance = config.apfThresholdDistance;
     }
 }

@@ -1078,14 +1078,17 @@ MonoBehaviour:
   MIN_ROT_GAIN: 0.8
   CURVATURE_RADIUS: 5.14
   predictionHorizon: 3
-  lemniscateEndpoints: 7
-  enablePathSmoothing: 0
+  lemniscateEndpoints: 11
+  enablePathSmoothing: 1
   discountFactor: 0.8
-  headingCostWeight: 1
-  RESET_TRIGGER_BUFFER: 0.05
+  headingCostWeight: 0
+  apfMaxValue: 20
+  apfDistributionWidth: 3
+  apfThresholdDistance: 5
+  RESET_TRIGGER_BUFFER: 0.2
   useMinimalActionSet: 1
   simulatedTime: 0
-  targetFPS: 30
+  targetFPS: 90
   trialsForRepeating: 1
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -1129,7 +1132,7 @@ MonoBehaviour:
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
-  squareWidth: 12.8
+  squareWidth: 10.09
   doubleRoomLeftRoomSide: 10
   doubleRoomRightRoomSide: 20
   doubleRoomCorridorWidth: 5
@@ -1640,7 +1643,7 @@ MonoBehaviour:
   isRotating: 0
   isWalking: 0
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 4
+  redirectorChoice: 10
   resetterChoice: 4
   globalConfiguration: {fileID: 0}
   visualizationManager: {fileID: 0}
