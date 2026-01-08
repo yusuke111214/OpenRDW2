@@ -13,7 +13,8 @@
       "Bash(ls:*)",
       "Bash(TrajectoryEvaluator \")",
       "Bash(git checkout:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndebug: 軌跡表示の問題を調査するためデバッグログを追加\n\n軌跡が点のようにしか表示されない問題を調査するため、\n以下の箇所にデバッグログを追加:\n\n1. LemniscatePathPredictor.cs:\n   - predictionHorizon の値\n   - エンドポイントまでの距離範囲\n\n2. PredRedLPP_Redirector.cs:\n   - 生成された軌跡の情報\n   - 選択された T_pred の情報\n   - 最終的な bestTrajectory の情報\n\n3. Trajectory.cs:\n   - ApplyCurvature 実行時の入出力情報\n   - 曲率適用前後の軌跡の距離\n\nこれらのログにより、軌跡が短い原因\\(約0.1-0.2m\\)を\n特定できるようになる。\nEOF\n\\)\")"
     ],
     "deny": [],
     "ask": []

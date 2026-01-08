@@ -121,6 +121,9 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
 
         // 各エンドポイントへのクロソイド軌跡を生成
         int validCount = 0;
+        int filteredCount = 0;
+        float minTrajectoryLength = predictionHorizon * 0.5f; // 最低限の軌跡長（predictionHorizonの50%）
+
         foreach (var endpoint in endpoints)
         {
             // 開始点からエンドポイントへのクロソイド曲線を作成
@@ -134,9 +137,24 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             if (CurvesWrapper.IsValidClothoid(clothoid))
             {
                 Trajectory trajectory = new Trajectory(clothoid, trajectorySamplePoints);
-                trajectories.Add(trajectory);
-                validCount++;
+
+                // 軌跡の長さをチェック（短すぎる軌跡を除外）
+                float trajectoryLength = Vector2.Distance(trajectory.startPosition, trajectory.endPosition);
+                if (trajectoryLength >= minTrajectoryLength)
+                {
+                    trajectories.Add(trajectory);
+                    validCount++;
+                }
+                else
+                {
+                    filteredCount++;
+                }
             }
+        }
+
+        if (filteredCount > 0)
+        {
+            Debug.Log($"[LemniscatePredictor] Filtered out {filteredCount} trajectories shorter than {minTrajectoryLength:F2}m");
         }
 
         // デバッグ：軌跡生成をログ出力（パフォーマンス重視なら削除可）
