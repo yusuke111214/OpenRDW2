@@ -356,7 +356,8 @@ public class Trajectory
             float rotationAngle = curvature * segmentLength;
 
             // 新しい向きを計算
-            currentAngle -= rotationAngle;
+            // Redirector.SetCurvature の符号規則に合わせる: positive = left (counter-clockwise)
+            currentAngle += rotationAngle;
 
             // 新しい向きで次のポイントを計算
             Vector2 direction = new Vector2(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle));
