@@ -68,16 +68,32 @@ public abstract class Redirector : MonoBehaviour
     {
         if (redirectionManager.isWalking)
         {
+            float originalCurvature = curvature;
             curvature = Mathf.Max(curvature, -1 / globalConfiguration.CURVATURE_RADIUS);
             curvature = Mathf.Min(curvature, 1 / globalConfiguration.CURVATURE_RADIUS);
             redirectionManager.curvature = curvature;
             var rotationInDegreesGC = Mathf.Rad2Deg * redirectionManager.deltaPos.magnitude * curvature;
-            if (Mathf.Abs(rotationInDegreesGC) > Mathf.Abs(rotationInDegrees))
+            bool applied = Mathf.Abs(rotationInDegreesGC) > Mathf.Abs(rotationInDegrees);
+            if (applied)
             {
                 rotationInDegrees = rotationInDegreesGC;
                 GetComponentInChildren<KeyboardController>().SetLastRotation(rotationInDegreesGC);
             }
             globalConfiguration.statisticsLogger.Event_Curvature_Gain(movementManager.avatarId, curvature, rotationInDegreesGC);
+
+            // デバッグログ（大きな曲率の場合のみ）
+            if (Mathf.Abs(originalCurvature) > 0.12f)
+            {
+                Debug.Log($"[Redirector] SetCurvature: input={originalCurvature:F3}, clamped={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F3}, rotationGC={rotationInDegreesGC:F2}°, prevRotation={rotationInDegrees - rotationInDegreesGC:F2}°, applied={applied}");
+            }
+        }
+        else
+        {
+            // isWalkingがfalseの場合のデバッグログ
+            if (Mathf.Abs(curvature) > 0.01f)
+            {
+                Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature={curvature:F3}");
+            }
         }
     }
 

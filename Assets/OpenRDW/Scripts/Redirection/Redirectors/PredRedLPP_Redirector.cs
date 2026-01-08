@@ -550,6 +550,10 @@ public class PredRedLPP_Redirector : APF_Redirector
                 // 曲率ゲインのみ適用
                 SetTranslationGain(1.0f);  // 中立
                 SetRotationGain(1.0f);     // 中立
+                if (showDebugInfo)
+                {
+                    Debug.Log($"[PredRedLPP] Applying Curvature: {action.primaryValue:F3}, isWalking={redirectionManager.isWalking}, deltaPos.magnitude={redirectionManager.deltaPos.magnitude:F3}");
+                }
                 SetCurvature(action.primaryValue);
                 break;
 

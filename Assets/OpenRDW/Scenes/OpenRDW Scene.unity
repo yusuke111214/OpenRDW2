@@ -1078,17 +1078,17 @@ MonoBehaviour:
   MIN_ROT_GAIN: 0.8
   CURVATURE_RADIUS: 5.14
   predictionHorizon: 3
-  lemniscateEndpoints: 11
-  enablePathSmoothing: 1
+  lemniscateEndpoints: 19
+  enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 0
   apfMaxValue: 20
   apfDistributionWidth: 3
   apfThresholdDistance: 5
   RESET_TRIGGER_BUFFER: 0.2
-  useMinimalActionSet: 1
+  useMinimalActionSet: 0
   simulatedTime: 0
-  targetFPS: 90
+  targetFPS: 30
   trialsForRepeating: 1
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   showPotentialArrows: 0
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
-  avatarNum: 1
+  avatarNum: 3
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
