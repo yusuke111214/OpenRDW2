@@ -229,11 +229,6 @@ public class PredRedLPP_Redirector : APF_Redirector
             redirectionManager.currDirReal
         );
 
-        if (showDebugInfo && predictions.Count > 0)
-        {
-            Debug.Log($"[PredRedLPP] Generated {predictions.Count} predictions. First prediction: {predictions[0].points.Count} points, distance: {Vector2.Distance(predictions[0].startPosition, predictions[0].endPosition):F2}m");
-        }
-
         if (predictions.Count == 0)
         {
             // 予測が利用できない場合、ヌルアクションを適用
@@ -274,16 +269,9 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        if (showDebugInfo)
+        if (showDebugInfo && T_pred.points.Count == 0)
         {
-            if (T_pred.points.Count == 0)
-            {
-                Debug.LogWarning($"[PredRedLPP] T_pred has no points. Trajectory ID issue.");
-            }
-            else
-            {
-                Debug.Log($"[PredRedLPP] T_pred selected: {T_pred.points.Count} points, distance: {Vector2.Distance(T_pred.startPosition, T_pred.endPosition):F2}m");
-            }
+            Debug.LogWarning($"[PredRedLPP] T_pred has no points. Trajectory ID issue.");
         }
 
         // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
@@ -322,8 +310,7 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (showDebugInfo)
         {
-            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}, distance: {Vector2.Distance(bestTrajectory.startPosition, bestTrajectory.endPosition):F2}m");
-            Debug.Log($"[PredRedLPP] bestTrajectory first point: {bestTrajectory.points[0]}, last point: {bestTrajectory.points[bestTrajectory.points.Count - 1]}");
+            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}");
         }
 
         currentBestTrajectory = bestTrajectory;
@@ -850,13 +837,6 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        if (showDebugInfo)
-        {
-            Debug.Log($"[PredRedLPP] UpdateTrajectoryVisualization: Rendering {currentBestTrajectory.points.Count} points");
-            // 最初と最後の点の座標をデバッグ出力
-            Debug.Log($"[PredRedLPP] First point (physical): {currentBestTrajectory.points[0]}, Last point (physical): {currentBestTrajectory.points[currentBestTrajectory.points.Count - 1]}");
-        }
-
         // 物理空間から仮想空間に変換
         Vector3[] virtualPositions = new Vector3[currentBestTrajectory.points.Count];
         for (int i = 0; i < currentBestTrajectory.points.Count; i++)
@@ -867,12 +847,6 @@ public class PredRedLPP_Redirector : APF_Redirector
             // 3D（物理空間）→ 3D（仮想空間）
             // trackingSpace.TransformPointは物理空間のローカル座標を仮想空間のワールド座標に変換
             virtualPositions[i] = redirectionManager.trackingSpace.TransformPoint(physicalPos3D);
-        }
-
-        if (showDebugInfo)
-        {
-            // 変換後の最初と最後の点の座標をデバッグ出力
-            Debug.Log($"[PredRedLPP] First point (virtual): {virtualPositions[0]}, Last point (virtual): {virtualPositions[virtualPositions.Length - 1]}");
         }
 
         trajectoryLineRenderer.positionCount = virtualPositions.Length;
