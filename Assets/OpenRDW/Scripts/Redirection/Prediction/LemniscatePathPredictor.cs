@@ -173,7 +173,9 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             float denom = 1f + cosT * cosT;
 
             float x_local = size * sinT / denom;
-            float y_local = size * sinT * cosT / denom;
+            // y_localの符号を反転：左右のエンドポイントを入れ替える
+            // これにより、時計回り・反時計回り両方向のカーブ移動を実現
+            float y_local = -size * sinT * cosT / denom;
 
             // ワールド座標に変換
             // 前進方向の角度で回転

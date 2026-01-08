@@ -41,6 +41,9 @@ public class TrajectoryEvaluator
     private float apfDistributionWidth; // b_o - 分布幅
     private float apfThresholdDistance; // d_d - 閾値距離
 
+    // デバッグ用フラグ
+    private bool enableDebugLog = false;
+
     /// <summary>
     /// コンストラクタ（設定ファイルから初期化）
     ///
@@ -209,6 +212,12 @@ public class TrajectoryEvaluator
                 currentAvatarId
             );
 
+            // デバッグログ
+            if (enableDebugLog)
+            {
+                UnityEngine.Debug.Log($"[TrajectoryEvaluator] Action: {action.ToString()}, Cost: {actionCost:F2}");
+            }
+
             // オプション：ゲインコストを追加（現在は論文でJ_Gain,i=0）
             // actionCost += CalculateGainCost(action);
 
@@ -219,6 +228,11 @@ public class TrajectoryEvaluator
                 bestAction = action;
                 bestRedirectedTrajectory = T_red; // リダイレクト後の軌跡
             }
+        }
+
+        if (enableDebugLog)
+        {
+            UnityEngine.Debug.Log($"[TrajectoryEvaluator] Best action selected: {bestAction?.ToString() ?? "null"}, Min cost: {minCost:F2}");
         }
 
         // 有効なアクションが見つからない場合はヌルアクションにフォールバック

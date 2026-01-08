@@ -316,6 +316,11 @@ public class Trajectory
     /// 実装方法：
     /// - 元の軌跡の各セグメント（点と点の間）に対して、curvatureによる曲がりを加える
     /// - 曲がり具合は距離に比例（長く歩くほど大きく曲がる）
+    ///
+    /// 符号規則（Unity座標系: XZ平面、Y軸上向き）：
+    /// - currentAngle -= rotationAngle の実装
+    /// - 正のcurvature → 角度減少 → 時計回り（右曲がり）
+    /// - 負のcurvature → 角度増加 → 反時計回り（左曲がり）
     /// </summary>
     /// <param name="curvature">曲率ゲイン値（正=右曲がり、負=左曲がり、単位：1/m）</param>
     /// <returns>Curvatureを適用した新しい軌跡</returns>
@@ -351,7 +356,7 @@ public class Trajectory
             float rotationAngle = curvature * segmentLength;
 
             // 新しい向きを計算
-            currentAngle += rotationAngle;
+            currentAngle -= rotationAngle;
 
             // 新しい向きで次のポイントを計算
             Vector2 direction = new Vector2(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle));

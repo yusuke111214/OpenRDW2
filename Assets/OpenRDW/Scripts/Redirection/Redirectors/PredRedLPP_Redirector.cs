@@ -259,8 +259,15 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (T_pred == null)
         {
+            if (showDebugInfo)
+                Debug.LogWarning("[PredRedLPP] T_pred is null. Applying null redirection.");
             ApplyNullRedirection();
             return;
+        }
+
+        if (showDebugInfo && T_pred.points.Count == 0)
+        {
+            Debug.LogWarning($"[PredRedLPP] T_pred has no points. Trajectory ID issue.");
         }
 
         // Step 5: アクションセット U を生成（論文 Table 2, Section 3.3.1）
@@ -291,8 +298,15 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         if (bestAction == null || bestTrajectory == null)
         {
+            if (showDebugInfo)
+                Debug.LogWarning("[PredRedLPP] bestAction or bestTrajectory is null. Applying null redirection.");
             ApplyNullRedirection();
             return;
+        }
+
+        if (showDebugInfo)
+        {
+            Debug.Log($"[PredRedLPP] Selected action: {bestAction.ToString()}, Trajectory points: {bestTrajectory.points.Count}");
         }
 
         currentBestTrajectory = bestTrajectory;
@@ -808,7 +822,20 @@ public class PredRedLPP_Redirector : APF_Redirector
         if (currentBestTrajectory == null || currentBestTrajectory.points.Count == 0)
         {
             trajectoryLineRenderer.positionCount = 0;
+            if (showDebugInfo && currentBestTrajectory == null)
+            {
+                Debug.LogWarning("[PredRedLPP] UpdateTrajectoryVisualization: currentBestTrajectory is null");
+            }
+            else if (showDebugInfo && currentBestTrajectory != null && currentBestTrajectory.points.Count == 0)
+            {
+                Debug.LogWarning("[PredRedLPP] UpdateTrajectoryVisualization: currentBestTrajectory has no points");
+            }
             return;
+        }
+
+        if (showDebugInfo)
+        {
+            Debug.Log($"[PredRedLPP] UpdateTrajectoryVisualization: Rendering {currentBestTrajectory.points.Count} points");
         }
 
         // 物理空間から仮想空間に変換
