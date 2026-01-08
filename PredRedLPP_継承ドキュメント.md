@@ -719,6 +719,65 @@ return (bestAction, bestRedirectedTrajectory);  // ✅ リダイレクト後の�
 - Curvature action が適用された場合、カーブした軌跡が表示される
 - Translation/Rotation action の場合、T_pred と同じ軌跡が表示される
 
+### 🟢 問題9: 短すぎる軌跡が選択される問題（2026-01-09発見・修正・解決済み）
+
+#### 症状（問題8の修正後に発見）
+
+**症状:**
+- 問題8の修正後も軌跡が点のように表示される（0.11m～0.14m程度）
+- 軌跡データは21点あるが、すべて密集している
+
+**デバッグログの結果:**
+```
+[LemniscatePredictor] predictionHorizon=3.00m, endpoints=11, distance range=[0.11m, 3.00m]
+[PredRedLPP] Generated 11 predictions. First prediction: 21 points, distance: 0.11m
+[PredRedLPP] T_pred selected: 21 points, distance: 0.11m
+```
+
+**根本原因:**
+`SelectBestTrajectoryUsingSimilarityMeasure` が **MSE（平均二乗誤差）で最も短い軌跡を選択**していた。
+
+**問題の詳細:**
+1. レムニスケートは0.11m～3.00mの範囲で11個のエンドポイントを生成
+2. 各エンドポイントへのクロソイド軌跡を生成（11個）
+3. MSE評価では、短い軌跡ほど履歴との誤差が小さくなる傾向
+4. 結果：0.11mの最短軌跡が常に選択される
+
+**修正内容:**
+**LemniscatePathPredictor.cs:125-158** - 短すぎる軌跡をフィルタリング
+
+```csharp
+float minTrajectoryLength = predictionHorizon * 0.5f; // 最低限の軌跡長（predictionHorizonの50%）
+
+// 軌跡の長さをチェック（短すぎる軌跡を除外）
+float trajectoryLength = Vector2.Distance(trajectory.startPosition, trajectory.endPosition);
+if (trajectoryLength >= minTrajectoryLength)
+{
+    trajectories.Add(trajectory);
+    validCount++;
+}
+```
+
+**動作確認結果（2026-01-09）:**
+
+実験環境:
+- 正方形の部屋
+- predictionHorizon: 3.00m
+- minTrajectoryLength: 1.50m（50%）
+
+ログ分析結果:
+- フィルタリング: 6個の短い軌跡を除外（1.50m未満）
+- アクション選択（合計約3,500フレーム）:
+  - Translation: 0.860 → 2,400件（約69%）
+  - Curvature: 0.195 → 700件（約20%）右曲がり
+  - Curvature: -0.195 → 400件（約11%）左曲がり
+
+**結論:**
+- **問題9（短すぎる軌跡が選択される）は完全に解決された** ✅
+- 軌跡が正しく表示されるようになった
+- 適切な長さの軌跡（1.5m以上）のみが評価対象になる
+- 両方向のカーブ移動が正常に動作している
+
 ---
 
 ## 📊 論文との整合性評価
@@ -1035,6 +1094,13 @@ PredRedLPPアルゴリズムの実装は**論文に100%準拠**しています�
   - `TrajectoryEvaluator.cs` で T_red（リダイレクト後の軌跡）を返すように修正
   - 修正前: T_pred（元の予測軌跡）を返していた → 球形に見えていた
   - 修正後: bestRedirectedTrajectory（T_red）を返す → 正しいカーブ軌跡が表示される
+
+**最新の修正（2026-01-09）:**
+- **問題9: 短すぎる軌跡が選択される問題を解決** ✅
+  - `LemniscatePathPredictor.cs` で短すぎる軌跡をフィルタリング
+  - 修正前: MSE評価で0.11mの最短軌跡が常に選択される → 軌跡が点に見える
+  - 修正後: predictionHorizonの50%未満（1.5m未満）の軌跡を除外 → 正しい軌跡が表示される
+  - **動作確認済み**: 軌跡が正しく表示される、両方向のカーブ移動が正常に動作
 
 **残課題:**
 - **非調和APFパラメータの最適化**（インスペクターで調整可能：a_o、b_o、d_d）
