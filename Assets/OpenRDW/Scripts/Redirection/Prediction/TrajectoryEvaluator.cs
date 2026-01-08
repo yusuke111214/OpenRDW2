@@ -269,13 +269,30 @@ public class TrajectoryEvaluator
         // Curvature gainの場合のみ軌跡を変更
         if (action.gainType == RedirectionGainType.Curvature)
         {
+            // 実際の適用時の制限に合わせて曲率をクランプ（Redirector.SetCurvatureと同じ処理）
+            float maxCurvature = 1f / globalConfig.CURVATURE_RADIUS;
+            float clampedCurvature = UnityEngine.Mathf.Clamp(action.primaryValue, -maxCurvature, maxCurvature);
+
+            if (enableDebugLog && UnityEngine.Mathf.Abs(action.primaryValue) > maxCurvature)
+            {
+                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Curvature clamped: {action.primaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3}, RADIUS={globalConfig.CURVATURE_RADIUS:F1}m)");
+            }
+
             // Curvatureを適用した新しい軌跡を生成
-            return trajectory.ApplyCurvature(action.primaryValue);
+            return trajectory.ApplyCurvature(clampedCurvature);
         }
         else if (action.gainType == RedirectionGainType.Combined)
         {
             // Combined（Translation + Curvature）の場合、Curvature部分のみが軌跡に影響
-            return trajectory.ApplyCurvature(action.secondaryValue);
+            float maxCurvature = 1f / globalConfig.CURVATURE_RADIUS;
+            float clampedCurvature = UnityEngine.Mathf.Clamp(action.secondaryValue, -maxCurvature, maxCurvature);
+
+            if (enableDebugLog && UnityEngine.Mathf.Abs(action.secondaryValue) > maxCurvature)
+            {
+                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Combined curvature clamped: {action.secondaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3})");
+            }
+
+            return trajectory.ApplyCurvature(clampedCurvature);
         }
         else
         {
