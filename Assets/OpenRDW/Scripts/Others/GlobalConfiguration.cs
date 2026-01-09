@@ -556,6 +556,9 @@ public class GlobalConfiguration : MonoBehaviour
 
     private void Awake()
     {
+        // スタックトレースを無効化してログを簡潔に（問題10ログ分析用）
+        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+
         startTimeOfProgram = Utilities.GetTimeString();
         statisticsLogger = GetComponent<StatisticsLogger>();
 
