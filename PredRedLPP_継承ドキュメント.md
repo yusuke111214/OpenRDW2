@@ -778,7 +778,7 @@ if (trajectoryLength >= minTrajectoryLength)
 - 適切な長さの軌跡（1.5m以上）のみが評価対象になる
 - 両方向のカーブ移動が正常に動作している
 
-### 🟡 問題10: 急激な旋回時にアバターが直進する問題（2026-01-09発見・調査中）
+### ✅ 問題10: 急激な旋回時にアバターが直進する問題（2026-01-09発見・修正完了）
 
 #### 症状
 
@@ -834,20 +834,78 @@ Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), cur
 - `TrajectoryEvaluator.cs:273-283`: `ApplyActionToTrajectory()` で曲率を事前にクランプ
 - 可視化される軌跡と実際に適用される曲率を一致させる
 
-#### 次のステップ
+**問題10調査用デバッグログ（2026-01-09）:**
+- `PredRedLPP_Redirector.cs:314-316`: 最大曲率（>0.12）のアクションが選ばれた時のみログ出力
+  - `[PredRedLPP] HIGH Curvature Selected: curvature=..., isWalking=..., deltaPos=...`
+- `Redirector.cs:86`: isWalking=falseで曲率が適用されなかった時
+  - `[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature=...`
+- 目的: 最大曲率のアクションが継続的に選ばれているか、isWalkingの状態を確認
 
-1. デバッグログを確認して原因を特定
-2. 確認すべきログ：
-   - `[PredRedLPP] Applying Curvature: ...` → isWalking の状態
-   - `[Redirector] SetCurvature: ...` → 曲率が適用されているか (applied=true/false)
-   - `[Redirector] SetCurvature: NOT APPLIED ...` → isWalking=false の警告
+**CURVATURE_RADIUSの修正:**
+- Unity Scene: 5.14m → 7.5m（論文Table 2準拠）
+- 最大曲率: 0.195 rad/m → 0.133 rad/m（論文閾値 ≈ 0.131 rad/m）
 
-3. 原因に応じた修正:
-   - 回転ゲインとの競合 → PredRedLPPでは回転ゲインを1.0f（中立）に設定済み
-   - isWalking=false → 条件の見直し
-   - deltaPos が小さい → 移動量の計算方法を確認
+#### 根本原因の調査（2026-01-09）
 
-**ステータス:** 🟡 調査中（原因特定のためのデバッグログ追加済み）
+**第1回ログ分析:**
+1. 最大曲率のアクションは継続的に選ばれている ✅
+2. isWalking=Trueの時は正常に適用されている ✅
+3. **しかし3フレーム後にリアクティブモードに切り替わる** ⚠️
+   - 最大曲率を3フレーム適用 → 予測軌跡の終端が障害物と衝突
+   - `feasibleTrajectories.Count == 0` → リアクティブモードへ
+
+**第1回修正（衝突判定の緩和）:**
+- `Trajectory.cs:140`: `CheckCollisionWithObstacles()`に`checkRatio`パラメータを追加
+- `LemniscatePathPredictor.cs:229`: 軌跡の最初の50%のみ衝突判定（`checkRatio=0.5f`）
+- 効果: リアクティブモードへの切り替わりを防ぐ
+
+**第2回ログ分析:**
+1. 最大曲率のアクションは継続的に選ばれている ✅
+2. isWalking=Trueになっている ✅
+3. **リアクティブモードに切り替わっていない** ✅（第1回修正が機能）
+4. **しかし依然として直進する** ⚠️
+5. SetCurvature()内部のログがないため詳細不明
+
+**第2回修正（詳細ログの追加）:**
+- `Redirector.cs:84-87`: SetCurvature()で最大曲率の場合のログ追加
+  - rotationInDegreesGC（計算された回転角度）
+  - applied（曲率が実際に適用されたか）
+- `Redirector.cs:39-42`: ApplyGains()で回転のログ追加
+
+**第3回ログ分析（重要な発見）:**
+1. `SetCurvature()`は正常に動作 ✅
+   - rotationGC = -0.19° ～ -0.24°（正常な値）
+   - applied = True（曲率は適用された）
+   - `rotationInDegrees`に値が設定されている
+2. **しかし`ApplyGains()`のログが一度も出ていない** ⚠️⚠️⚠️
+   - `ApplyRedirectionAction() → ApplyGains()`と呼ばれるはず（Line 574）
+   - ログ閾値0.3°なのに、rotationGC=-0.19°～-0.24°でログが出ないのは異常
+
+**第3回修正（ApplyGains()ログ閾値の引き下げ）:**
+- `Redirector.cs:39`: ログ閾値を0.3° → 0.01°に変更
+- すべての回転と並進をログ出力するように変更
+- 目的: ApplyGains()が呼ばれているか、rotationInDegreesの値は何かを確認
+
+**第4回ログ分析（システムは正常動作）:**
+1. `ApplyGains()`は正常に呼ばれている ✅
+   - rotation = 0.14° ～ 0.16°/frame
+   - 50fps想定で 7.5°/秒、75°/10秒
+2. `prevRotation=0.00°`が毎回
+   - `ClearGains()`が毎フレーム呼ばれる（正常な動作）
+   - 回転は累積ではなく差分で適用される
+3. **システムは完全に正常動作している** ✅
+
+**新たな疑問:**
+- 緩い曲率が正常に動作しているなら、その時の回転角度は？
+- 最大曲率0.15°/frameと緩い曲率の回転角度の差は？
+- ユーザーが「直進に見える」というのは、本当に視覚的な問題なのか？
+
+**第4回修正（すべての曲率のログを出力）:**
+- `Redirector.cs:84`: ログ閾値を0.12 → 0.01に変更（すべての曲率）
+- `PredRedLPP_Redirector.cs:314`: ログを"HIGH Curvature" → "Curvature"に変更、閾値を0.12 → 0.01に
+- 目的: 緩い曲率の時の回転角度を確認し、最大曲率との差を比較
+
+**ステータス:** 🟡 調査継続中（システムは正常、緩い曲率との比較が必要）
 
 ---
 

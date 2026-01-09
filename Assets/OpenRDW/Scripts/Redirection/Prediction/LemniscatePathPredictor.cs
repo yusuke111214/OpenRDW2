@@ -223,8 +223,10 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
 
         foreach (var trajectory in trajectories)
         {
-            // 仮想障害物との衝突をチェック
-            bool hasCollision = trajectory.CheckCollisionWithObstacles(space.obstaclePolygons);
+            // 仮想障害物との衝突をチェック（軌跡の前半部分のみ）
+            // 問題10対策：最大曲率適用時に予測軌跡の終端が衝突してもリアクティブモードに切り替わらないようにする
+            // 軌跡の最初の50%が衝突していなければ実行可能と判定する
+            bool hasCollision = trajectory.CheckCollisionWithObstacles(space.obstaclePolygons, checkRatio: 0.5f);
 
             // トラッキング空間内に収まっているかチェック
             bool withinBounds = trajectory.IsWithinTrackingSpace(space.trackingSpace);

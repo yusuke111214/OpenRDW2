@@ -310,6 +310,12 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         currentBestTrajectory = bestTrajectory;
 
+        // デバッグ: 選択されたアクションをログ出力（問題10調査用）
+        if (showDebugInfo && bestAction.gainType == RedirectionGainType.Curvature && Mathf.Abs(bestAction.primaryValue) > 0.01f)
+        {
+            Debug.Log($"[PredRedLPP] Curvature Selected: curvature={bestAction.primaryValue:F3}, isWalking={redirectionManager.isWalking}, deltaPos={redirectionManager.deltaPos.magnitude:F3}");
+        }
+
         // Step 7: 選択されたアクション π_optimal を適用（論文 Section 3.3）
         ApplyRedirectionAction(bestAction);
 
@@ -545,10 +551,6 @@ public class PredRedLPP_Redirector : APF_Redirector
                 // 曲率ゲインのみ適用
                 SetTranslationGain(1.0f);  // 中立
                 SetRotationGain(1.0f);     // 中立
-                if (showDebugInfo)
-                {
-                    Debug.Log($"[PredRedLPP] Applying Curvature: {action.primaryValue:F3}, isWalking={redirectionManager.isWalking}, deltaPos.magnitude={redirectionManager.deltaPos.magnitude:F3}");
-                }
                 SetCurvature(action.primaryValue);
                 break;
 

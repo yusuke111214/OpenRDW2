@@ -1076,7 +1076,7 @@ MonoBehaviour:
   MIN_TRANS_GAIN: 0.86
   MAX_ROT_GAIN: 1.901
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 5.14
+  CURVATURE_RADIUS: 7.5
   predictionHorizon: 3
   lemniscateEndpoints: 19
   enablePathSmoothing: 0

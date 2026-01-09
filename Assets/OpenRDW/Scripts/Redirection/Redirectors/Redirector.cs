@@ -35,6 +35,12 @@ public abstract class Redirector : MonoBehaviour
     }
     public void ApplyGains()
     {
+        // 問題10デバッグ: すべての回転をログ
+        if (Mathf.Abs(rotationInDegrees) > 0.01f || translation.magnitude > 0.001f)
+        {
+            Debug.Log($"[Redirector] ApplyGains: rotation={rotationInDegrees:F2}°, translation={translation.magnitude:F3}m");
+        }
+
         transform.Translate(translation, Space.World);
         transform.RotateAround(Utilities.FlattenedPos3D(redirectionManager.headTransform.position), Vector3.up, rotationInDegrees);
     }
@@ -79,21 +85,18 @@ public abstract class Redirector : MonoBehaviour
                 rotationInDegrees = rotationInDegreesGC;
                 GetComponentInChildren<KeyboardController>().SetLastRotation(rotationInDegreesGC);
             }
-            globalConfiguration.statisticsLogger.Event_Curvature_Gain(movementManager.avatarId, curvature, rotationInDegreesGC);
 
-            // デバッグログ（大きな曲率の場合のみ）
-            if (Mathf.Abs(originalCurvature) > 0.12f)
+            // 問題10デバッグ: すべての曲率をログ
+            if (Mathf.Abs(originalCurvature) > 0.01f)
             {
-                Debug.Log($"[Redirector] SetCurvature: input={originalCurvature:F3}, clamped={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F3}, rotationGC={rotationInDegreesGC:F2}°, prevRotation={rotationInDegrees - rotationInDegreesGC:F2}°, applied={applied}");
+                Debug.Log($"[Redirector] SetCurvature: curvature={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F3}, rotationGC={rotationInDegreesGC:F2}°, prevRotation={rotationInDegrees - (applied ? rotationInDegreesGC : 0):F2}°, applied={applied}");
             }
+
+            globalConfiguration.statisticsLogger.Event_Curvature_Gain(movementManager.avatarId, curvature, rotationInDegreesGC);
         }
-        else
+        else if (Mathf.Abs(curvature) > 0.01f)
         {
-            // isWalkingがfalseの場合のデバッグログ
-            if (Mathf.Abs(curvature) > 0.01f)
-            {
-                Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature={curvature:F3}");
-            }
+            Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature={curvature:F3}");
         }
     }
 

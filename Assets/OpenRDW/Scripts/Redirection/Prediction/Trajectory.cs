@@ -131,15 +131,20 @@ public class Trajectory
     /// 軌跡が仮想障害物と衝突するかチェック
     ///
     /// 処理内容：
-    /// - 軌跡上のすべての点について障害物との衝突を確認
+    /// - 軌跡上の点について障害物との衝突を確認
     /// - 1つでも衝突していたらtrueを返す
     /// </summary>
     /// <param name="obstaclePolygons">障害物のポリゴン（多角形）リスト</param>
+    /// <param name="checkRatio">チェックする軌跡の割合（0.0~1.0）。デフォルトは1.0（すべての点）</param>
     /// <returns>衝突が検出された場合true</returns>
-    public bool CheckCollisionWithObstacles(List<List<Vector2>> obstaclePolygons)
+    public bool CheckCollisionWithObstacles(List<List<Vector2>> obstaclePolygons, float checkRatio = 1.0f)
     {
-        foreach (var point in points)
+        // チェックする点の数を計算
+        int pointsToCheck = Mathf.Max(1, Mathf.RoundToInt(points.Count * Mathf.Clamp01(checkRatio)));
+
+        for (int i = 0; i < pointsToCheck; i++)
         {
+            Vector2 point = points[i];
             foreach (var obstacle in obstaclePolygons)
             {
                 if (Utilities.IfPosInPolygon(obstacle, point))
