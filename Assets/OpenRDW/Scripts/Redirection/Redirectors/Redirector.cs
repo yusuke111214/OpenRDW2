@@ -35,12 +35,6 @@ public abstract class Redirector : MonoBehaviour
     }
     public void ApplyGains()
     {
-        // 問題10デバッグ: すべての回転をログ
-        if (Mathf.Abs(rotationInDegrees) > 0.01f || translation.magnitude > 0.001f)
-        {
-            Debug.Log($"[Redirector] ApplyGains: rotation={rotationInDegrees:F2}°, translation={translation.magnitude:F3}m");
-        }
-
         transform.Translate(translation, Space.World);
         transform.RotateAround(Utilities.FlattenedPos3D(redirectionManager.headTransform.position), Vector3.up, rotationInDegrees);
     }
@@ -62,7 +56,15 @@ public abstract class Redirector : MonoBehaviour
             gr = Mathf.Min(gr, globalConfiguration.MAX_ROT_GAIN);
             redirectionManager.gr = gr;
             var rotationInDegreesGR = redirectionManager.deltaDir * (gr - 1);
-            if (Mathf.Abs(rotationInDegreesGR) > Mathf.Abs(rotationInDegrees))
+            bool applied = Mathf.Abs(rotationInDegreesGR) > Mathf.Abs(rotationInDegrees);
+
+            // 問題10対策C: applied状態をログ出力（Redirected Avatarのみ）
+            if (Mathf.Abs(rotationInDegreesGR) > 0.01f && transform.name == "Redirected Avatar")
+            {
+                Debug.Log($"[Redirector.SetRotationGain] avatar={transform.name}, gr={gr:F2}, rotationGR={rotationInDegreesGR:F2}°, prevRotation={rotationInDegrees:F2}°, applied={applied}");
+            }
+
+            if (applied)
             {
                 rotationInDegrees = rotationInDegreesGR;
                 GetComponentInChildren<KeyboardController>().SetLastRotation(rotationInDegreesGR);
@@ -80,23 +82,20 @@ public abstract class Redirector : MonoBehaviour
             redirectionManager.curvature = curvature;
             var rotationInDegreesGC = Mathf.Rad2Deg * redirectionManager.deltaPos.magnitude * curvature;
             bool applied = Mathf.Abs(rotationInDegreesGC) > Mathf.Abs(rotationInDegrees);
+
+            // 問題10対策C: deltaPos.magnitudeをログ出力（Redirected Avatarのみ）
+            if (Mathf.Abs(originalCurvature) > 0.01f && transform.name == "Redirected Avatar")
+            {
+                Debug.Log($"[Redirector.SetCurvature] avatar={transform.name}, curvature={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F4}m, rotationGC={rotationInDegreesGC:F2}°, applied={applied}");
+            }
+
             if (applied)
             {
                 rotationInDegrees = rotationInDegreesGC;
                 GetComponentInChildren<KeyboardController>().SetLastRotation(rotationInDegreesGC);
             }
 
-            // 問題10デバッグ: すべての曲率をログ
-            if (Mathf.Abs(originalCurvature) > 0.01f)
-            {
-                Debug.Log($"[Redirector] SetCurvature: curvature={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F3}, rotationGC={rotationInDegreesGC:F2}°, prevRotation={rotationInDegrees - (applied ? rotationInDegreesGC : 0):F2}°, applied={applied}");
-            }
-
             globalConfiguration.statisticsLogger.Event_Curvature_Gain(movementManager.avatarId, curvature, rotationInDegreesGC);
-        }
-        else if (Mathf.Abs(curvature) > 0.01f)
-        {
-            Debug.LogWarning($"[Redirector] SetCurvature: NOT APPLIED (isWalking=false), curvature={curvature:F3}");
         }
     }
 
