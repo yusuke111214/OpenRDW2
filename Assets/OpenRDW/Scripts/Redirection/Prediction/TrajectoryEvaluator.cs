@@ -248,9 +248,11 @@ public class TrajectoryEvaluator
             bestRedirectedTrajectory.totalCost = minCost;
         }
 
-        // ★修正: T_predではなく、bestRedirectedTrajectory（T_red）を返す
-        // これにより、リダイレクション適用後の実際の軌跡を可視化できる
-        return (bestAction, bestRedirectedTrajectory);
+        // ★問題10対策: T_red（リダイレクト後）ではなく、T_pred（リダイレクト前）を返す
+        // これにより、元の予測軌跡を可視化できる（エンドポイントまで確実に届く）
+        // T_predはクロソイド曲線で定義されており、エンドポイントまで届く
+        // T_redはApplyCurvature()で変形されるため、エンドポイントからずれる可能性がある
+        return (bestAction, T_pred);
     }
 
     /// <summary>

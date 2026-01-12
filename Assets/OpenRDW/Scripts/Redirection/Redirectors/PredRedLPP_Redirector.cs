@@ -43,6 +43,7 @@ public class PredRedLPP_Redirector : APF_Redirector
     private LineRenderer trajectoryLineRenderer;  // 軌跡描画用LineRenderer
     private GameObject lemniscateVisualizer;  // レムニスケート描画用オブジェクト
     private LineRenderer lemniscateLineRenderer;  // レムニスケート描画用LineRenderer
+    private List<GameObject> endpointVisualizers;  // エンドポイント描画用オブジェクトのリスト
 
     [Header("デバッグ")]
     [Tooltip("コンソールにデバッグ情報を表示")]
@@ -110,6 +111,7 @@ public class PredRedLPP_Redirector : APF_Redirector
     /// 作成するオブジェクト：
     /// 1. PredRedLPP_Trajectory：選択された最適軌跡（緑色）
     /// 2. PredRedLPP_Lemniscate：レムニスケート形状（黄色）
+    /// 3. PredRedLPP_Endpoints：レムニスケート上のエンドポイント（赤い球体）
     ///
     /// 親子関係：
     /// - これらはリダイレクターの子として作成
@@ -156,6 +158,32 @@ public class PredRedLPP_Redirector : APF_Redirector
         lemniscateLineRenderer.positionCount = 0;
         lemniscateLineRenderer.useWorldSpace = true; // ワールド空間座標を使用（Arrow(Clone)と同じ）
         lemniscateLineRenderer.enabled = visualizationManager.ifVisible;
+
+        // エンドポイント可視化オブジェクトを作成
+        endpointVisualizers = new List<GameObject>();
+        int numEndpoints = globalConfiguration.lemniscateEndpoints;
+        for (int i = 0; i < numEndpoints; i++)
+        {
+            GameObject endpoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            endpoint.name = $"PredRedLPP_Endpoint_{i}";
+            endpoint.transform.SetParent(transform);
+            endpoint.transform.localScale = Vector3.one * 0.1f;  // 小さな球体（半径0.05m）
+
+            // ★問題10対策: コライダーを削除（障害物として認識されないようにする）
+            Collider collider = endpoint.GetComponent<Collider>();
+            if (collider != null)
+            {
+                Destroy(collider);
+            }
+
+            // 赤色のマテリアルを設定
+            Renderer renderer = endpoint.GetComponent<Renderer>();
+            renderer.material = new Material(Shader.Find("Standard"));
+            renderer.material.color = new Color(1f, 0f, 0f, 1f);  // 赤色：エンドポイント
+
+            endpoint.SetActive(visualizationManager.ifVisible);
+            endpointVisualizers.Add(endpoint);
+        }
     }
 
     /// <summary>
@@ -171,6 +199,15 @@ public class PredRedLPP_Redirector : APF_Redirector
             Destroy(trajectoryVisualizer);
         if (lemniscateVisualizer != null)
             Destroy(lemniscateVisualizer);
+        if (endpointVisualizers != null)
+        {
+            foreach (var endpoint in endpointVisualizers)
+            {
+                if (endpoint != null)
+                    Destroy(endpoint);
+            }
+            endpointVisualizers.Clear();
+        }
     }
 
     /// <summary>
@@ -716,7 +753,8 @@ public class PredRedLPP_Redirector : APF_Redirector
     ///
     /// 可視化対象：
     /// 1. レムニスケート形状（黄色）
-    /// 2. 選択された最適軌跡（緑色）
+    /// 2. 選択された最適軌跡（シアン）
+    /// 3. エンドポイント（赤い球体）
     ///
     /// 動作：
     /// - APFの矢印のようにアバターに追従
@@ -735,6 +773,15 @@ public class PredRedLPP_Redirector : APF_Redirector
         trajectoryLineRenderer.enabled = isVisible;
         lemniscateLineRenderer.enabled = isVisible;
 
+        if (endpointVisualizers != null)
+        {
+            foreach (var endpoint in endpointVisualizers)
+            {
+                if (endpoint != null)
+                    endpoint.SetActive(isVisible);
+            }
+        }
+
         if (!isVisible)
             return;
 
@@ -744,6 +791,9 @@ public class PredRedLPP_Redirector : APF_Redirector
 
         // レムニスケート可視化を更新
         UpdateLemniscateVisualization(currentPos2D, currentDir2D);
+
+        // エンドポイント可視化を更新
+        UpdateEndpointVisualization(currentPos2D, currentDir2D);
 
         // 軌跡可視化を更新
         UpdateTrajectoryVisualization();
@@ -799,12 +849,58 @@ public class PredRedLPP_Redirector : APF_Redirector
     }
 
     /// <summary>
+    /// エンドポイントの可視化を更新
+    ///
+    /// 処理：
+    /// 1. レムニスケート上のエンドポイントを生成（物理空間の2D座標）
+    /// 2. 物理空間→仮想空間に座標変換（trackingSpace.TransformPoint）
+    /// 3. 各エンドポイントに球体を配置
+    ///
+    /// エンドポイントとは：
+    /// - 予測軌跡の終点となる点
+    /// - レムニスケート形状上に等間隔で配置
+    /// - これらの点に向かって軌跡が生成される
+    /// </summary>
+    private void UpdateEndpointVisualization(Vector2 origin, Vector2 direction)
+    {
+        if (endpointVisualizers == null || endpointVisualizers.Count == 0)
+            return;
+
+        // レムニスケートのエンドポイントを生成（物理空間の2D座標）
+        var endpoints = pathPredictor.GenerateLemniscatePointsForVisualization(
+            origin,
+            direction,
+            globalConfiguration.lemniscateEndpoints  // エンドポイント数
+        );
+
+        // エンドポイント数が一致しない場合は更新しない
+        if (endpoints.Count != endpointVisualizers.Count)
+        {
+            Debug.LogWarning($"[PredRedLPP] Endpoint count mismatch: {endpoints.Count} vs {endpointVisualizers.Count}");
+            return;
+        }
+
+        // 各エンドポイントの位置を更新
+        for (int i = 0; i < endpoints.Count; i++)
+        {
+            // 2D（物理空間）→ 3D（物理空間）
+            Vector3 physicalPos3D = Utilities.UnFlatten(endpoints[i]);
+
+            // 3D（物理空間）→ 3D（仮想空間）
+            Vector3 virtualPos = redirectionManager.trackingSpace.TransformPoint(physicalPos3D);
+
+            // 球体の位置を更新
+            endpointVisualizers[i].transform.position = virtualPos;
+        }
+    }
+
+    /// <summary>
     /// 最良軌跡の可視化を更新
     ///
     /// 処理：
     /// 1. 現在選択されている最良軌跡のポイントを取得（物理空間の2D座標）
     /// 2. 物理空間→仮想空間に座標変換（trackingSpace.TransformPoint）
-    /// 3. LineRendererで緑色の線として描画（useWorldSpace = true）
+    /// 3. LineRendererでシアン色の線として描画（useWorldSpace = true）
     ///
     /// 座標系の理解：
     /// - currentBestTrajectory.pointsは物理空間の座標
