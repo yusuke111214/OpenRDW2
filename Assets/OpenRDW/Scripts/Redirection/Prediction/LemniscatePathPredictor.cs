@@ -30,7 +30,7 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     public int trajectorySamplePoints = 20;
 
     [Tooltip("予測開始点のルックバックステップ数（論文のt-T、0=現在位置を使用）")]
-    public int lookbackSteps = 0; // シミュレーション環境では現在位置を使用
+    public int lookbackSteps = 0; // デフォルトは現在位置。リダイレクター側でt-T用に設定する。
 
     private GlobalConfiguration globalConfiguration;
 
@@ -170,10 +170,9 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
     {
         List<Vector2> endpoints = new List<Vector2>();
 
-        // パラメータtを(0, π)の範囲でサンプリング
-        // t=0とt=πは特異点なので避ける（計算が不安定になる）
-        float tMin = 0.05f;
-        float tMax = Mathf.PI - 0.05f;
+        // パラメータtを[0, π]の範囲でサンプリング（論文準拠）
+        float tMin = 0f;
+        float tMax = Mathf.PI;
 
         for (int i = 0; i < numPoints; i++)
         {

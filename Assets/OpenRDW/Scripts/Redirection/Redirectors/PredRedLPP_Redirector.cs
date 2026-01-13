@@ -93,6 +93,7 @@ public class PredRedLPP_Redirector : APF_Redirector
         {
             pathPredictor = gameObject.AddComponent<LemniscatePathPredictor>();
         }
+        pathPredictor.lookbackSteps = MAX_HISTORY_SIZE;
 
         // 軌跡評価器を初期化
         trajectoryEvaluator = new TrajectoryEvaluator(globalConfiguration);
