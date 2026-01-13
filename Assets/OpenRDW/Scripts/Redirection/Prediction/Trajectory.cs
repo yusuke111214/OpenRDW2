@@ -252,54 +252,74 @@ public class Trajectory
     /// - この値が小さいほど、ユーザーの実際の移動パターンに近い予測
     ///
     /// 計算方法：
-    /// 1. 履歴の各点について、軌跡上の最も近い点との距離を計算
-    /// 2. 距離の二乗を計算（MSE）
+    /// 1. 履歴と予測軌跡の進行方向ベクトル列を作成
+    /// 2. 方向ベクトルの内積から誤差を算出（1 - dot）
     /// 3. 新しい履歴ほど高い重みを付ける（割引係数）
     /// 4. 重み付き平均を返す
     ///
-    /// 小さいMSE = 履歴に近い軌跡 = より良い予測
+    /// 小さいMSE = 進行方向パターンが近い軌跡 = より良い予測
     /// </summary>
     /// <param name="positionHistory">HMDの位置履歴（古い順）</param>
     /// <param name="discountFactor">割引係数（デフォルト0.8、最近の履歴を重視）</param>
     /// <returns>MSEスコア（小さいほど良い）</returns>
     public float CalculatePathSimilarity(Queue<Vector3> positionHistory, float discountFactor = 0.8f)
     {
-        if (positionHistory == null || positionHistory.Count == 0)
+        if (positionHistory == null || positionHistory.Count < 2)
             return float.MaxValue;
 
-        if (points == null || points.Count == 0)
+        if (points == null || points.Count < 2)
             return float.MaxValue;
 
         // 履歴を配列に変換（古い順: [0]=最古, [N-1]=最新）
         Vector3[] historyArray = positionHistory.ToArray();
 
-        // MSEを計算
+        List<Vector2> historyDirections = new List<Vector2>(historyArray.Length - 1);
+        for (int i = 1; i < historyArray.Length; i++)
+        {
+            Vector2 delta = new Vector2(
+                historyArray[i].x - historyArray[i - 1].x,
+                historyArray[i].z - historyArray[i - 1].z);
+            if (delta.sqrMagnitude > 1e-6f)
+            {
+                historyDirections.Add(delta.normalized);
+            }
+        }
+
+        List<Vector2> trajectoryDirections = new List<Vector2>(points.Count - 1);
+        for (int i = 1; i < points.Count; i++)
+        {
+            Vector2 delta = points[i] - points[i - 1];
+            if (delta.sqrMagnitude > 1e-6f)
+            {
+                trajectoryDirections.Add(delta.normalized);
+            }
+        }
+
+        if (historyDirections.Count == 0 || trajectoryDirections.Count == 0)
+            return float.MaxValue;
+
+        int compareCount = Mathf.Min(historyDirections.Count, trajectoryDirections.Count);
+        int historyStartIndex = historyDirections.Count - compareCount;
+
+        // MSE over directional alignment.
         float mse = 0f;
         float totalWeight = 0f;
 
-        // 履歴の各点について、軌跡上の最も近い点との距離を計算
-        for (int i = 0; i < historyArray.Length; i++)
+        for (int i = 0; i < compareCount; i++)
         {
             // 割引係数：新しい履歴ほど重要
             // i=0（最古）→ discount^(N-1)
-            // i=N-1（最新）→ discount^0 = 1.0
-            int reverseIndex = historyArray.Length - 1 - i;
+            // i=compareCount-1（最新）→ discount^0 = 1.0
+            int reverseIndex = compareCount - 1 - i;
             float weight = Mathf.Pow(discountFactor, reverseIndex);
 
-            // 履歴点を2Dに変換
-            Vector2 historyPoint = Utilities.FlattenedPos2D(historyArray[i]);
-
-            // 軌跡上の最も近い点を見つける
-            float minDistance = float.MaxValue;
-            foreach (var trajectoryPoint in points)
-            {
-                float distance = Vector2.Distance(historyPoint, trajectoryPoint);
-                if (distance < minDistance)
-                    minDistance = distance;
-            }
+            Vector2 historyDir = historyDirections[historyStartIndex + i];
+            Vector2 trajectoryDir = trajectoryDirections[i];
+            float dot = Mathf.Clamp(Vector2.Dot(historyDir, trajectoryDir), -1f, 1f);
+            float error = 1f - dot;
 
             // 重み付きの二乗誤差を加算
-            mse += weight * minDistance * minDistance;
+            mse += weight * error * error;
             totalWeight += weight;
         }
 

@@ -1076,19 +1076,19 @@ MonoBehaviour:
   MIN_TRANS_GAIN: 0.86
   MAX_ROT_GAIN: 1.901
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 1.6
+  CURVATURE_RADIUS: 4.22
   predictionHorizon: 3
   lemniscateEndpoints: 11
   enablePathSmoothing: 1
   discountFactor: 0.8
-  headingCostWeight: 1
+  headingCostWeight: 0
   apfMaxValue: 20
   apfDistributionWidth: 3
   apfThresholdDistance: 5
   RESET_TRIGGER_BUFFER: 0.2
   useMinimalActionSet: 0
   simulatedTime: 0
-  targetFPS: 10
+  targetFPS: 40
   trialsForRepeating: 1
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   showPotentialArrows: 0
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
-  avatarNum: 2
+  avatarNum: 3
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
@@ -1132,7 +1132,7 @@ MonoBehaviour:
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
-  squareWidth: 16.47
+  squareWidth: 12.3
   doubleRoomLeftRoomSide: 10
   doubleRoomRightRoomSide: 20
   doubleRoomCorridorWidth: 5

@@ -223,10 +223,8 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
 
         foreach (var trajectory in trajectories)
         {
-            // 仮想障害物との衝突をチェック（軌跡の前半部分のみ）
-            // 問題10対策：最大曲率適用時に予測軌跡の終端が衝突してもリアクティブモードに切り替わらないようにする
-            // 軌跡の最初の50%が衝突していなければ実行可能と判定する
-            bool hasCollision = trajectory.CheckCollisionWithObstacles(space.obstaclePolygons, checkRatio: 0.5f);
+            // 仮想障害物との衝突をチェック
+            bool hasCollision = trajectory.CheckCollisionWithObstacles(space.obstaclePolygons);
 
             // トラッキング空間内に収まっているかチェック
             bool withinBounds = trajectory.IsWithinTrackingSpace(space.trackingSpace);
@@ -236,14 +234,6 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             {
                 feasible.Add(trajectory);
             }
-        }
-
-        // 【優先順位1】フィルタリング後の軌跡数をログ出力
-        Debug.Log($"[LPP] Generated trajectories: {trajectories.Count}");
-        Debug.Log($"[LPP] Feasible trajectories: {feasible.Count}");
-        if (feasible.Count == 1)
-        {
-            Debug.LogWarning($"[LPP] Only 1 feasible trajectory! MSE selection bypassed.");
         }
 
         return feasible;
@@ -280,36 +270,27 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
         if (trajectories == null || trajectories.Count == 0)
             return null;
 
-        if (positionHistory == null || positionHistory.Count == 0)
+        if (positionHistory == null || positionHistory.Count < 2)
         {
             // 履歴がない場合は最初の軌跡を返す
             // 初期フレームでは履歴が不足している可能性があるため
-            Debug.LogWarning("[LPP] positionHistory is null or empty!");
             return trajectories[0];
         }
 
         float minMSE = float.MaxValue;
         Trajectory bestTrajectory = null;
 
-        // 【優先順位2】各軌跡のMSEスコアをログ出力
-        int idx = 0;
         foreach (var trajectory in trajectories)
         {
             // MSEスコアを計算（割引係数はTrajectory内でデフォルト0.8）
             float mse = trajectory.CalculatePathSimilarity(positionHistory);
-
-            Debug.Log($"[LPP] Trajectory[{idx}] MSE: {mse:F4}, " +
-                      $"Endpoint: ({trajectory.endPosition.x:F2}, {trajectory.endPosition.y:F2})");
 
             if (mse < minMSE)
             {
                 minMSE = mse;
                 bestTrajectory = trajectory;
             }
-            idx++;
         }
-
-        Debug.Log($"[LPP] Selected trajectory with minimum MSE: {minMSE:F4}");
 
         return bestTrajectory;
     }

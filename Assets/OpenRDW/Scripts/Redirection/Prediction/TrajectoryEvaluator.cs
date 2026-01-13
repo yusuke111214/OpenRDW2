@@ -41,9 +41,6 @@ public class TrajectoryEvaluator
     private float apfDistributionWidth; // b_o - 分布幅
     private float apfThresholdDistance; // d_d - 閾値距離
 
-    // デバッグ用フラグ
-    private bool enableDebugLog = false;
-
     /// <summary>
     /// コンストラクタ（設定ファイルから初期化）
     ///
@@ -95,7 +92,6 @@ public class TrajectoryEvaluator
         float minCost = float.MaxValue;
         RedirectionAction bestAction = null;
         Trajectory bestTrajectory = null;
-        Trajectory bestRedirectedTrajectory = null;
 
         // 各予測軌跡を評価
         foreach (var trajectory in predictions)
@@ -123,8 +119,7 @@ public class TrajectoryEvaluator
                 {
                     minCost = actionCost;
                     bestAction = action;
-                    bestTrajectory = trajectory; // 元の予測軌跡
-                    bestRedirectedTrajectory = T_red; // リダイレクト後の軌跡
+                    bestTrajectory = T_red; // リダイレクト後の軌跡
                 }
             }
         }
@@ -139,8 +134,8 @@ public class TrajectoryEvaluator
             }
         }
 
-        // 最良の軌跡のコストを記録（可視化やデバッグ用）
-        if (bestRedirectedTrajectory != null)
+        // 最良の軌跡のコストを記録（可視化用）
+        if (bestTrajectory != null)
         {
             bestTrajectory.totalCost = minCost;
         }
@@ -212,12 +207,6 @@ public class TrajectoryEvaluator
                 currentAvatarId
             );
 
-            // デバッグログ
-            if (enableDebugLog)
-            {
-                UnityEngine.Debug.Log($"[TrajectoryEvaluator] Action: {action.ToString()}, Cost: {actionCost:F2}");
-            }
-
             // オプション：ゲインコストを追加（現在は論文でJ_Gain,i=0）
             // actionCost += CalculateGainCost(action);
 
@@ -230,11 +219,6 @@ public class TrajectoryEvaluator
             }
         }
 
-        if (enableDebugLog)
-        {
-            UnityEngine.Debug.Log($"[TrajectoryEvaluator] Best action selected: {bestAction?.ToString() ?? "null"}, Min cost: {minCost:F2}");
-        }
-
         // 有効なアクションが見つからない場合はヌルアクションにフォールバック
         if (bestAction == null)
         {
@@ -242,17 +226,18 @@ public class TrajectoryEvaluator
             bestRedirectedTrajectory = T_pred; // Null actionの場合はT_predをそのまま使用
         }
 
-        // 最良の軌跡のコストを記録（可視化やデバッグ用）
+        // 最良の軌跡のコストを記録（可視化用）
         if (bestRedirectedTrajectory != null)
         {
             bestRedirectedTrajectory.totalCost = minCost;
         }
 
-        // ★問題10対策: T_red（リダイレクト後）ではなく、T_pred（リダイレクト前）を返す
-        // これにより、元の予測軌跡を可視化できる（エンドポイントまで確実に届く）
-        // T_predはクロソイド曲線で定義されており、エンドポイントまで届く
-        // T_redはApplyCurvature()で変形されるため、エンドポイントからずれる可能性がある
-        return (bestAction, T_pred);
+        return (bestAction, bestRedirectedTrajectory);
+    }
+
+    public Trajectory ApplyActionToTrajectoryForVisualization(Trajectory trajectory, RedirectionAction action)
+    {
+        return ApplyActionToTrajectory(trajectory, action);
     }
 
     /// <summary>
@@ -271,30 +256,13 @@ public class TrajectoryEvaluator
         // Curvature gainの場合のみ軌跡を変更
         if (action.gainType == RedirectionGainType.Curvature)
         {
-            // 実際の適用時の制限に合わせて曲率をクランプ（Redirector.SetCurvatureと同じ処理）
-            float maxCurvature = 1f / globalConfiguration.CURVATURE_RADIUS;
-            float clampedCurvature = UnityEngine.Mathf.Clamp(action.primaryValue, -maxCurvature, maxCurvature);
-
-            if (enableDebugLog && UnityEngine.Mathf.Abs(action.primaryValue) > maxCurvature)
-            {
-                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Curvature clamped: {action.primaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3}, RADIUS={globalConfiguration.CURVATURE_RADIUS:F1}m)");
-            }
-
             // Curvatureを適用した新しい軌跡を生成
-            return trajectory.ApplyCurvature(clampedCurvature);
+            return trajectory.ApplyCurvature(action.primaryValue);
         }
         else if (action.gainType == RedirectionGainType.Combined)
         {
             // Combined（Translation + Curvature）の場合、Curvature部分のみが軌跡に影響
-            float maxCurvature = 1f / globalConfiguration.CURVATURE_RADIUS;
-            float clampedCurvature = UnityEngine.Mathf.Clamp(action.secondaryValue, -maxCurvature, maxCurvature);
-
-            if (enableDebugLog && UnityEngine.Mathf.Abs(action.secondaryValue) > maxCurvature)
-            {
-                UnityEngine.Debug.LogWarning($"[TrajectoryEvaluator] Combined curvature clamped: {action.secondaryValue:F3} → {clampedCurvature:F3} (max: ±{maxCurvature:F3})");
-            }
-
-            return trajectory.ApplyCurvature(clampedCurvature);
+            return trajectory.ApplyCurvature(action.secondaryValue);
         }
         else
         {

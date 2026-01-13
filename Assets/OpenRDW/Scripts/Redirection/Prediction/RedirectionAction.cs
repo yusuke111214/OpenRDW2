@@ -182,9 +182,6 @@ public static class RedirectionActionFactory
         // ゲインタイプごとの離散値の数（論文に基づく）
         const int numSteps = 6;
 
-        // ★問題10対策: 並進ゲインを一時的に無効化
-        // 並進ゲイン（最小値から最大値まで6段階）
-        /*
         for (int i = 0; i < numSteps; i++)
         {
             // t: 0～1の範囲で均等分割（0, 0.2, 0.4, 0.6, 0.8, 1.0）
@@ -193,18 +190,14 @@ public static class RedirectionActionFactory
             float gt = Mathf.Lerp(config.MIN_TRANS_GAIN, config.MAX_TRANS_GAIN, t);
             actions.Add(new RedirectionAction(RedirectionGainType.Translation, gt));
         }
-        */
 
-        // ★問題10対策: 回転ゲインを一時的に無効化
         // 回転ゲイン（最小値から最大値まで6段階）
-        /*
         for (int i = 0; i < numSteps; i++)
         {
             float t = (float)i / (numSteps - 1);
             float gr = Mathf.Lerp(config.MIN_ROT_GAIN, config.MAX_ROT_GAIN, t);
             actions.Add(new RedirectionAction(RedirectionGainType.Rotation, gr));
         }
-        */
 
         // 曲率ゲイン（-1/Rから+1/Rまで6段階）
         // 負の値=左曲がり、正の値=右曲がり
@@ -215,11 +208,9 @@ public static class RedirectionActionFactory
             actions.Add(new RedirectionAction(RedirectionGainType.Curvature, gc));
         }
 
-        // ★問題10対策: 複合ゲインを一時的に無効化
         // 複合ゲイン（並進+曲率）- 論文 Section 3.3.1, Table 2
         // "a combination of translation and curvature gains (Grechkin et al., 2016)"
         // 論文準拠のため、3段階の複合ゲインを追加
-        /*
         for (int i = 0; i < 3; i++)
         {
             float t = (float)i / 2f;
@@ -227,7 +218,6 @@ public static class RedirectionActionFactory
             float gc = Mathf.Lerp(-1f / config.CURVATURE_RADIUS, 1f / config.CURVATURE_RADIUS, t);
             actions.Add(new RedirectionAction(RedirectionGainType.Combined, gt, gc));
         }
-        */
 
         // ヌルリダイレクション（常に含める）
         // 何もしない選択肢を用意することで、無理なリダイレクションを避ける

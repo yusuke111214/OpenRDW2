@@ -33,7 +33,7 @@ public class PredRedLPP_Redirector : APF_Redirector
     [Header("移動履歴")]
     private Queue<Vector3> positionHistory;  // 位置履歴（キュー構造）
     private Queue<Vector3> directionHistory;  // 向き履歴
-    private const int MAX_HISTORY_SIZE = 50;  // 履歴の最大サイズ（10→50に変更：移動パターン捕捉のため）
+    private const int MAX_HISTORY_SIZE = 10;  // 履歴の最大サイズ
 
     [Header("現在の状態")]
     private Trajectory currentBestTrajectory;  // 現在選択されている最良の軌跡
@@ -169,7 +169,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             endpoint.transform.SetParent(transform);
             endpoint.transform.localScale = Vector3.one * 0.1f;  // 小さな球体（半径0.05m）
 
-            // ★問題10対策: コライダーを削除（障害物として認識されないようにする）
+            // 可視化用オブジェクトが障害物として扱われないようにする
             Collider collider = endpoint.GetComponent<Collider>();
             if (collider != null)
             {
@@ -345,7 +345,7 @@ public class PredRedLPP_Redirector : APF_Redirector
             return;
         }
 
-        currentBestTrajectory = bestTrajectory;
+        currentBestTrajectory = trajectoryEvaluator.ApplyActionToTrajectoryForVisualization(T_pred, bestAction);
 
         // Step 7: 選択されたアクション π_optimal を適用（論文 Section 3.3）
         ApplyRedirectionAction(bestAction);
