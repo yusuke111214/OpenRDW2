@@ -33,7 +33,7 @@ public class PredRedLPP_Redirector : APF_Redirector
     [Header("移動履歴")]
     private Queue<Vector3> positionHistory;  // 位置履歴（キュー構造）
     private Queue<Vector3> directionHistory;  // 向き履歴
-    private const int MAX_HISTORY_SIZE = 10;  // 履歴の最大サイズ
+    private const int MAX_HISTORY_SIZE = 50;  // 履歴の最大サイズ（10→50に変更：移動パターン捕捉のため）
 
     [Header("現在の状態")]
     private Trajectory currentBestTrajectory;  // 現在選択されている最良の軌跡
@@ -368,11 +368,13 @@ public class PredRedLPP_Redirector : APF_Redirector
     ///
     /// 処理内容：
     /// 1. 現在の位置と向きをキューに追加
-    /// 2. サイズ制限（MAX_HISTORY_SIZE=10）を超えたら古いデータを削除
+    /// 2. サイズ制限（MAX_HISTORY_SIZE=50）を超えたら古いデータを削除
     ///
     /// キューの動作：
     /// - Enqueue（追加）：最新データを末尾に追加
     /// - Dequeue（削除）：最も古いデータを先頭から削除
+    ///
+    /// 注: 50fps環境で50個 = 1秒分の履歴 = 約1.7mの移動距離をカバー
     /// </summary>
     private void UpdateHistory()
     {

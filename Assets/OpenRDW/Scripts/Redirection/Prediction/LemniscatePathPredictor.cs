@@ -238,6 +238,14 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
             }
         }
 
+        // 【優先順位1】フィルタリング後の軌跡数をログ出力
+        Debug.Log($"[LPP] Generated trajectories: {trajectories.Count}");
+        Debug.Log($"[LPP] Feasible trajectories: {feasible.Count}");
+        if (feasible.Count == 1)
+        {
+            Debug.LogWarning($"[LPP] Only 1 feasible trajectory! MSE selection bypassed.");
+        }
+
         return feasible;
     }
 
@@ -276,23 +284,32 @@ public class LemniscatePathPredictor : MonoBehaviour, IPathPredictor
         {
             // 履歴がない場合は最初の軌跡を返す
             // 初期フレームでは履歴が不足している可能性があるため
+            Debug.LogWarning("[LPP] positionHistory is null or empty!");
             return trajectories[0];
         }
 
         float minMSE = float.MaxValue;
         Trajectory bestTrajectory = null;
 
+        // 【優先順位2】各軌跡のMSEスコアをログ出力
+        int idx = 0;
         foreach (var trajectory in trajectories)
         {
             // MSEスコアを計算（割引係数はTrajectory内でデフォルト0.8）
             float mse = trajectory.CalculatePathSimilarity(positionHistory);
+
+            Debug.Log($"[LPP] Trajectory[{idx}] MSE: {mse:F4}, " +
+                      $"Endpoint: ({trajectory.endPosition.x:F2}, {trajectory.endPosition.y:F2})");
 
             if (mse < minMSE)
             {
                 minMSE = mse;
                 bestTrajectory = trajectory;
             }
+            idx++;
         }
+
+        Debug.Log($"[LPP] Selected trajectory with minimum MSE: {minMSE:F4}");
 
         return bestTrajectory;
     }

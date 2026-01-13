@@ -58,12 +58,6 @@ public abstract class Redirector : MonoBehaviour
             var rotationInDegreesGR = redirectionManager.deltaDir * (gr - 1);
             bool applied = Mathf.Abs(rotationInDegreesGR) > Mathf.Abs(rotationInDegrees);
 
-            // 問題10対策C: applied状態をログ出力（Redirected Avatarのみ）
-            if (Mathf.Abs(rotationInDegreesGR) > 0.01f && transform.name == "Redirected Avatar")
-            {
-                Debug.Log($"[Redirector.SetRotationGain] avatar={transform.name}, gr={gr:F2}, rotationGR={rotationInDegreesGR:F2}°, prevRotation={rotationInDegrees:F2}°, applied={applied}");
-            }
-
             if (applied)
             {
                 rotationInDegrees = rotationInDegreesGR;
@@ -82,12 +76,6 @@ public abstract class Redirector : MonoBehaviour
             redirectionManager.curvature = curvature;
             var rotationInDegreesGC = Mathf.Rad2Deg * redirectionManager.deltaPos.magnitude * curvature;
             bool applied = Mathf.Abs(rotationInDegreesGC) > Mathf.Abs(rotationInDegrees);
-
-            // 問題10対策C: deltaPos.magnitudeをログ出力（Redirected Avatarのみ）
-            if (Mathf.Abs(originalCurvature) > 0.01f && transform.name == "Redirected Avatar")
-            {
-                Debug.Log($"[Redirector.SetCurvature] avatar={transform.name}, curvature={curvature:F3}, deltaPos={redirectionManager.deltaPos.magnitude:F4}m, rotationGC={rotationInDegreesGC:F2}°, applied={applied}");
-            }
 
             if (applied)
             {
