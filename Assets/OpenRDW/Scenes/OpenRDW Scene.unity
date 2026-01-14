@@ -1067,19 +1067,19 @@ MonoBehaviour:
   multiCmdFiles: 0
   useResetPanel: 0
   useCrystalWaypoint: 0
-  useSimulationTime: 0
+  useSimulationTime: 1
   overviewModeEveryTrial: 0
   firstPersonView: 0
-  pathLength: 300
-  DEFAULT_RANDOM_SEED: 23
+  pathLength: 200
+  DEFAULT_RANDOM_SEED: 1
   MAX_TRANS_GAIN: 1.26
   MIN_TRANS_GAIN: 0.86
-  MAX_ROT_GAIN: 1.901
+  MAX_ROT_GAIN: 1.49
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 4.22
+  CURVATURE_RADIUS: 7.5
   predictionHorizon: 3
   lemniscateEndpoints: 11
-  enablePathSmoothing: 1
+  enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 0
   apfMaxValue: 20
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   RESET_TRIGGER_BUFFER: 0.2
   useMinimalActionSet: 0
   simulatedTime: 0
-  targetFPS: 40
+  targetFPS: 50
   trialsForRepeating: 1
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   showPotentialArrows: 0
   potentialArrowSpacing: 0.5
   realtimePotentialUpdate: 0
-  avatarNum: 3
+  avatarNum: 1
   avatarColors:
   - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
@@ -1132,7 +1132,7 @@ MonoBehaviour:
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
-  squareWidth: 12.3
+  squareWidth: 7
   doubleRoomLeftRoomSide: 10
   doubleRoomRightRoomSide: 20
   doubleRoomCorridorWidth: 5
@@ -1170,7 +1170,7 @@ MonoBehaviour:
   cameraVirtualTopForAllAvatars: {fileID: 0}
   signText: {fileID: 0}
   userInterfaceManager: {fileID: 0}
-  InitialPoseModeForNonHmd: 1
+  InitialPoseModeForNonHmd: 0
 --- !u!114 &226199563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,7 +1558,7 @@ MonoBehaviour:
   samplingIntervalsFilePath: 
   waypoints: []
   samplingIntervals: []
-  pathSeedChoice: 2
+  pathSeedChoice: 1
   vePath: {fileID: 144110144}
   waypointIterator: 0
   accumulatedWaypointTime: 0
