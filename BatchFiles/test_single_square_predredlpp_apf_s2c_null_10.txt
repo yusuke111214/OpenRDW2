@@ -1,0 +1,8 @@
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = straightline
+pathLengthSet = 200
+trackingSpaceDirPath = TrackingSpaces/TestSingleSquare/
+trialsCount = 10
+redirectorSet = PredRedLPP, ThomasAPF, S2C, Null
+resetterSet = R2G, R2G, R2G, Null

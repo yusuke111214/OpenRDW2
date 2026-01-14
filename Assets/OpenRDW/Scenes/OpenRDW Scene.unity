@@ -1082,9 +1082,6 @@ MonoBehaviour:
   enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 0
-  apfMaxValue: 20
-  apfDistributionWidth: 3
-  apfThresholdDistance: 5
   RESET_TRIGGER_BUFFER: 0.2
   useMinimalActionSet: 0
   simulatedTime: 0
@@ -1558,7 +1555,7 @@ MonoBehaviour:
   samplingIntervalsFilePath: 
   waypoints: []
   samplingIntervals: []
-  pathSeedChoice: 1
+  pathSeedChoice: 2
   vePath: {fileID: 144110144}
   waypointIterator: 0
   accumulatedWaypointTime: 0
