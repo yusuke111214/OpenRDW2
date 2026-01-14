@@ -1,0 +1,400 @@
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1531325944
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1515672430
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1807772216
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 364667486
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1518041765
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 803880565
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 276146314
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1311085405
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1232127831
+newUser
+end
+
+redirector = PredRedLPP
+resetter = R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1199487220
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1459634722
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1944721899
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1907944593
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 259351663
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1276797
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 543084731
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1191846306
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 861374667
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1437324642
+newUser
+end
+
+redirector =  ThomasAPF
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1506273600
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 845938768
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1050274991
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 273743015
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 2118897523
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1375073929
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 894279852
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 427617600
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 774276579
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1365327772
+newUser
+end
+
+redirector =  S2C
+resetter =  R2G
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1685788845
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 745388802
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1859617447
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1055677445
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1977930719
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1195288662
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1887050844
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1077913126
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1908328959
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 1076505747
+newUser
+end
+
+redirector =  Null
+resetter =  Null
+pathSeedChoice = straightline
+trackingSpaceChoice = filepath
+trackingSpaceFilepath = TrackingSpaces/TestSingleSquare/square_no_obstacle_7m.txt
+pathLength = 200
+randomSeed = 2094828421
+newUser
+end
+
