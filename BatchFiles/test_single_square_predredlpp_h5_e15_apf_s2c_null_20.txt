@@ -1,8 +1,8 @@
 useRandomSeedSet = false
 sameRandomSeedForEachUser = false
 pathChoice = randomturn
-pathLengthSet = 200
+pathLengthSet = 100
 trackingSpaceDirPath = TrackingSpaces/TestTwoSquare/
-trialsCount = 10
+trialsCount = 20
 redirectorSet = PredRedLPP, ThomasAPF, S2C, Null
 resetterSet = R2G, R2G, R2G, R2G
