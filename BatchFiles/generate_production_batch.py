@@ -1,14 +1,15 @@
 # Batch file generator for production experiments
 # Based on experiment plan from commit 1e31a00
+# Generates a SINGLE batch file containing all 4 scenarios
 
 import os
 
-def generate_trial_block(tracking_space_file, num_users, algorithm_config, trial_num=1):
+def generate_trial_block(tracking_space_file, num_users, algorithm_config):
     """Generate a single trial block"""
     lines = []
     lines.append(f"useRandomSeedSet = false")
     lines.append(f"sameRandomSeedForEachUser = false")
-    lines.append(f"pathChoice = randomturn")
+    lines.append(f"pathChoice = straightline")
     lines.append(f"pathLength = 200")
     lines.append(f"trackingSpaceChoice = FilePath")
     lines.append(f"trackingSpaceFilePath = {tracking_space_file}")
@@ -32,11 +33,9 @@ def generate_trial_block(tracking_space_file, num_users, algorithm_config, trial
 
     return "\n".join(lines)
 
-def generate_batch_file(scenario_name, tracking_space_file, num_users, output_file):
-    """Generate complete batch file for one scenario"""
-
-    # Define all 13 algorithms
-    algorithms = [
+def get_algorithms():
+    """Define all 13 algorithms"""
+    return [
         # 1. PredRedLPP Default (horizon=3, endpoints=11, actionSet=19)
         {
             'name': 'PredRedLPP_Default',
@@ -100,7 +99,7 @@ def generate_batch_file(scenario_name, tracking_space_file, num_users, output_fi
             'lemniscateEndpoints': 15,
             'useMinimalActionSet': False
         },
-        # 8. PredRedLPP horizon=1, minimalActionSet=true (additional variation)
+        # 8. PredRedLPP horizon=1, minimalActionSet=true
         {
             'name': 'PredRedLPP_H1_MinAction',
             'redirector': 'PredRedLPP',
@@ -109,7 +108,7 @@ def generate_batch_file(scenario_name, tracking_space_file, num_users, output_fi
             'lemniscateEndpoints': 11,
             'useMinimalActionSet': True
         },
-        # 9. PredRedLPP horizon=5, minimalActionSet=true (additional variation)
+        # 9. PredRedLPP horizon=5, minimalActionSet=true
         {
             'name': 'PredRedLPP_H5_MinAction',
             'redirector': 'PredRedLPP',
@@ -118,7 +117,7 @@ def generate_batch_file(scenario_name, tracking_space_file, num_users, output_fi
             'lemniscateEndpoints': 11,
             'useMinimalActionSet': True
         },
-        # 10. PredRedLPP endpoints=15, minimalActionSet=true (additional variation)
+        # 10. PredRedLPP endpoints=15, minimalActionSet=true
         {
             'name': 'PredRedLPP_E15_MinAction',
             'redirector': 'PredRedLPP',
@@ -147,81 +146,95 @@ def generate_batch_file(scenario_name, tracking_space_file, num_users, output_fi
         }
     ]
 
+def generate_unified_batch_file(output_file):
+    """Generate a single unified batch file containing all scenarios"""
+
+    scenarios = [
+        {
+            'name': 'Scenario 1: Single User, No Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle.txt',
+            'num_users': 1
+        },
+        {
+            'name': 'Scenario 2: Two Users, No Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt',
+            'num_users': 2
+        },
+        {
+            'name': 'Scenario 3: Single User, 4 Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles.txt',
+            'num_users': 1
+        },
+        {
+            'name': 'Scenario 4: Two Users, 4 Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles_2users.txt',
+            'num_users': 2
+        }
+    ]
+
+    algorithms = get_algorithms()
     trials_per_algorithm = 30
+    total_trials = len(scenarios) * len(algorithms) * trials_per_algorithm
 
     content = []
-    content.append(f"// Production Experiment Batch File - {scenario_name}")
-    content.append(f"// Based on experiment plan from commit 1e31a00")
-    content.append(f"// Tracking space: {tracking_space_file}")
-    content.append(f"// Users: {num_users}")
-    content.append(f"// Total trials: {len(algorithms)} algorithms x {trials_per_algorithm} trials = {len(algorithms) * trials_per_algorithm}")
-    content.append(f"//")
-    content.append(f"// Algorithms:")
+    content.append("// ====================================================================")
+    content.append("// Production Experiment Batch File")
+    content.append("// Based on experiment plan from commit 1e31a00")
+    content.append("// Path: StraightLine")
+    content.append("// ====================================================================")
+    content.append("//")
+    content.append("// Structure:")
+    content.append(f"//   4 scenarios x 13 algorithms x {trials_per_algorithm} trials = {total_trials} total trials")
+    content.append("//")
+    content.append("// Scenarios:")
+    for i, s in enumerate(scenarios, 1):
+        content.append(f"//   {i}. {s['name']}")
+    content.append("//")
+    content.append("// Algorithms (13 total):")
     for i, alg in enumerate(algorithms, 1):
-        content.append(f"// {i}. {alg['name']}")
+        content.append(f"//   {i}. {alg['name']}")
+    content.append("//")
+    content.append("// ====================================================================")
     content.append("")
 
-    for alg in algorithms:
-        content.append(f"// ====================================================================")
-        content.append(f"// {alg['name']} - {trials_per_algorithm} trials")
-        content.append(f"// ====================================================================")
+    for scenario in scenarios:
+        content.append("// ====================================================================")
+        content.append(f"// {scenario['name']}")
+        content.append(f"// Tracking Space: {scenario['tracking_space']}")
+        content.append(f"// Users: {scenario['num_users']}")
+        content.append("// ====================================================================")
         content.append("")
 
-        for trial in range(trials_per_algorithm):
-            content.append(generate_trial_block(tracking_space_file, num_users, alg, trial + 1))
+        for alg in algorithms:
+            content.append(f"// --- {alg['name']} ({trials_per_algorithm} trials) ---")
+
+            for trial in range(trials_per_algorithm):
+                content.append(generate_trial_block(
+                    scenario['tracking_space'],
+                    scenario['num_users'],
+                    alg
+                ))
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("\n".join(content))
 
-    print(f"Generated: {output_file}")
-    print(f"  - {len(algorithms)} algorithms x {trials_per_algorithm} trials = {len(algorithms) * trials_per_algorithm} trials")
+    print(f"Generated unified batch file: {output_file}")
+    print(f"Total trials: {total_trials}")
+    print(f"  - {len(scenarios)} scenarios")
+    print(f"  - {len(algorithms)} algorithms")
+    print(f"  - {trials_per_algorithm} trials per algorithm")
 
 def main():
     batch_dir = os.path.dirname(os.path.abspath(__file__))
+    output_path = os.path.join(batch_dir, 'production_experiment_all.txt')
 
-    scenarios = [
-        {
-            'name': 'SingleUser_NoObstacle',
-            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle.txt',
-            'num_users': 1,
-            'output': 'production_1user_no_obstacle.txt'
-        },
-        {
-            'name': 'TwoUsers_NoObstacle',
-            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt',
-            'num_users': 2,
-            'output': 'production_2users_no_obstacle.txt'
-        },
-        {
-            'name': 'SingleUser_4Obstacles',
-            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles.txt',
-            'num_users': 1,
-            'output': 'production_1user_4obstacles.txt'
-        },
-        {
-            'name': 'TwoUsers_4Obstacles',
-            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles_2users.txt',
-            'num_users': 2,
-            'output': 'production_2users_4obstacles.txt'
-        }
-    ]
-
-    print("Generating production batch files...")
+    print("Generating unified production batch file...")
     print("=" * 60)
 
-    for scenario in scenarios:
-        output_path = os.path.join(batch_dir, scenario['output'])
-        generate_batch_file(
-            scenario['name'],
-            scenario['tracking_space'],
-            scenario['num_users'],
-            output_path
-        )
+    generate_unified_batch_file(output_path)
 
     print("=" * 60)
-    print("All batch files generated successfully!")
-    print("\nTotal experiments:")
-    print(f"  4 scenarios x 13 algorithms x 30 trials = 1560 trials")
+    print("Done!")
 
 if __name__ == "__main__":
     main()
