@@ -1078,8 +1078,8 @@ MonoBehaviour:
   MIN_ROT_GAIN: 0.8
   CURVATURE_RADIUS: 7.5
   predictionHorizon: 3
-  lemniscateEndpoints: 17
-  enablePathSmoothing: 1
+  lemniscateEndpoints: 11
+  enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 0
   apfMaxValue: 20
@@ -1170,7 +1170,7 @@ MonoBehaviour:
   cameraVirtualTopForAllAvatars: {fileID: 0}
   signText: {fileID: 0}
   userInterfaceManager: {fileID: 0}
-  InitialPoseModeForNonHmd: 1
+  InitialPoseModeForNonHmd: 0
 --- !u!114 &226199563
 MonoBehaviour:
   m_ObjectHideFlags: 0
