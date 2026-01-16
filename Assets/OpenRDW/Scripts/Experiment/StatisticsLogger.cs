@@ -841,13 +841,22 @@ public class StatisticsLogger : MonoBehaviour
             var beginWeight = 0.1f;
             var deltaWeight = (1 - beginWeight) / realPosList.Count;
 
+            Color colorStart;
+            Color colorEnd;
+            if (uId == 1)
+            {
+                colorStart = Color.yellow;
+                colorEnd = Color.green;
+            }
+            else
+            {
+                colorStart = Color.blue;
+                colorEnd = Color.red;
+            }
+
             for (int i = 0; i < realPosList.Count - 1; i++)
             {
-                var t = (float)i / (realPosList.Count - 1); // 0→1 に正規化
-
-                // 青から赤への線形補間
-                var colorStart = Color.blue;
-                var colorEnd = Color.red;
+                var t = (float)i / (realPosList.Count - 1); // 0->1 normalized
 
                 var c1 = Color.Lerp(colorStart, colorEnd, t);
                 var c2 = Color.Lerp(colorStart, colorEnd, Mathf.Min(1, t + deltaWeight));
