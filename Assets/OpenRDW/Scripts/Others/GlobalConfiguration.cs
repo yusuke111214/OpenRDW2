@@ -1278,6 +1278,17 @@ public class GlobalConfiguration : MonoBehaviour
                     pathLength = float.Parse(split[1]);
                     break;
 
+                // PredRedLPP parameters
+                case "predictionhorizon":
+                    predictionHorizon = float.Parse(split[1]);
+                    break;
+                case "lemniscateendpoints":
+                    lemniscateEndpoints = int.Parse(split[1]);
+                    break;
+                case "useminimalactionset":
+                    useMinimalActionSet = bool.Parse(split[1].ToLower());
+                    break;
+
                 //handle experiment setup
                 case "end":
                 {

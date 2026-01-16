@@ -840,7 +840,7 @@ public class StatisticsLogger : MonoBehaviour
             var realPosList = avatarStatistics[uId].userRealPositionSamples;
             var beginWeight = 0.1f;
             var deltaWeight = (1 - beginWeight) / realPosList.Count;
-            
+
             for (int i = 0; i < realPosList.Count - 1; i++)
             {
                 var t = (float)i / (realPosList.Count - 1); // 0→1 に正規化
@@ -860,6 +860,27 @@ public class StatisticsLogger : MonoBehaviour
                     pathThickness,
                     c1,
                     c2);
+            }
+        }
+
+        // Draw start position markers for each avatar
+        int markerSize = Mathf.RoundToInt(imageResolution * 0.02f); // 2% of image size
+        for (int uId = 0; uId < avatarStatistics.Count; uId++)
+        {
+            var realPosList = avatarStatistics[uId].userRealPositionSamples;
+            if (realPosList.Count > 0)
+            {
+                var startPos = realPosList[0] - centerp;
+                if (uId == 0)
+                {
+                    // Avatar 1: Black filled circle
+                    Utilities.DrawFilledCircle(texRealPathGraph, startPos, realSideLength, markerSize, Color.black);
+                }
+                else if (uId == 1)
+                {
+                    // Avatar 2: Black star
+                    Utilities.DrawStar(texRealPathGraph, startPos, realSideLength, markerSize, Color.black);
+                }
             }
         }
 

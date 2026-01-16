@@ -260,6 +260,67 @@ public static class Utilities
         SetPixelWithThickness(tex, Mathf.RoundToInt(p.x), Mathf.RoundToInt(p.y), thickness, c);
     }
 
+    // Draw a filled circle at the specified position
+    public static void DrawFilledCircle(Texture2D tex, Vector2 p, float sideLength, int radius, Color c)
+    {
+        p = RealPosToPixelPos(tex, p, sideLength);
+        int cx = Mathf.RoundToInt(p.x);
+        int cy = Mathf.RoundToInt(p.y);
+        for (int i = cx - radius; i <= cx + radius; i++)
+        {
+            for (int j = cy - radius; j <= cy + radius; j++)
+            {
+                if (IfPosInTex(tex, i, j))
+                {
+                    float dist = Mathf.Sqrt((i - cx) * (i - cx) + (j - cy) * (j - cy));
+                    if (dist <= radius)
+                    {
+                        tex.SetPixel(i, j, c);
+                    }
+                }
+            }
+        }
+    }
+
+    // Draw a 5-pointed star at the specified position
+    public static void DrawStar(Texture2D tex, Vector2 p, float sideLength, int size, Color c)
+    {
+        p = RealPosToPixelPos(tex, p, sideLength);
+        int cx = Mathf.RoundToInt(p.x);
+        int cy = Mathf.RoundToInt(p.y);
+
+        // Generate 5-pointed star vertices
+        float outerRadius = size;
+        float innerRadius = size * 0.4f;
+        List<Vector2> starPoints = new List<Vector2>();
+
+        for (int i = 0; i < 10; i++)
+        {
+            float radius = (i % 2 == 0) ? outerRadius : innerRadius;
+            float angle = Mathf.PI / 2 + i * Mathf.PI / 5; // Start from top
+            float x = cx + radius * Mathf.Cos(angle);
+            float y = cy + radius * Mathf.Sin(angle);
+            starPoints.Add(new Vector2(x, y));
+        }
+
+        // Fill the star polygon
+        int minX = Mathf.RoundToInt(cx - outerRadius);
+        int maxX = Mathf.RoundToInt(cx + outerRadius);
+        int minY = Mathf.RoundToInt(cy - outerRadius);
+        int maxY = Mathf.RoundToInt(cy + outerRadius);
+
+        for (int i = minX; i <= maxX; i++)
+        {
+            for (int j = minY; j <= maxY; j++)
+            {
+                if (IfPosInTex(tex, i, j) && IfPosInPolygon(starPoints, new Vector2(i, j)))
+                {
+                    tex.SetPixel(i, j, c);
+                }
+            }
+        }
+    }
+
     public static void DrawLine(Texture2D tex, Vector2 a, Vector2 b, float sideLength, int thickness, Color colorBegin, Color colorEnd)
     {
         DrawLine(tex, a, b, sideLength, thickness, colorBegin, colorEnd, 0);

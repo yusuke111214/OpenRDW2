@@ -1,0 +1,6432 @@
+// Production Experiment Batch File - TwoUsers_NoObstacle
+// Based on experiment plan from commit 1e31a00
+// Tracking space: TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+// Users: 2
+// Total trials: 13 algorithms x 30 trials = 390
+//
+// Algorithms:
+// 1. PredRedLPP_Default
+// 2. PredRedLPP_H1
+// 3. PredRedLPP_H5
+// 4. PredRedLPP_MinAction
+// 5. PredRedLPP_E7
+// 6. PredRedLPP_E15
+// 7. PredRedLPP_MaxComp
+// 8. PredRedLPP_H1_MinAction
+// 9. PredRedLPP_H5_MinAction
+// 10. PredRedLPP_E15_MinAction
+// 11. ThomasAPF
+// 12. S2C
+// 13. Null
+
+// ====================================================================
+// PredRedLPP_Default - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_H1 - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_H5 - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_MinAction - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_E7 - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 7
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_E15 - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_MaxComp - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 15
+useMinimalActionSet = false
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_H1_MinAction - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 1
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_H5_MinAction - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 5
+lemniscateEndpoints = 11
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// PredRedLPP_E15_MinAction - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+predictionHorizon = 3
+lemniscateEndpoints = 15
+useMinimalActionSet = true
+newUser
+redirector = PredRedLPP
+resetter = R2G
+newUser
+redirector = PredRedLPP
+resetter = R2G
+end
+
+// ====================================================================
+// ThomasAPF - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = ThomasAPF
+resetter = R2G
+newUser
+redirector = ThomasAPF
+resetter = R2G
+end
+
+// ====================================================================
+// S2C - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = S2C
+resetter = R2G
+newUser
+redirector = S2C
+resetter = R2G
+end
+
+// ====================================================================
+// Null - 30 trials
+// ====================================================================
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
+
+useRandomSeedSet = false
+sameRandomSeedForEachUser = false
+pathChoice = randomturn
+pathLength = 200
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
+newUser
+redirector = Null
+resetter = R2G
+newUser
+redirector = Null
+resetter = R2G
+end
