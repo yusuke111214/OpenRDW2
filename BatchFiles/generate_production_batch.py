@@ -3,14 +3,13 @@
 # Generates a SINGLE batch file containing all 4 scenarios
 
 import os
+import random
 
-def generate_trial_block(tracking_space_file, num_users, algorithm_config):
+def generate_trial_block(tracking_space_file, num_users, algorithm_config, path_seed_choice, rng):
     """Generate a single trial block"""
     lines = []
-    lines.append(f"useRandomSeedSet = false")
-    lines.append(f"sameRandomSeedForEachUser = false")
-    lines.append(f"pathChoice = straightline")
-    lines.append(f"pathLength = 200")
+    lines.append(f"pathSeedChoice = {path_seed_choice}")
+    lines.append(f"pathLength = 100")
     lines.append(f"trackingSpaceChoice = FilePath")
     lines.append(f"trackingSpaceFilePath = {tracking_space_file}")
 
@@ -22,11 +21,13 @@ def generate_trial_block(tracking_space_file, num_users, algorithm_config):
     if 'useMinimalActionSet' in algorithm_config:
         lines.append(f"useMinimalActionSet = {str(algorithm_config['useMinimalActionSet']).lower()}")
 
+    lines.append(f"redirector = {algorithm_config['redirector']}")
+    lines.append(f"resetter = {algorithm_config['resetter']}")
+
     # Add users
     for user_id in range(num_users):
+        lines.append(f"randomSeed = {rng.randint(1, 2**31 - 1)}")
         lines.append(f"newUser")
-        lines.append(f"redirector = {algorithm_config['redirector']}")
-        lines.append(f"resetter = {algorithm_config['resetter']}")
 
     lines.append("end")
     lines.append("")
@@ -151,25 +152,53 @@ def generate_unified_batch_file(output_file):
 
     scenarios = [
         {
-            'name': 'Scenario 1: Single User, No Obstacles',
+            'name': 'Scenario 1: StraightLine, Single User, No Obstacles',
             'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle.txt',
-            'num_users': 1
+            'num_users': 1,
+            'path_seed_choice': 'straightline',
         },
         {
-            'name': 'Scenario 2: Two Users, No Obstacles',
+            'name': 'Scenario 2: StraightLine, Two Users, No Obstacles',
             'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt',
-            'num_users': 2
+            'num_users': 2,
+            'path_seed_choice': 'straightline',
         },
         {
-            'name': 'Scenario 3: Single User, 4 Obstacles',
+            'name': 'Scenario 3: StraightLine, Single User, 4 Obstacles',
             'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles.txt',
-            'num_users': 1
+            'num_users': 1,
+            'path_seed_choice': 'straightline',
         },
         {
-            'name': 'Scenario 4: Two Users, 4 Obstacles',
+            'name': 'Scenario 4: StraightLine, Two Users, 4 Obstacles',
             'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles_2users.txt',
-            'num_users': 2
-        }
+            'num_users': 2,
+            'path_seed_choice': 'straightline',
+        },
+        {
+            'name': 'Scenario 5: 90Turn, Single User, No Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle.txt',
+            'num_users': 1,
+            'path_seed_choice': '90turn',
+        },
+        {
+            'name': 'Scenario 6: 90Turn, Two Users, No Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt',
+            'num_users': 2,
+            'path_seed_choice': '90turn',
+        },
+        {
+            'name': 'Scenario 7: 90Turn, Single User, 4 Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles.txt',
+            'num_users': 1,
+            'path_seed_choice': '90turn',
+        },
+        {
+            'name': 'Scenario 8: 90Turn, Two Users, 4 Obstacles',
+            'tracking_space': 'TrackingSpaces/SingleSquare10m/square_10m_four_obstacles_2users.txt',
+            'num_users': 2,
+            'path_seed_choice': '90turn',
+        },
     ]
 
     algorithms = get_algorithms()
@@ -180,11 +209,11 @@ def generate_unified_batch_file(output_file):
     content.append("// ====================================================================")
     content.append("// Production Experiment Batch File")
     content.append("// Based on experiment plan from commit 1e31a00")
-    content.append("// Path: StraightLine")
+    content.append("// Path: StraightLine + 90Turn")
     content.append("// ====================================================================")
     content.append("//")
     content.append("// Structure:")
-    content.append(f"//   4 scenarios x 13 algorithms x {trials_per_algorithm} trials = {total_trials} total trials")
+    content.append(f"//   8 scenarios x 13 algorithms x {trials_per_algorithm} trials = {total_trials} total trials")
     content.append("//")
     content.append("// Scenarios:")
     for i, s in enumerate(scenarios, 1):
@@ -197,11 +226,14 @@ def generate_unified_batch_file(output_file):
     content.append("// ====================================================================")
     content.append("")
 
+    rng = random.Random(20260118)
+
     for scenario in scenarios:
         content.append("// ====================================================================")
         content.append(f"// {scenario['name']}")
         content.append(f"// Tracking Space: {scenario['tracking_space']}")
         content.append(f"// Users: {scenario['num_users']}")
+        content.append(f"// PathSeedChoice: {scenario['path_seed_choice']}")
         content.append("// ====================================================================")
         content.append("")
 
@@ -212,7 +244,9 @@ def generate_unified_batch_file(output_file):
                 content.append(generate_trial_block(
                     scenario['tracking_space'],
                     scenario['num_users'],
-                    alg
+                    alg,
+                    scenario['path_seed_choice'],
+                    rng,
                 ))
 
     with open(output_file, 'w', encoding='utf-8') as f:

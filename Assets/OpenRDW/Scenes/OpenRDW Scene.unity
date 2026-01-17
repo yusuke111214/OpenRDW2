@@ -1170,7 +1170,7 @@ MonoBehaviour:
   cameraVirtualTopForAllAvatars: {fileID: 0}
   signText: {fileID: 0}
   userInterfaceManager: {fileID: 0}
-  InitialPoseModeForNonHmd: 0
+  InitialPoseModeForNonHmd: 1
 --- !u!114 &226199563
 MonoBehaviour:
   m_ObjectHideFlags: 0
