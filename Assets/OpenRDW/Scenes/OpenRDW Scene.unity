@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: 1
-  synchronizedReset: 1
+  synchronizedReset: 0
   timeStep: 0.5
   directionSamples: 30
   timeStepBase: 0
@@ -1070,7 +1070,7 @@ MonoBehaviour:
   useSimulationTime: 1
   overviewModeEveryTrial: 0
   firstPersonView: 0
-  pathLength: 200
+  pathLength: 100
   DEFAULT_RANDOM_SEED: 1
   MAX_TRANS_GAIN: 1.26
   MIN_TRANS_GAIN: 0.86
