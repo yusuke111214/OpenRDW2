@@ -1,10 +1,4 @@
-﻿// ====================================================================
-// Random Initial Pose Test (S2C, 2 Users, 50 Trials)
-// Scenario: StraightLine, Two Users, No Obstacles
-// Tracking Space: TrackingSpaces/SingleSquare10m/square_10m_no_obstacle_2users.txt
-// ====================================================================
-
-// --- S2C (50 trials) ---
+﻿
 pathSeedChoice = straightline
 pathLength = 50
 trackingSpaceChoice = FilePath
