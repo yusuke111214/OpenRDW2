@@ -24,6 +24,8 @@ public class TrackingSpaceGenerator
     private const float DEFAULT_TRACKING_SPACE_RADIUS = 5;//default physical tracking space radius
 
     private const float TARGET_AREA = 200;
+    private const float DEFAULT_WALL_MARGIN = 0.3f;
+    private const float DEFAULT_OBSTACLE_MARGIN = 0.3f;
 
     //generate polygon tracking space with sidenum, center is (0,0)
     public static List<Vector2> GeneratePolygonTrackingSpacePoints(int sideNum, float radius = DEFAULT_TRACKING_SPACE_RADIUS)
@@ -842,6 +844,32 @@ public class TrackingSpaceGenerator
         return inside;
     }
 
+    public static bool IsPointInsidePolygonWithMargin(List<Vector2> polygonPoints, Vector2 point, float margin)
+    {
+        if (!IsPointInsidePolygon(polygonPoints, point))
+        {
+            return false;
+        }
+
+        if (margin <= 0)
+        {
+            return true;
+        }
+
+        var count = polygonPoints.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var p1 = polygonPoints[i];
+            var p2 = polygonPoints[(i + 1) % count];
+            if (DistancePointToLineSegment(point, p1, p2) < margin)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// 点が障害物ポリゴンのいずれかの内部にあるかチェック
     /// </summary>
@@ -919,6 +947,16 @@ public class TrackingSpaceGenerator
 
     public static Vector2 GetRandomPointInsidePolygon(List<Vector2> polygonPoints, List<List<Vector2>> obstaclePolygons, System.Random random)
     {
+        return GetRandomPointInsidePolygon(polygonPoints, obstaclePolygons, random, 0f, DEFAULT_OBSTACLE_MARGIN);
+    }
+
+    public static Vector2 GetRandomPointInsidePolygon(
+        List<Vector2> polygonPoints,
+        List<List<Vector2>> obstaclePolygons,
+        System.Random random,
+        float wallMargin,
+        float obstacleMargin)
+    {
         if (polygonPoints == null || polygonPoints.Count == 0)
         {
             return Vector2.zero;
@@ -938,6 +976,21 @@ public class TrackingSpaceGenerator
             if (p.y > maxY) maxY = p.y;
         }
 
+        var sampleMinX = minX + wallMargin;
+        var sampleMaxX = maxX - wallMargin;
+        var sampleMinY = minY + wallMargin;
+        var sampleMaxY = maxY - wallMargin;
+        if (sampleMinX >= sampleMaxX)
+        {
+            sampleMinX = minX;
+            sampleMaxX = maxX;
+        }
+        if (sampleMinY >= sampleMaxY)
+        {
+            sampleMinY = minY;
+            sampleMaxY = maxY;
+        }
+
         // バウンディングボックス内でサンプリング → ポリゴン内かつ障害物外かチェック
         for (var attempt = 0; attempt < 512; attempt++)
         {
@@ -946,19 +999,19 @@ public class TrackingSpaceGenerator
             {
                 var rx = random.NextDouble();
                 var ry = random.NextDouble();
-                x = (float)(minX + (maxX - minX) * rx);
-                y = (float)(minY + (maxY - minY) * ry);
+                x = (float)(sampleMinX + (sampleMaxX - sampleMinX) * rx);
+                y = (float)(sampleMinY + (sampleMaxY - sampleMinY) * ry);
             }
             else
             {
-                x = Random.Range(minX, maxX);
-                y = Random.Range(minY, maxY);
+                x = Random.Range(sampleMinX, sampleMaxX);
+                y = Random.Range(sampleMinY, sampleMaxY);
             }
             var candidate = new Vector2(x, y);
 
             // トラッキングスペース内かつ障害物外
-            if (IsPointInsidePolygon(polygonPoints, candidate) &&
-                !IsPointInsideAnyObstacle(obstaclePolygons, candidate))
+            if (IsPointInsidePolygonWithMargin(polygonPoints, candidate, wallMargin) &&
+                !IsPointInsideAnyObstacle(obstaclePolygons, candidate, obstacleMargin))
             {
                 return candidate;
             }
@@ -989,8 +1042,8 @@ public class TrackingSpaceGenerator
             return new InitialPose(Vector2.zero, Vector2.up);
         }
 
-        // 障害物を考慮してランダム位置を取得
-        var position = GetRandomPointInsidePolygon(space.trackingSpace, space.obstaclePolygons, random);
+        // 障害物と壁マージンを考慮してランダム位置を取得
+        var position = GetRandomPointInsidePolygon(space.trackingSpace, space.obstaclePolygons, random, DEFAULT_WALL_MARGIN, DEFAULT_OBSTACLE_MARGIN);
 
         var center = Vector2.zero;
         for (var i = 0; i < space.trackingSpace.Count; i++)
@@ -999,9 +1052,13 @@ public class TrackingSpaceGenerator
         }
         center /= space.trackingSpace.Count;
 
-        var forward = (center - position).sqrMagnitude > 0.0001f
-            ? (center - position).normalized
-            : Vector2.up;
+        var nearestWall = Utilities.GetNearestPos(position, space.trackingSpace);
+        var forwardVec = position - nearestWall;
+        if (forwardVec.sqrMagnitude < 0.0001f)
+        {
+            forwardVec = center - position;
+        }
+        var forward = forwardVec.sqrMagnitude > 0.0001f ? forwardVec.normalized : Vector2.up;
 
         return new InitialPose(position, forward);
     }
@@ -1013,8 +1070,8 @@ public class TrackingSpaceGenerator
             return new InitialPose(Vector2.zero, Vector2.up);
         }
 
-        // 障害物を考慮してランダム位置を取得
-        var position = GetRandomPointInsidePolygon(space.trackingSpace, space.obstaclePolygons);
+        // 障害物と壁マージンを考慮してランダム位置を取得
+        var position = GetRandomPointInsidePolygon(space.trackingSpace, space.obstaclePolygons, null, DEFAULT_WALL_MARGIN, DEFAULT_OBSTACLE_MARGIN);
 
         // 向きは「部屋のざっくり中心方向」を向かせる
         var center = Vector2.zero;
@@ -1025,9 +1082,13 @@ public class TrackingSpaceGenerator
 
         center /= space.trackingSpace.Count;
 
-        var forward = (center - position).sqrMagnitude > 0.0001f
-            ? (center - position).normalized
-            : Vector2.up;
+        var nearestWall = Utilities.GetNearestPos(position, space.trackingSpace);
+        var forwardVec = position - nearestWall;
+        if (forwardVec.sqrMagnitude < 0.0001f)
+        {
+            forwardVec = center - position;
+        }
+        var forward = forwardVec.sqrMagnitude > 0.0001f ? forwardVec.normalized : Vector2.up;
 
         return new InitialPose(position, forward);
     }
