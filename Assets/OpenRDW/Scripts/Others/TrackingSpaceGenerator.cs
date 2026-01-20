@@ -917,6 +917,47 @@ public class TrackingSpaceGenerator
         return false;
     }
 
+    private static bool IsRandomStartCandidateValid(
+        List<Vector2> polygonPoints,
+        List<List<Vector2>> obstaclePolygons,
+        Vector2 candidate,
+        float wallMargin,
+        float obstacleMargin)
+    {
+        return IsPointInsidePolygonWithMargin(polygonPoints, candidate, wallMargin) &&
+               !IsPointInsideAnyObstacle(obstaclePolygons, candidate, obstacleMargin);
+    }
+
+    private static Vector2 GetNearestBoundaryPoint(
+        Vector2 position,
+        List<Vector2> trackingSpace,
+        List<List<Vector2>> obstaclePolygons)
+    {
+        var nearestPoint = Utilities.GetNearestPos(position, trackingSpace);
+        var minDistSq = (position - nearestPoint).sqrMagnitude;
+
+        if (obstaclePolygons != null)
+        {
+            foreach (var obstacle in obstaclePolygons)
+            {
+                if (obstacle == null || obstacle.Count < 2)
+                {
+                    continue;
+                }
+
+                var obstaclePoint = Utilities.GetNearestPos(position, obstacle);
+                var distSq = (position - obstaclePoint).sqrMagnitude;
+                if (distSq < minDistSq)
+                {
+                    minDistSq = distSq;
+                    nearestPoint = obstaclePoint;
+                }
+            }
+        }
+
+        return nearestPoint;
+    }
+
     /// <summary>
     /// 点から線分への最短距離を計算
     /// </summary>
@@ -992,7 +1033,7 @@ public class TrackingSpaceGenerator
         }
 
         // バウンディングボックス内でサンプリング → ポリゴン内かつ障害物外かチェック
-        for (var attempt = 0; attempt < 512; attempt++)
+        for (var attempt = 0; attempt < 1024; attempt++)
         {
             float x, y;
             if (random != null)
@@ -1010,15 +1051,32 @@ public class TrackingSpaceGenerator
             var candidate = new Vector2(x, y);
 
             // トラッキングスペース内かつ障害物外
-            if (IsPointInsidePolygonWithMargin(polygonPoints, candidate, wallMargin) &&
-                !IsPointInsideAnyObstacle(obstaclePolygons, candidate, obstacleMargin))
+            if (IsRandomStartCandidateValid(polygonPoints, obstaclePolygons, candidate, wallMargin, obstacleMargin))
             {
                 return candidate;
             }
         }
 
+        // Fallback: coarse grid search to avoid returning a point inside obstacles when random sampling fails.
+        var rangeX = sampleMaxX - sampleMinX;
+        var rangeY = sampleMaxY - sampleMinY;
+        var baseStep = Mathf.Max(0.1f, Mathf.Min(wallMargin, obstacleMargin) * 0.5f);
+        var stepX = Mathf.Max(baseStep, rangeX / 200f);
+        var stepY = Mathf.Max(baseStep, rangeY / 200f);
+        for (var x = sampleMinX; x <= sampleMaxX; x += stepX)
+        {
+            for (var y = sampleMinY; y <= sampleMaxY; y += stepY)
+            {
+                var candidate = new Vector2(x, y);
+                if (IsRandomStartCandidateValid(polygonPoints, obstaclePolygons, candidate, wallMargin, obstacleMargin))
+                {
+                    return candidate;
+                }
+            }
+        }
+
         // 念のためのフォールバック（中心点）
-        Debug.LogWarning("GetRandomPointInsidePolygon: Failed to find valid position after 512 attempts, using center");
+        Debug.LogWarning("GetRandomPointInsidePolygon: Failed to find valid position after 1024 attempts and grid search, using center");
         return new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f);
     }
     
@@ -1052,8 +1110,8 @@ public class TrackingSpaceGenerator
         }
         center /= space.trackingSpace.Count;
 
-        var nearestWall = Utilities.GetNearestPos(position, space.trackingSpace);
-        var forwardVec = position - nearestWall;
+        var nearestBoundary = GetNearestBoundaryPoint(position, space.trackingSpace, space.obstaclePolygons);
+        var forwardVec = position - nearestBoundary;
         if (forwardVec.sqrMagnitude < 0.0001f)
         {
             forwardVec = center - position;
@@ -1073,7 +1131,7 @@ public class TrackingSpaceGenerator
         // 障害物と壁マージンを考慮してランダム位置を取得
         var position = GetRandomPointInsidePolygon(space.trackingSpace, space.obstaclePolygons, null, DEFAULT_WALL_MARGIN, DEFAULT_OBSTACLE_MARGIN);
 
-        // 向きは「部屋のざっくり中心方向」を向かせる
+        // 向きは「最寄りの壁/障害物から離れる方向」を基本にする
         var center = Vector2.zero;
         for (var i = 0; i < space.trackingSpace.Count; i++)
         {
@@ -1082,8 +1140,8 @@ public class TrackingSpaceGenerator
 
         center /= space.trackingSpace.Count;
 
-        var nearestWall = Utilities.GetNearestPos(position, space.trackingSpace);
-        var forwardVec = position - nearestWall;
+        var nearestBoundary = GetNearestBoundaryPoint(position, space.trackingSpace, space.obstaclePolygons);
+        var forwardVec = position - nearestBoundary;
         if (forwardVec.sqrMagnitude < 0.0001f)
         {
             forwardVec = center - position;
