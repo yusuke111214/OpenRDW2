@@ -1,0 +1,600 @@
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 1
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 2
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 3
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 4
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 5
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 6
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 7
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 8
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 9
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 10
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 11
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 12
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 13
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 14
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 15
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 16
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 17
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 18
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 19
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 20
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 21
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 22
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 23
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 24
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 25
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 26
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 27
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 28
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 29
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_one_obstacle.txt
+redirector = Null
+resetter = Null
+randomSeed = 30
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1001
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1002
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1003
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1004
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1005
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1006
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1007
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1008
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1009
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1010
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1011
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1012
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1013
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1014
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1015
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1016
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1017
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1018
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1019
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1020
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1021
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1022
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1023
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1024
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1025
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1026
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1027
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1028
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1029
+newUser
+end
+
+pathSeedChoice = randomturn
+pathLength = 50
+trackingSpaceChoice = FilePath
+trackingSpaceFilePath = TrackingSpaces/SingleSquare/square_four_obstacles.txt
+redirector = Null
+resetter = Null
+randomSeed = 1030
+newUser
+end
+
