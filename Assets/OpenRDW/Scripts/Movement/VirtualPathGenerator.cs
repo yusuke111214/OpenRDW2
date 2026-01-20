@@ -64,7 +64,7 @@ public class VirtualPathGenerator
         {
             SamplingDistribution distanceSamplingDistribution = new SamplingDistribution(DistributionType.Uniform, 2, 8);
 
-            SamplingDistribution angleSamplingDistribution = new SamplingDistribution(DistributionType.Uniform, -180, 180);
+            SamplingDistribution angleSamplingDistribution = new SamplingDistribution(DistributionType.Uniform, -90, 90);
             int waypointCount = 50;
             return new PathSeed(distanceSamplingDistribution, angleSamplingDistribution, waypointCount);
         }
