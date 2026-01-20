@@ -130,21 +130,7 @@ public class GlobalConfiguration : MonoBehaviour
     [Range(0f, 5f)]
     public float headingCostWeight = 0f; // 論文準拠：現在は0（将来の拡張用プレースホルダー）
 
-    [Header("Anharmonic APF Parameters (Eq. 11)")]
-    [Tooltip("Maximum APF value (a_o in the paper Eq. 11)")]
-    [Range(1f, 50f)]
-    public float apfMaxValue = 10.0f;
-
-    [Tooltip("Distribution width (b_o in the paper Eq. 11)")]
-    [Range(0.1f, 5f)]
-    public float apfDistributionWidth = 1.0f;
-
-    [Tooltip("Threshold distance in meters (d_d in the paper Eq. 11) - APF force is 0 beyond this distance")]
-    [Range(0.5f, 5f)]
-    public float apfThresholdDistance = 2.0f;
-
-    [Header("Reset Settings")]
-    [Tooltip("Buffer width for triggering reset (distance from walls). For APF-related redirectors, recommended to be at least 0.4m")]
+    [Tooltip("Buffer width for triggering reset")]
     [SerializeField, Range(0f, 1f)]
     public float RESET_TRIGGER_BUFFER = 0.5f;
 
