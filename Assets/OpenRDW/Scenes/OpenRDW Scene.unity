@@ -1076,15 +1076,12 @@ MonoBehaviour:
   MIN_TRANS_GAIN: 0.86
   MAX_ROT_GAIN: 1.49
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 7.5
+  CURVATURE_RADIUS: 2
   predictionHorizon: 3
   lemniscateEndpoints: 11
   enablePathSmoothing: 0
   discountFactor: 0.8
   headingCostWeight: 0
-  apfMaxValue: 20
-  apfDistributionWidth: 1
-  apfThresholdDistance: 5
   RESET_TRIGGER_BUFFER: 0.2
   useMinimalActionSet: 0
   simulatedTime: 0
@@ -1558,7 +1555,7 @@ MonoBehaviour:
   samplingIntervalsFilePath: 
   waypoints: []
   samplingIntervals: []
-  pathSeedChoice: 0
+  pathSeedChoice: 2
   vePath: {fileID: 144110144}
   waypointIterator: 0
   accumulatedWaypointTime: 0
