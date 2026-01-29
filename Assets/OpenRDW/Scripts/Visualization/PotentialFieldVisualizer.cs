@@ -176,37 +176,16 @@ public class PotentialFieldVisualizer : MonoBehaviour
         potentialGrid = new float[gridWidth, gridHeight];
         gradientGrid = new Vector2[gridWidth, gridHeight];
 
-        // 障害物リストを収集（ThomasAPFと同じロジック）
-        var obstaclePoints = new List<Vector2>();
-
-        // トラッキングスペースの境界
-        for (int i = 0; i < space.trackingSpace.Count; i++)
+        int edgeCount = space.trackingSpace.Count;
+        var edgeNormals = new Vector2[edgeCount];
+        for (int i = 0; i < edgeCount; i++)
         {
             var p = space.trackingSpace[i];
-            var q = space.trackingSpace[(i + 1) % space.trackingSpace.Count];
-
-            // エッジをセグメント分割
-            int segments = Mathf.Max(2, Mathf.CeilToInt((q - p).magnitude / gridCellSize));
-            for (int j = 0; j < segments; j++)
-            {
-                float t = j / (float)segments;
-                obstaclePoints.Add(Vector2.Lerp(p, q, t));
-            }
+            var q = space.trackingSpace[(i + 1) % edgeCount];
+            edgeNormals[i] = Utilities.RotateVector(q - p, -90).normalized;
         }
 
-        // 障害物
-        if (space.obstaclePolygons != null)
-        {
-            foreach (var obstacle in space.obstaclePolygons)
-            {
-                foreach (var point in obstacle)
-                {
-                    obstaclePoints.Add(point);
-                }
-            }
-        }
-
-        // 他のアバター
+        var otherAvatarPositions = new List<Vector2>();
         if (globalConfiguration.redirectedAvatars != null)
         {
             foreach (var user in globalConfiguration.redirectedAvatars)
@@ -219,11 +198,16 @@ public class PotentialFieldVisualizer : MonoBehaviour
                     continue;
 
                 var userPos = user.GetComponent<RedirectionManager>().currPosReal;
-                obstaclePoints.Add(Utilities.FlattenedPos2D(userPos));
+                otherAvatarPositions.Add(Utilities.FlattenedPos2D(userPos));
             }
         }
 
-        // 各グリッドセルでポテンシャルと勾配を計算
+        int obstacleCount = space.obstaclePolygons == null ? 0 : space.obstaclePolygons.Count;
+        var nearestPosList = new List<Vector2>(edgeCount + obstacleCount + otherAvatarPositions.Count);
+
+        // 障害物リストを収集（ThomasAPFと同じロジック）
+
+        // トラッキングスペースの境界
         for (int x = 0; x < gridWidth; x++)
         {
             for (int y = 0; y < gridHeight; y++)
@@ -244,22 +228,56 @@ public class PotentialFieldVisualizer : MonoBehaviour
                 float potential = 0;
                 Vector2 gradient = Vector2.zero;
 
-                foreach (var obstaclePos in obstaclePoints)
+                nearestPosList.Clear();
+
+                // Boundary (walls)
+                for (int i = 0; i < edgeCount; i++)
+                {
+                    var p = space.trackingSpace[i];
+                    var q = space.trackingSpace[(i + 1) % edgeCount];
+                    var nearestPos = GetNearestPointOnSegment(cellPos, p, q);
+                    var d = cellPos - nearestPos;
+                    if (d.sqrMagnitude <= 1e-8f)
+                    {
+                        nearestPosList.Add(nearestPos);
+                        continue;
+                    }
+                    if (Vector2.Dot(edgeNormals[i], d.normalized) > 0)
+                    {
+                        nearestPosList.Add(nearestPos);
+                    }
+                }
+
+                // Obstacles
+                if (space.obstaclePolygons != null)
+                {
+                    foreach (var obstacle in space.obstaclePolygons)
+                    {
+                        if (obstacle == null || obstacle.Count < 2)
+                            continue;
+                        var nearestPos = Utilities.GetNearestPos(cellPos, obstacle);
+                        nearestPosList.Add(nearestPos);
+                    }
+                }
+
+                // Other avatars
+                if (otherAvatarPositions.Count > 0)
+                {
+                    nearestPosList.AddRange(otherAvatarPositions);
+                }
+
+                foreach (var obstaclePos in nearestPosList)
                 {
                     float distance = (cellPos - obstaclePos).magnitude;
 
-                    // 数値安定性のため最小距離を設定
                     if (distance < 0.01f)
                         distance = 0.01f;
 
-                    // ポテンシャル: U += 1/r
                     potential += 1f / distance;
 
-                    // 勾配: ∇U += -(p - o) / r²
                     Vector2 gDelta = -1f / distance * (cellPos - obstaclePos).normalized;
                     gradient += gDelta;
                 }
-
                 potentialGrid[x, y] = potential;
                 gradientGrid[x, y] = -gradient; // 負の勾配（誘導方向）
             }
@@ -289,6 +307,18 @@ public class PotentialFieldVisualizer : MonoBehaviour
         }
 
         Debug.Log($"Potential range: min={minPotential:F2}, max={maxPotential:F2}, gamma={colorGamma:F2}");
+    }
+
+    private static Vector2 GetNearestPointOnSegment(Vector2 pos, Vector2 p, Vector2 q)
+    {
+        var pq = q - p;
+        var denom = pq.sqrMagnitude;
+        if (denom < 1e-6f)
+            return p;
+
+        var t = Vector2.Dot(pos - p, pq) / denom;
+        t = Mathf.Clamp01(t);
+        return p + pq * t;
     }
 
     /// <summary>
