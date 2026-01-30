@@ -1,19 +1,25 @@
 
 
-## <center>OpenRDW 2: A Redirected Walking Evaluation Toolkit Supporting Multi-user online VR</center>
+## <center>PredRedLPP: Predictive Redirected Walking using Lemniscate Path Prediction</center>
 
 <img src="Visuals/representative.png" alt="title" style="zoom: 150%;" />
 
-This project is a toolkit for evaluating **Redirected Walking** methods in virtual reality (VR).
+This repository contains the implementation of **PredRedLPP** (Predictive Redirected Walking using Lemniscate Path Prediction), a novel redirected walking algorithm that combines predictive path planning with artificial potential fields.
 
-This toolkit is an extended version of [OpenRDW](https://github.com/yaoling1997/OpenRDW) that retains most of its features while introducing many upgrades. One of the most significant new features is that OpenRDW 2 supports the simulation of multi-user online VR scenario, that is, it supports the simulation of multiple users in different physical spaces while playing in a common virtual space. Such kind of online VR scenarios are becoming increasingly common with the development of cloud rendering technology and the Metaverse. To the best of our knowledge, this project is the first redirected walking simulation toolkit that supports this type of multi-user offsite online VR applications.
+### Overview
 
-In multi-user online VR applications, if everyone is not associated with others, the redirected walking strategy will not differ from single-user strategies. But if users' tasks are correlated, there will be new challenges to redirect users. An ideal online RDW strategy must make the locomotion opportunities of different users equal, regardless of different physical environment layouts. Otherwise, some online VR games, such as the multiplayer game “Red Light, Green Light”, will become unfair and even lose their playability.
+PredRedLPP is based on the algorithm described in:
+> Hirt, C., Zank, M., & Kunz, A. (2024). "Predictive multiuser redirected walking using artificial potential fields." *Frontiers in Virtual Reality*, 5, 1365344.
+> https://www.frontiersin.org/articles/10.3389/frvir.2024.1365344/full
 
-This code contains the implementation of the multi-user online RDW controller described in the paper [Multi-User Redirected Walking in Separate Physical Spaces for Online VR Scenarios](https://ieeexplore.ieee.org/document/10058042). This controller is designed for multi-user online VR scenarios and ensures that online users in separate physical spaces have the same number of resets and reset timings while reducing the number of resets for all users.
+The algorithm predicts user trajectories using lemniscate-shaped curves and evaluates redirection actions through cost functions based on artificial potential fields. Key features include:
 
-This code retains most of the features of [OpenRDW], so we also highly recommend reading and using the original [OpenRDW] and [its wiki](https://github.com/yaoling1997/OpenRDW/wiki/Introduction).
+- **Lemniscate-based trajectory prediction**: Models user walking patterns with infinity-shaped curves and generates candidate trajectories using clothoid curves
+- **APF-based cost evaluation**: Evaluates redirection actions considering obstacles, boundaries, and other users
+- **Two-stage selection process**: First selects the best predicted trajectory using similarity measure, then evaluates redirection actions on that trajectory
+- **Minimal action set support**: Optionally uses a reduced action set (7 actions instead of 19) for 63% faster computation
 
+This implementation is built on [OpenRDW 2](https://github.com/yaoling1997/OpenRDW), a redirected walking evaluation toolkit supporting multi-user VR scenarios.
 
 ![gif](Visuals/main.gif)
 
@@ -28,6 +34,26 @@ To use all the features, you will need to install two additional plugins: [PUN 2
 Once you have everything set up, open the ***OpenRDW Scene*** and start playing to see the visualized simulation process!
 
 
+### Using PredRedLPP
+
+To use the PredRedLPP redirector in your experiments:
+
+1. Select the ***Redirected Avatar*** gameobject in the scene hierarchy
+2. In the ***Redirection Manager*** component, set `Redirector Choice` to **PredRedLPP**
+3. Configure PredRedLPP parameters in the ***Global Configuration*** component:
+   - `Prediction Horizon`: Distance for trajectory prediction (default: 3.0m)
+   - `Lemniscate Endpoints`: Number of candidate trajectories (default: 11)
+   - `Discount Factor`: Time discount parameter for cost function (default: 0.8)
+   - `Use Minimal Action Set`: Enable for faster computation with reduced action set
+
+The implementation includes three main components:
+- `PredRedLPP_Redirector.cs`: Main redirector implementation
+- `LemniscatePathPredictor.cs`: Lemniscate-based trajectory prediction
+- `TrajectoryEvaluator.cs`: Cost-based trajectory and action evaluation
+
+Trajectory visualization (lemniscate shape, endpoints, and selected trajectory) can be toggled using the `Visualize Predictions` option in the redirector component.
+
+
 ### Project Structure
 
 The main ***OpenRDW Scene*** is located at `Assets/OpenRDW/Scenes/OpenRDW Scene.unity`.
@@ -37,7 +63,11 @@ The `Experiment` directory contains experiment-related codes and is responsible 
 The `Movement` directory contains codes that controls the motion of the avatars, and `MovementManager.cs` is the most important file of them. 
 The `Networking` directory contains codes that works with PUN2, which is only necessary if there are networking-experiment requirements. 
 The `Others` directory contains the key file in this project, `GlobalConfiguration.cs`, which configures most of the parameters and controls the entire experiment process. 
-The `Redirection` directory contains several implemented redirectors and resetters, with `RedirectionManager.cs` managing them. 
+The `Redirection` directory contains several implemented redirectors and resetters, with `RedirectionManager.cs` managing them. The PredRedLPP implementation can be found in:
+- `Redirectors/PredRedLPP_Redirector.cs`: Main redirector implementation
+- `Prediction/LemniscatePathPredictor.cs`: Trajectory prediction component
+- `Evaluation/TrajectoryEvaluator.cs`: Cost-based evaluation component
+- `Prediction/RedirectionActionFactory.cs`: Redirection action set generation 
 The `Visualization` directory contains codes that focuses on visualization effects in the Unity scene.
 
 Text files in `BatchFiles/` and `CommandFiles/` aim to perform large-scale simulation experiments.  
@@ -179,7 +209,9 @@ The experiment configurations may not be robust to special cases. If you find th
 
 ### Acknowledgement
 
-This project is developed on top of the repository [OpenRDW](https://github.com/yaoling1997/OpenRDW) as well as its paper [OpenRDW: A Redirected Walking Library and Benchmark with Multi-User, Learning-based Functionalities and State-of-the-art Algorithms](https://ieeexplore.ieee.org/abstract/document/9583831).
+**PredRedLPP Implementation**: This implementation is based on the algorithm described by Hirt et al. (2024) in "Predictive multiuser redirected walking using artificial potential fields" published in Frontiers in Virtual Reality.
+
+**Simulation Framework**: This project is built on [OpenRDW 2](https://github.com/senzhe98/OpenRDW2), which extends the original [OpenRDW](https://github.com/yaoling1997/OpenRDW) toolkit developed by Yao Ling et al. We are grateful to the original authors for providing the foundation for this implementation.
 
 This project uses several assets from the [Unity Asset Store](https://assetstore.unity.com/):
 
@@ -193,24 +225,32 @@ This project uses several assets from the [Unity Asset Store](https://assetstore
 
 ### Citation
 
-If you find this project helpful for your research, please consider citing:
+If you use this implementation in your research, please cite the original PredRedLPP paper:
 
 ```
-S. -Z. Xu, J. -H. Liu, M. Wang, F. -L. Zhang and S. -H. Zhang, "Multi-User Redirected Walking in Separate Physical Spaces for Online VR Scenarios," in IEEE Transactions on Visualization and Computer Graphics, vol. 30, no. 4, pp. 1916-1926, April 2024, doi: 10.1109/TVCG.2023.3251648.
+@article{hirt2024predictive,
+  title={Predictive multiuser redirected walking using artificial potential fields},
+  author={Hirt, Christian and Zank, Markus and Kunz, Andreas},
+  journal={Frontiers in Virtual Reality},
+  volume={5},
+  pages={1365344},
+  year={2024},
+  publisher={Frontiers Media SA},
+  doi={10.3389/frvir.2024.1365344}
+}
 ```
 
-or
+This implementation is based on OpenRDW 2. If you use the underlying framework, please also cite:
 
 ```
 @ARTICLE{xu2024multi-user,
   author={Xu, Sen-Zhe and Liu, Jia-Hong and Wang, Miao and Zhang, Fang-Lue and Zhang, Song-Hai},
-  journal={IEEE Transactions on Visualization and Computer Graphics}, 
-  title={Multi-User Redirected Walking in Separate Physical Spaces for Online VR Scenarios}, 
+  journal={IEEE Transactions on Visualization and Computer Graphics},
+  title={Multi-User Redirected Walking in Separate Physical Spaces for Online VR Scenarios},
   year={2024},
   volume={30},
   number={4},
   pages={1916-1926},
-  keywords={Legged locomotion;Space vehicles;Games;Aerospace electronics;Task analysis;Reinforcement learning;Real-time systems;Redirected walking;multi-user;online VR;fairness},
   doi={10.1109/TVCG.2023.3251648}
 }
 ```
