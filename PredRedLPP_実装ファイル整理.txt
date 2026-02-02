@@ -1,0 +1,393 @@
+================================================================================
+PredRedLPPアルゴリズム実装ファイル整理レポート
+================================================================================
+作成日: 2026-02-02
+目的: HirtのPredRedLPPアルゴリズム実装のための変更ファイルを特定し、
+      実験用・可視化用の変更と区別する
+
+元リポジトリ: omegafantasy/OpenRDW2
+フォークリポジトリ: yusuke111214/OpenRDW2
+参照コミット: 4bd1e029bba9c8988c69917b5a422764f94bcd13 (継承ドキュメント記載時点)
+
+================================================================================
+【1】PredRedLPPアルゴリズム実装の中核ファイル（必須）
+================================================================================
+
+■ 1-1. 新規追加ファイル - Predictionフォルダ
+────────────────────────────────────────────────────────────
+これらは論文のPredRedLPPアルゴリズムを実装するために新規作成されたコアファイル。
+
+📁 Assets/OpenRDW/Scripts/Redirection/Prediction/
+  ├── PredRedLPP_Redirector.cs              (949行追加)
+  │   └─ メインリダイレクター
+  │      - 論文Section 3.3 に対応
+  │      - レムニスケート予測 + APFコスト関数評価
+  │      - 2段階選択プロセス（Phase 1: 予測、Phase 2: アクション評価）
+  │
+  ├── LemniscatePathPredictor.cs
+  │   └─ レムニスケートベースの軌跡予測器
+  │      - 論文Section 3.2.2, Eq.1 に対応
+  │      - Clothoid曲線を使った軌跡生成
+  │      - Scene awareness（障害物衝突検出）
+  │
+  ├── TrajectoryEvaluator.cs
+  │   └─ コスト関数による軌跡評価器
+  │      - 論文Section 3.3.3, Eq.14-18 に対応
+  │      - APFコスト、Headingコスト、Resetコストの計算
+  │      - 割引率α=0.8での総コスト計算
+  │
+  ├── Trajectory.cs
+  │   └─ 軌跡データ構造 + 類似度計算
+  │      - Path similarity measure（MSE + 割引係数）
+  │      - Curvature適用機能
+  │
+  ├── RedirectionAction.cs
+  │   └─ リダイレクションアクション定義
+  │      - 論文Table 2 に対応
+  │      - Translation/Rotation/Curvature gain
+  │      - 6段階のゲイン値 + Null action
+  │
+  ├── CurvesWrapper.cs
+  │   └─ Clothoid曲線生成ライブラリのラッパー
+  │      - 外部ライブラリとの連携
+  │
+  ├── IPathPredictor.cs
+  │   └─ パス予測器のインターフェース
+  │
+  ├── PathSmoother.cs
+  │   └─ パス平滑化（HMD用、シミュレーションでは無効化推奨）
+  │
+  └── ClothoidGenerationTest.cs
+      └─ Clothoid生成のテストクラス
+
+■ 1-2. 外部ライブラリ - Curves-master
+────────────────────────────────────────────────────────────
+Clothoid曲線生成に必要な外部ライブラリ（必須）
+
+📁 Assets/Plugins/Curves-master/
+  └── Curves/
+      ├── Clothoid.cs                      (Clothoid曲線生成の中核)
+      ├── Curve.cs
+      ├── Arc.cs
+      ├── Angle.cs
+      ├── CoordinateSystemConverter.cs
+      ├── Geometry.cs
+      ├── LineSegment.cs
+      ├── Point2D.cs
+      ├── PolynomialSpiral.cs
+      ├── Pose2D.cs
+      └── Posture2D.cs
+
+■ 1-3. 既存ファイルの変更（アルゴリズム実装に必須の部分のみ）
+────────────────────────────────────────────────────────────
+
+📄 Assets/OpenRDW/Scripts/Redirection/RedirectionManager.cs
+  ├─ 変更内容: PredRedLPPリダイレクターの登録
+  ├─ 行数: +8行
+  └─ 詳細:
+      - RedirectorChoice enum に PredRedLPP を追加
+      - GetRedirectorType()、GetRedirectorChoice()、DecodeRedirector() に対応を追加
+
+📄 Assets/OpenRDW/Scripts/Redirection/Redirectors/Redirector.cs
+  ├─ 変更内容: リダイレクション適用フラグの追加
+  ├─ 行数: +10行
+  └─ 詳細:
+      - ApplyRotationGain()、ApplyCurvatureGain() で適用判定フラグ追加
+      - デバッグ情報の改善
+
+📄 Assets/OpenRDW/Scripts/Others/GlobalConfiguration.cs
+  ├─ 変更内容: PredRedLPP設定パラメータの追加（一部のみ）
+  ├─ 必須部分: +239行中、約50行がPredRedLPP設定
+  └─ 詳細:
+      【アルゴリズム実装に必須】
+      - predictionHorizon (float): 予測ホライゾン（論文A_Lem = 3m）
+      - lemniscateEndpoints (int): レムニスケートエンドポイント数（11推奨）
+      - enablePathSmoothing (bool): パス平滑化（HMD用）
+      - discountFactor (float): 割引係数（論文α = 0.8）
+      - headingCostWeight (float): Headingコスト重み（論文h0 = 0）
+      - useMinimalActionSet (bool): 最小アクションセット使用（計算量削減）
+
+      【アルゴリズム実装以外】（後述の【2】に分類）
+      - ポテンシャル場可視化設定
+      - DoubleRoom トラッキングスペース
+      - InitialPoseMode（ランダム初期位置）
+
+================================================================================
+【2】アルゴリズム実装以外の追加・変更ファイル
+================================================================================
+これらは実験環境の整備、可視化、ドキュメント作成など、
+アルゴリズム本体の実装には直接関係しないファイル。
+
+■ 2-1. 可視化機能
+────────────────────────────────────────────────────────────
+
+📄 Assets/OpenRDW/Scripts/Visualization/PotentialFieldVisualizer.cs (新規)
+  ├─ 行数: +621行
+  └─ 詳細: ポテンシャル場のヒートマップ・矢印フィールド表示
+
+📄 Assets/OpenRDW/Scripts/Visualization/VisualizationManager.cs
+  ├─ 行数: +16行
+  └─ 詳細: PotentialFieldVisualizerの統合
+
+📄 Assets/OpenRDW/Scripts/Others/Utilities.cs
+  ├─ 行数: +61行
+  └─ 詳細: DrawFilledCircle()、DrawStar() 関数追加（スタート位置マーカー用）
+
+📄 Assets/OpenRDW/Scripts/Experiment/StatisticsLogger.cs
+  ├─ 行数: +50行（主に変更）
+  └─ 詳細:
+      - 2人のユーザー軌跡を異なる色で表示（黄→緑、青→赤）
+      - スタート位置マーカー（円、星）の追加
+
+📄 Assets/OpenRDW/Scripts/Others/GlobalConfiguration.cs（一部）
+  └─ ポテンシャル場可視化設定（enablePotentialFieldVisualization等）
+
+■ 2-2. 実験環境の拡張
+────────────────────────────────────────────────────────────
+
+📄 Assets/OpenRDW/Scripts/Others/TrackingSpaceGenerator.cs
+  ├─ 行数: +496行
+  └─ 詳細:
+      - DoubleRoom トラッキングスペースの実装
+      - 障害物生成機能の拡張
+      - ランダム初期位置のサポート
+
+📄 Assets/OpenRDW/Scripts/Movement/VirtualPathGenerator.cs
+  ├─ 行数: +154行（主に変更）
+  └─ 詳細:
+      - RandomTurnの範囲を-180～180から-90～90に変更
+      - Random.state の保存・復元（バグ修正）
+
+📄 Assets/OpenRDW/Scripts/Others/GlobalConfiguration.cs（一部）
+  └─ TrackingSpaceChoice に DoubleRoom 追加
+  └─ InitialPoseMode enum追加（FixedFromTrackingSpace、RandomInTrackingSpace）
+
+■ 2-3. 実験実行ファイル
+────────────────────────────────────────────────────────────
+
+📁 BatchFiles/
+  ├── generate_production_batch.py
+  ├── production_experiment_all.txt
+  ├── production_experiment_no_obstacles_4ed4c.txt
+  ├── test_random_init_s2c_2users_50.txt
+  ├── test_single_square_null_50m_30trials_two_obstacle_patterns.txt
+  ├── test_single_square_predredlpp_apf_s2c_null_10.txt
+  ├── test_single_square_predredlpp_h5_e15_apf_s2c_null_20.txt
+  ├── test_single_square_predredlpp_h5_e15_apf_s2c_null_20_straightline.txt
+  └── test_single_square12m_4obs_predredlpp_h5_e15_apf_s2c_null_20_90turn.txt
+
+📁 CommandFiles/
+  ├── experiment_10m_3rooms_4algo_100m_30trials.txt
+  ├── experiment_predred_6algo_100m_30trials.txt
+  ├── test_single_square_predredlpp_apf_s2c_null_10.txt
+  ├── test_single_square_predredlpp_h5_e15_apf_s2c_null_20.txt
+  ├── test_single_square_predredlpp_h5_e15_apf_s2c_null_20_straightline.txt
+  └── test_single_square12m_4obs_predredlpp_h5_e15_apf_s2c_null_20_90turn.txt
+
+■ 2-4. 実験結果ファイル
+────────────────────────────────────────────────────────────
+
+📁 Experiment Results/
+  └── 2026-01-19_04-10-53/
+      └── Graphs/ (多数のPNGファイル)
+
+📁 TrackingSpaces/ (生成された部屋形状データ)
+
+📄 _computed_stats.csv
+📄 _computed_stats_v2.csv
+
+■ 2-5. ドキュメント・論文
+────────────────────────────────────────────────────────────
+
+📄 PredRedLPP_継承ドキュメント.md (新規)
+  └─ アルゴリズム実装の詳細な引き継ぎドキュメント
+
+📄 PredRedLPP_シミュレーション実験計画.txt (新規)
+  └─ 実験計画書
+
+📄 問題10_曲率制限ドキュメント.md (新規)
+  └─ 急激な旋回時の問題調査ドキュメント
+
+📄 論文と実装の矛盾点分析.txt (新規)
+  └─ 論文と実装の差異分析
+
+📄 詳細パラメータ設定ガイド.txt (新規)
+  └─ パラメータ設定の詳細ガイド
+
+📄 Hirt_原文_予測＿マルチユーザー.pdf (新規)
+  └─ 論文PDF
+
+📄 README.md (変更)
+  └─ プロジェクト説明の更新
+
+■ 2-6. 開発環境設定
+────────────────────────────────────────────────────────────
+
+📁 .claude/
+  └── settings.local.json
+
+📁 .idea/
+  └── (JetBrains IDE設定ファイル)
+
+■ 2-7. Unityシーン・設定ファイル
+────────────────────────────────────────────────────────────
+
+📄 Assets/OpenRDW/Scenes/OpenRDW Scene.unity
+  └─ Unityシーン設定の変更
+
+================================================================================
+【3】重要な実装コミット履歴
+================================================================================
+
+以下は、アルゴリズム実装に関連する主要なコミット：
+
+✅ アルゴリズム実装の中核コミット
+────────────────────────────────────────────────────────────
+4bd1e029b  feat:問題１０を解決
+60e9619e6  feat:論文準拠の実装に修正
+3df1fc092  feat:APF値計算を非調和ベースに変更
+99a65cb4a  fix:矛盾点3，5，6解消
+b15cb06e2  fix:問題４・６対応
+38e4a2732  feat:問題１解決
+d20523514  feat:フェーズ3，4，5実装
+2d8bb098a  feat:フェーズ２実装
+b65fca498  feat:Curvesプラグインを追加
+a7192cce9  feat:Curvesライブラリインポート
+
+🔧 バグ修正・調整コミット
+────────────────────────────────────────────────────────────
+60b145d3e  Reapply "fix:APF方式を非調和型にしていたことをRevert"
+e7fdc9488  fix:APF方式を非調和型にしていたことをRevert
+cf93d6b1b  fix: ApplyCurvatureの符号を反転して可視化と実際の動きを一致
+c99ebc859  fix: 可視化される軌跡と実際の曲率を一致させる
+4003f6ab5  fix: 短すぎる軌跡を除外して軌跡表示を修正
+
+📊 実験・可視化関連コミット
+────────────────────────────────────────────────────────────
+9a5ea2a14  fix:ベクトル場可視化機能修正
+f9e32a45f  feat:エンドポイント可視化。予測軌跡を表示するように変更
+5616a6429  fix:2人目の軌跡の色を変更
+f3c6b0e30  feat:実験環境整備
+c22da8c79  feat:部屋形状を追加。バッチファイル作成
+f3c5007cf  update:RandomTurnを-90～90の範囲に変更
+
+================================================================================
+【4】推奨事項：プロジェクト整理の方針
+================================================================================
+
+■ 4-1. 保持すべきファイル（アルゴリズム実装の中核）
+────────────────────────────────────────────────────────────
+
+【絶対に削除してはいけない】
+  ✓ Assets/OpenRDW/Scripts/Redirection/Prediction/ (フォルダ全体)
+  ✓ Assets/Plugins/Curves-master/ (フォルダ全体)
+  ✓ RedirectionManager.cs の PredRedLPP 追加部分
+  ✓ Redirector.cs の適用フラグ追加部分
+  ✓ GlobalConfiguration.cs の PredRedLPP設定パラメータ部分
+     - predictionHorizon
+     - lemniscateEndpoints
+     - enablePathSmoothing
+     - discountFactor
+     - headingCostWeight
+     - useMinimalActionSet
+
+【ドキュメントとして保持推奨】
+  ✓ PredRedLPP_継承ドキュメント.md
+  ✓ Hirt_原文_予測＿マルチユーザー.pdf
+  ✓ 問題10_曲率制限ドキュメント.md
+  ✓ 論文と実装の矛盾点分析.txt
+  ✓ 詳細パラメータ設定ガイド.txt
+
+■ 4-2. 削除・Revert候補（実験・可視化・環境拡張）
+────────────────────────────────────────────────────────────
+
+【可視化機能（必要に応じて削除可）】
+  - PotentialFieldVisualizer.cs
+  - VisualizationManager.cs の変更
+  - Utilities.cs の DrawFilledCircle/DrawStar 追加
+  - StatisticsLogger.cs の色分け・マーカー追加
+  - GlobalConfiguration.cs のポテンシャル場可視化設定
+
+【実験環境拡張（元に戻すか検討）】
+  - TrackingSpaceGenerator.cs の DoubleRoom 追加
+  - GlobalConfiguration.cs の DoubleRoom、InitialPoseMode 追加
+  - VirtualPathGenerator.cs の RandomTurn 範囲変更
+
+【実験ファイル（削除推奨）】
+  - BatchFiles/ フォルダ全体
+  - CommandFiles/ フォルダ全体
+  - Experiment Results/ フォルダ全体
+  - TrackingSpaces/ フォルダ
+  - _computed_stats.csv、_computed_stats_v2.csv
+  - PredRedLPP_シミュレーション実験計画.txt
+
+【開発環境設定（削除可）】
+  - .claude/ フォルダ
+  - .idea/ フォルダ
+
+■ 4-3. 慎重に判断すべきファイル
+────────────────────────────────────────────────────────────
+
+【要検討】
+  - VirtualPathGenerator.cs の Random.state 保存・復元
+    → バグ修正のため、保持推奨
+
+  - VirtualPathGenerator.cs の RandomTurn 範囲変更（-180～180 → -90～90）
+    → 実験設定に依存。元に戻すか要検討
+
+  - TrackingSpaceGenerator.cs の DoubleRoom
+    → 実験用だが、将来的に有用な可能性あり
+
+  - 可視化機能全般
+    → デバッグに有用。削除せず無効化で対応推奨
+
+================================================================================
+【5】まとめ：純粋なアルゴリズム実装の範囲
+================================================================================
+
+■ コアファイル数
+────────────────────────────────────────────────────────────
+  新規追加: 約20ファイル（Prediction フォルダ + Curves ライブラリ）
+  既存変更: 3ファイル（RedirectionManager、Redirector、GlobalConfiguration の一部）
+
+■ 総実装行数（アルゴリズム本体のみ）
+────────────────────────────────────────────────────────────
+  約2,500～3,000行（コメント含む）
+
+■ 実装完了度
+────────────────────────────────────────────────────────────
+  論文準拠度: 95%以上
+  主要機能: すべて実装済み
+  既知の制約:
+    - 180度Uターン不可（レムニスケート予測の本質的制約）
+    - APF方式は非調和型（論文準拠）
+
+■ 次のステップ
+────────────────────────────────────────────────────────────
+  1. 実験ファイル（BatchFiles、CommandFiles、結果ファイル）を削除
+  2. 可視化機能を無効化または削除（必要に応じて）
+  3. 実験環境拡張（DoubleRoom等）を元に戻すか検討
+  4. ドキュメントファイルは保持
+  5. 純粋なアルゴリズム実装のみの状態でコミット
+  6. 実験用・可視化用の変更は別ブランチで管理
+
+================================================================================
+作成者注記
+================================================================================
+このレポートは、upstream/master（omegafantasy/OpenRDW2）からの変更を
+分析し、PredRedLPPアルゴリズム実装に関連するファイルを特定したものです。
+
+分析方法:
+  - git diff upstream/master との比較
+  - 継承ドキュメント（PredRedLPP_継承ドキュメント.md）の参照
+  - 各ファイルの内容確認（スクリプトの役割、論文対応の検証）
+  - コミット履歴の分析
+
+推奨される整理手順:
+  1. このレポートを基に、保持/削除するファイルを決定
+  2. 実験ファイルは別リポジトリまたはアーカイブに移動
+  3. 可視化機能は設定で無効化（コード削除は慎重に）
+  4. 純粋なアルゴリズム実装のみでPRを作成
+  5. 実験・可視化機能は別PRで管理
+
+================================================================================
