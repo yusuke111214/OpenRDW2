@@ -1062,8 +1062,8 @@ MonoBehaviour:
   directionSamples: 30
   timeStepBase: 0
   timeStepCountDown: 0
-  runInBackstage: 1
-  loadFromTxt: 1
+  runInBackstage: 0
+  loadFromTxt: 0
   multiCmdFiles: 0
   useResetPanel: 0
   useCrystalWaypoint: 0
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   MIN_TRANS_GAIN: 0.86
   MAX_ROT_GAIN: 1.49
   MIN_ROT_GAIN: 0.8
-  CURVATURE_RADIUS: 2
+  CURVATURE_RADIUS: 7.5
   predictionHorizon: 3
   lemniscateEndpoints: 11
   enablePathSmoothing: 0
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   bufferVisible: 1
   if3dObstacle: 1
   trackingSpaceChoice: 1
-  obstacleType: 2
+  obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: TrackingSpaces/CloseVirtualSpace/sample_multiple_spaces.txt
   squareWidth: 10
@@ -1640,7 +1640,7 @@ MonoBehaviour:
   isRotating: 0
   isWalking: 0
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 10
+  redirectorChoice: 4
   resetterChoice: 4
   globalConfiguration: {fileID: 0}
   visualizationManager: {fileID: 0}
